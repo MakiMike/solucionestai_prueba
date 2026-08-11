@@ -18,10 +18,10 @@ class Auth extends CI_Controller
 
     public function attempt_login()
     {
-        $correo = $this->input->post('correo');
-        $contrasenia = $this->input->post('contrasenia');
+        $correo = $this->input->post('email');
+        $contrasenia = $this->input->post('password');
 
-        $usuario = $this->Usuario_model->obtener_por_correoc($correo);
+        $usuario = $this->Usuario_model->obtener_por_correo($correo);
 
          if (!$usuario) {
 
@@ -34,7 +34,7 @@ class Auth extends CI_Controller
             return;
         }
 
-        if (!password_verify($contrasenia, $usuario->contrasenia)) {
+        if (!password_verify($contrasenia, $usuario->us_contrasenia)) {
 
             $this->session->set_flashdata(
                 'error',
@@ -56,7 +56,7 @@ class Auth extends CI_Controller
             'telefono' => $usuario->us_telefono,
             'logueado' => TRUE
         ));
-
+       // echo "Usuario logueado: " . $usuario->us_nombre;
         redirect('dashboard');
     }
 

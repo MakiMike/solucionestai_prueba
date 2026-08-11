@@ -4,14 +4,11 @@
 <head>
 
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Inicio de sesion</title>
 
     <link rel="stylesheet" href="<?= base_url('assets/css/login.css') ?>">
-
-    <style type="text/css">
-
-    </style>
 
 </head>
 
@@ -19,57 +16,60 @@
 
 <body>
 
-    <h1>Iniciar Sesión</h1>
+    <main class="login-shell">
+        <section class="login-card">
+            <div class="login-copy">
+                <h1>Iniciar sesión</h1>
+                <p class="subtitle">El estilo alternativo es para ti</p>
+            </div>
 
-    <?php if ($this->session->flashdata('error')): ?>
+            <?php if ($this->session->flashdata('error')): ?>
+                <div class="alert-error">
+                    <?= $this->session->flashdata('error'); ?>
+                </div>
+            <?php endif; ?>
 
-        <p style="color:red;">
-            <?= $this->session->flashdata('error'); ?>
-        </p>
-
-    <?php endif; ?>
-
-
-    <form
-        method="POST"
-        action="<?= base_url('login/submit'); ?>"
-    >
-
-        <div>
-
-            <label>
-                Correo
-            </label>
-
-            <input
-                type="email"
-                name="email"
-                required
+            <form
+                class="login-form"
+                method="POST"
+                action="<?= base_url('login/submit'); ?>"
             >
+                <div class="field-group">
+                    <label for="email">Correo</label>
+                    <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        placeholder="tu@correo.com"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
 
-        </div>
+                <div class="field-group">
+                    <label for="password">Contraseña</label>
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="••••••••"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
 
+                <button type="submit" class="login-button">
+                    Iniciar sesión
+                </button>
+            </form>
 
-        <div>
+                <div class="link-register">
+                    <p>¿No tienes una cuenta? <a href="<?= base_url('register') ?>">Regístrate</a></p>
+                </div>
 
-            <label>
-                Contraseña
-            </label>
-
-            <input
-                type="password"
-                name="password"
-                required
-            >
-
-        </div>
-
-
-        <button type="submit">
-            Iniciar sesión
-        </button>
-
-    </form>
+        </section>
+          
+    </main>
 
 </body>
 

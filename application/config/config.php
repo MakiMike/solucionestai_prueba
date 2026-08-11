@@ -24,10 +24,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 //$config['base_url'] = '';
-$config['base_url'] = (
-    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://') .
-    $_SERVER['HTTP_HOST'] . '/';
-
+//$config['base_url'] = (
+  //  (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://') .
+  //  $_SERVER['HTTP_HOST'] . '/';
+   $config['base_url'] = 'http://localhost/sistema/';
 
 /*
 |--------------------------------------------------------------------------
