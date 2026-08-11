@@ -80,6 +80,7 @@ $db['default'] = array(
 	'password' => 'finnyjake@2014',
 	'database' => 'Tarea',
 	'dbdriver' => 'postgre',
+	'port' => '5432',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
