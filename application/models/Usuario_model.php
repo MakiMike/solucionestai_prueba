@@ -173,4 +173,14 @@ class Usuario_model extends CI_Model
 
     );
 }
+
+
+    public function listar_usuarios_por_ids($ids)
+    {  
+        return $this->db
+            ->where_in('us_id', $ids)
+            ->get($this->tabla)
+            ->result();
+        
+    }
 }
