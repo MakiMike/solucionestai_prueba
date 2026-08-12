@@ -46,23 +46,14 @@ class Usuario_model extends CI_Model
     $sexo_filter = $this->input->post('sexo');
 
 
-    /*
-     * ==========================================
-     * TOTAL DE USUARIOS
-     * Sin filtros
-     * ==========================================
-     */
-
+   
     $recordsTotal = $this->db
         ->where('us_rol', 'U')
         ->count_all_results($this->tabla);
 
 
-    /*
-     * ==========================================
-     * CONSULTA PARA REGISTROS FILTRADOS
-     * ==========================================
-     */
+
+     //CONSULTA PARA REGISTROS FILTRADOS
 
     $this->db->where('us_rol', 'U');
 
