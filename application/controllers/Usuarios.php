@@ -18,6 +18,13 @@ class Usuarios extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->view('usuarios/index');
-	}
+        $this->load->view('usuarios');
+    }
+	
+    public function listar()
+    {
+        $resultado = $this->Usuario_model->listar_datatable();
+
+        echo json_encode($resultado);
+    }
 }

@@ -22,6 +22,10 @@
         <?= htmlspecialchars($us_correo); ?>
     </p>
 
+    <a href="<?= base_url('usuarios'); ?>">
+        Ver usuarios
+    </a>
+
     <a href="<?= base_url('logout'); ?>">
         Cerrar sesión
     </a>
