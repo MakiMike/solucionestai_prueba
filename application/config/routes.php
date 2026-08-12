@@ -53,6 +53,9 @@ $route['default_controller'] = 'auth/login';
 $route['login'] = 'auth/login';
 $route['login/submit'] = 'auth/attempt_login';
 
+$route['register'] = 'auth/register';
+$route['register/submit'] = 'auth/create_user';
+
 $route['dashboard'] = 'dashboard/index';
 
 $route['logout'] = 'auth/logout';

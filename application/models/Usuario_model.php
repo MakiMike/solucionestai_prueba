@@ -13,4 +13,12 @@ class Usuario_model extends CI_Model
             ->get($this->tabla)
             ->row();
     }
+
+    public function obtener_por_telefono($telefono)
+    {
+        return $this->db
+            ->where('us_telefono', $telefono)
+            ->get($this->tabla)
+            ->row();
+    }
 }
