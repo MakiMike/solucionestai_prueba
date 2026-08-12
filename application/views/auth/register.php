@@ -80,6 +80,16 @@
                     >
                 </div>
 
+                <div class="field-group">
+                    <label for="sexo">Sexo</label>
+                    <select id="sexo" name="sexo" required>
+                        <option value="">Selecciona tu sexo</option>
+                        <option value="H">Masculino</option>
+                        <option value="M">Femenino</option>
+                        <option value="O">Preferir no decirlo</option>
+                    </select>
+                </div>
+
                 <button type="submit" class="login-button">
                     Registrarme
                 </button>

@@ -11,8 +11,10 @@
 
 <body>
 
+   <?php if($us_rol == 'U'): $tipo = 'Usuario'; else: $tipo = 'Administrador'; endif; ?>
+
     <h1>
-        Bienvenido <?= htmlspecialchars($us_nombre); ?>
+        Bienvenido <?= htmlspecialchars($tipo); ?> <?= htmlspecialchars($us_nombre); ?>
     </h1>
 
     <p>

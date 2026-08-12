@@ -21,4 +21,11 @@ class Usuario_model extends CI_Model
             ->get($this->tabla)
             ->row();
     }
+
+    public function listar_usuarios()
+    {
+        return $this->db
+            ->get($this->tabla)
+            ->result();
+    }
 }

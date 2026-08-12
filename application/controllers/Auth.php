@@ -59,6 +59,8 @@ class Auth extends CI_Controller
             'usuario_nombre' => $usuario->us_nombre,
             'usuario_email' => $usuario->us_correo,
             'telefono' => $usuario->us_telefono,
+            'sexo' => $usuario->us_sexo,
+            'rol' => $usuario->us_rol,
             'logueado' => TRUE
         ));
        // echo "Usuario logueado: " . $usuario->us_nombre;
@@ -70,6 +72,7 @@ class Auth extends CI_Controller
         $nombre = $this->input->post('nombre');
         $correo = $this->input->post('email');
         $telefono = $this->input->post('telefono');
+        $sexo = $this->input->post('sexo');
         $contrasenia = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
 
         if (
@@ -105,20 +108,35 @@ class Auth extends CI_Controller
             redirect('register');
             return;
         }
-        
 
-         $usuario_existente = $this->Usuario_model->obtener_por_correo($correo);
-         $telefono_existente = $this->Usuario_model->obtener_por_telefono($telefono);
-
-         if ($telefono_existente) {
+        if (empty($sexo)) {
             $this->session->set_flashdata(
                 'error',
-                'El número de teléfono ya está registrado.'
+                'El campo sexo es obligatorio.'
             );
 
             redirect('register');
             return;
         }
+
+         $usuario_existente = $this->Usuario_model->obtener_por_correo($correo);
+         
+         if (empty($telefono)) {
+             $telefono = NULL;
+            } else {
+                $telefono_existente = $this->Usuario_model->obtener_por_telefono($telefono);
+
+                if ($telefono_existente) {
+                    $this->session->set_flashdata(
+                    'error',
+                    'El número de teléfono ya está registrado.'
+                    );
+
+                    redirect('register');
+                    return;
+                }
+            }
+
 
          if($usuario_existente) {
             $this->session->set_flashdata(
@@ -130,12 +148,38 @@ class Auth extends CI_Controller
             return;
         }
 
+        if (!in_array($sexo, ['H', 'M', 'O'])) {
+            $this->session->set_flashdata(
+                'error',
+                'Sexo no válido.'
+            );
+
+            redirect('register');
+            return;
+        }
+
         $data = array(
             'us_nombre' => $nombre,
             'us_correo' => $correo,
             'us_telefono' => $telefono,
+            'us_sexo' => $sexo,
+            'us_rol' => 'U',
             'us_contrasenia' => $contrasenia
         );
+
+        foreach ($data as $key => $value) {
+            if ($key === 'us_rol') {
+                  if ($value === 'A') {
+                    $this->session->set_flashdata(
+                        'error',
+                        'No puedes registrarte como administrador.'
+                    );
+
+                    redirect('register');
+                    return;
+                    
+            }
+        }
 
         $this->db->insert('us_usuarios', $data);
 
@@ -145,6 +189,7 @@ class Auth extends CI_Controller
         );
 
         redirect('login');
+    }
     }
 
     public function logout()

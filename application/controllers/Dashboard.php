@@ -19,7 +19,10 @@ class Dashboard extends CI_Controller
     {
         $data = array(
             'us_nombre' => $this->session->userdata('usuario_nombre'),
-            'us_correo' => $this->session->userdata('usuario_email')
+            'us_correo' => $this->session->userdata('usuario_email'),
+            'us_telefono' => $this->session->userdata('telefono'),
+            'us_sexo' => $this->session->userdata('sexo'),
+            'us_rol' => $this->session->userdata('rol')
         );
 
         $this->load->view('dashboard', $data);

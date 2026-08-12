@@ -58,6 +58,8 @@ $route['register/submit'] = 'auth/create_user';
 
 $route['dashboard'] = 'dashboard/index';
 
+$route['usuarios'] = 'usuarios/index';
+
 $route['logout'] = 'auth/logout';
 
 
