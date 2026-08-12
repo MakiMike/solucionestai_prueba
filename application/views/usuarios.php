@@ -61,6 +61,8 @@
 
                     <tr>
 
+                        <th></th>
+
                         <th>ID</th>
 
                         <th>Nombre</th>
@@ -93,6 +95,10 @@
 
             serverSide: true,
 
+            paging: true,
+
+            filter: true,
+
 
             ajax: {
 
@@ -108,6 +114,14 @@
             },
 
             columns: [
+                
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return `<input type="checkbox" class="select-checkbox" value="${row.us_id}">`;
+                    },
+                    orderable: false
+                },
 
                 {
                     data: 'us_id'
