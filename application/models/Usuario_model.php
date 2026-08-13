@@ -9,6 +9,11 @@ class Usuario_model extends CI_Model
     //CRUD
     public function insertar($data)
     {
+      if ($this->session->userdata('rol') !== 'A') {
+            // Redirigir al dashboard si no es admin, en lugar de mostrar error
+            redirect('dashboard');
+            exit;
+        }
         return $this->db->insert($this->tabla, $data);
     }
 
@@ -21,6 +26,11 @@ class Usuario_model extends CI_Model
 
     public function eliminar($id)
     {
+        if ($this->session->userdata('rol') !== 'A') {
+            // Redirigir al dashboard si no es admin, en lugar de mostrar error
+            redirect('dashboard');
+            exit;
+        }
         return $this->db
             ->where('us_id', $id)
             ->delete($this->tabla);
@@ -54,6 +64,11 @@ class Usuario_model extends CI_Model
 
     public function listar_usuarios()
     {
+        if ($this->session->userdata('rol') !== 'A') {
+            // Redirigir al dashboard si no es admin, en lugar de mostrar error
+            redirect('dashboard');
+            exit;
+        }
         return $this->db
             ->where('us_rol', 'U')
             ->get($this->tabla)
@@ -62,6 +77,11 @@ class Usuario_model extends CI_Model
 
     public function listar_datatable()
 {
+    if ($this->session->userdata('rol') !== 'A') {
+        // Redirigir al dashboard si no es admin, en lugar de mostrar error
+        redirect('dashboard');
+        exit;
+    }
     $start  = (int) $this->input->post('start');
     $length = (int) $this->input->post('length');
 
@@ -207,6 +227,11 @@ class Usuario_model extends CI_Model
 
     public function listar_usuarios_por_ids($ids)
     {  
+        if ($this->session->userdata('rol') !== 'A') {
+            // Redirigir al dashboard si no es admin, en lugar de mostrar error
+            redirect('dashboard');
+            exit;
+        }
         return $this->db
             ->where_in('us_id', $ids)
             ->get($this->tabla)
@@ -216,6 +241,12 @@ class Usuario_model extends CI_Model
 
     public function guardar_usuario($nombre, $correo, $telefono, $contrasenia_hash, $rol, $sexo)
     {
+        if ($this->session->userdata('rol') !== 'A') {
+            // Redirigir al dashboard si no es admin, en lugar de mostrar error
+            redirect('dashboard');
+            exit;
+        }
+
         $data = array(
             'us_nombre' => $nombre,
             'us_correo' => $correo,
