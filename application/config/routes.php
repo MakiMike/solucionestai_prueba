@@ -62,6 +62,10 @@ $route['dashboard'] = 'dashboard/index';
 
 $route['usuarios'] = 'usuarios/index';
 
+$route['productos'] = 'productos/index';
+
+$route['ventas'] = 'ventas/index';
+
 $route['logout'] = 'auth/logout';
 
 

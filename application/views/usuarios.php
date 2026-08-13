@@ -1,506 +1,424 @@
-<!DOCTYPE html>
-<html lang="es">
+<div class="usuarios-page">
+    
+    <section class="action-section">
+        <button id="exportExcel" class="action-button success">
+            <i class="fa-solid fa-file-excel"></i>
+            Exportar a Excel
+        </button>
 
-<head>
+        <button id="exportPDF" class="action-button danger">
+            <i class="fa-solid fa-file-pdf"></i>
+            Exportar a PDF
+        </button>
 
-    <meta charset="UTF-8">
+        <button id="Machote" class="action-button info">
+            <i class="fa-solid fa-file-arrow-down"></i>
+            Generar Plantilla
+        </button>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Usuarios</title>
-
-    <!-- DataTables -->
-    <link href="DataTables/datatables.min.css" rel="stylesheet">
-
-    <link href="<?= base_url('assets/css/usuarios.css'); ?>" rel="stylesheet">
-
-    <!-- Estilos de Botones -->
-    <style>
-        /* ===== SECCIÓN DE ACCIONES (BOTONES) ===== */
-        .actions-section {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            align-items: flex-start;
-        }
-
-        .action-button {
-            padding: 0.75rem 1.5rem;
-            border: 2px solid;
-            background-color: transparent;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-family: 'Courier New', monospace;
-            width: auto;
-            min-width: 180px;
-        }
-
-        .action-button:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Botón Excel - Verde */
-        #exportExcel {
-            border-color: #2d7a3f;
-            color: #4ade80;
-        }
-
-        #exportExcel:hover {
-            background-color: rgba(45, 122, 63, 0.2);
-            border-color: #4ade80;
-            color: #86efac;
-            box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
-        }
-
-        #exportExcel:active {
-            background-color: rgba(45, 122, 63, 0.4);
-        }
-
-        /* Botón PDF - Rojo */
-        #exportPDF {
-            border-color: #7a2d2d;
-            color: #f87171;
-        }
-
-        #exportPDF:hover {
-            background-color: rgba(122, 45, 45, 0.2);
-            border-color: #f87171;
-            color: #fca5a5;
-            box-shadow: 0 0 15px rgba(248, 113, 113, 0.3);
-        }
-
-        #exportPDF:active {
-            background-color: rgba(122, 45, 45, 0.4);
-        }
-
-        /* Botón Machote - Azul */
-        #Machote {
-            border-color: #1e3a8a;
-            color: #3b82f6;
-        }
-
-        #Machote:hover {
-            background-color: rgba(30, 58, 138, 0.2);
-            border-color: #3b82f6;
-            color: #60a5fa;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-        }
-
-        #Machote:active {
-            background-color: rgba(30, 58, 138, 0.4);
-        }
-
-        /* ===== SECCIÓN DE IMPORTACIÓN ===== */
-        .import-section {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            padding: 1rem;
-            background: #1a1a1a;
-            border: 1px solid #404040;
-            border-left: 3px solid #f97316;
-        }
-
-        .import-input-group {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        #importFile {
-            display: none;
-        }
-
-        .import-label {
-            padding: 0.75rem 1.5rem;
-            border: 2px solid #78350f;
-            background-color: transparent;
-            color: #f97316;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-family: 'Courier New', monospace;
-            display: inline-block;
-            min-width: 180px;
-            text-align: center;
-        }
-
-        .import-label:hover {
-            background-color: rgba(120, 53, 15, 0.2);
-            border-color: #f97316;
-            color: #fb923c;
-            box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .import-label:active {
-            background-color: rgba(120, 53, 15, 0.4);
-        }
-
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            color: #e8e8e8;
-            font-family: 'Courier New', monospace;
-        }
-
-        .file-name {
-            color: #f97316;
-            font-weight: 500;
-            max-width: 300px;
-            word-break: break-word;
-        }
-
-        /* Botón Importar - Naranja */
-        #importar {
-            border-color: #78350f;
-            color: #f97316;
-        }
-
-        #importar:hover {
-            background-color: rgba(120, 53, 15, 0.2);
-            border-color: #f97316;
-            color: #fb923c;
-            box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
-        }
-
-        #importar:active {
-            background-color: rgba(120, 53, 15, 0.4);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .actions-section {
-                flex-direction: column;
-            }
-
-            .import-section {
-                width: 100%;
-            }
-
-            .import-input-group {
-                flex-direction: column;
-            }
-
-            .import-label {
-                width: 100%;
-                min-width: auto;
-            }
-
-            #importar {
-                width: 100%;
-            }
-        }
-    </style>
-
-</head>
-
-<body>
-
-    <div class="container">
-
-        <!-- TÍTULO -->
-        <h1 class="page-title">Usuarios Registrados</h1>
-
-        <section class="actions-section">
-            <button id="exportExcel" class="action-button">
-                Exportar a Excel
-            </button>
-
-            <button id="exportPDF" class="action-button">
-                Exportar a PDF
-            </button>
-
-            <button id="Machote" class="action-button">
-                Generar Plantilla
-            </button>
-
-            <!-- SECCIÓN DE IMPORTACIÓN -->
-            <section class="import-section">
-                <div class="import-input-group">
-                    <label for="importFile" class="import-label">
-                        Seleccionar Excel
-                    </label>
-                    <input type="file" id="importFile" accept=".xlsx, .xls">
-                    <button id="importar" class="action-button">
-                        Importar
-                    </button>
-                </div>
-                <div class="file-info">
-                    <span>Archivo:</span>
-                    <span class="file-name" id="fileName">ninguno seleccionado</span>
-                </div>
-            </section>
-
-        </section>
-
-        <!-- SECCIÓN DE FILTROS -->
-        <section class="filters-section">
-            <div class="filter-group">
-                <label for="filtroSexo">
-                    Filtrar por Sexo:
+        <section class="import-section">
+            <div class="import-input-group">
+                <label for="importFile" class="import-label">
+                    <i class="fa-solid fa-upload"></i>
+                    Seleccionar Excel
                 </label>
-
-                <select id="filtroSexo">
-
-                    <option value="todos">
-                        Todos
-                    </option>
-
-                    <option value="H">
-                        Hombre
-                    </option>
-
-                    <option value="M">
-                        Mujer
-                    </option>
-
-                    <option value="O">
-                        Otro
-                    </option>
-
-                </select>
+                <input type="file" id="importFile" accept=".xlsx, .xls">
+                <button id="importar" class="action-button warning">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    Importar
+                </button>
+            </div>
+            <div class="file-info">
+                <span>Archivo:</span>
+                <span class="file-name" id="fileName">ninguno seleccionado</span>
             </div>
         </section>
+    </section>
 
-        <!-- TABLA -->
-        <div class="table-container">
-            <table id="usuariosTable">
-
-                <thead>
-
-                    <tr>
-
-                        <th></th>
-
-                        <th>ID</th>
-
-                        <th>Nombre</th>
-
-                        <th>Correo</th>
-
-                        <th>Teléfono</th>
-
-                        <th>Sexo</th>
-
-                    </tr>
-
-                </thead>
-
-            </table>
+    <section class="filters-section">
+        <div class="filter-group">
+            <label for="filtroSexo">Filtrar por Sexo:</label>
+            <select id="filtroSexo">
+                <option value="todos">Todos</option>
+                <option value="H">Hombre</option>
+                <option value="M">Mujer</option>
+                <option value="O">Otro</option>
+            </select>
         </div>
+    </section>
 
+    <div class="table-container">
+        <table id="usuariosTable" class="display">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Sexo</th>
+                </tr>
+            </thead>
+        </table>
     </div>
+</div>
 
+<style>
+    .usuarios-page {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0.5rem 0 2rem;
+        color: #e8e8e8;
+        font-family: 'Courier New', monospace;
+    }
 
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding: 1.5rem 1.25rem;
+        border: 1px solid rgba(157, 74, 111, 0.5);
+        background: linear-gradient(135deg, rgba(74, 45, 95, 0.18), rgba(17, 17, 17, 0.9));
+        border-radius: 18px;
+    }
 
-    <script src="DataTables/datatables.min.js"></script>
+    .page-kicker {
+        margin: 0 0 0.35rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #b87399;
+    }
 
+    .page-header h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 2vw, 2.5rem);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #f5f5f5;
+    }
 
-    <script>
+    .action-section {
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem 1.25rem;
+        background: #171717;
+        border: 1px solid rgba(157, 74, 111, 0.4);
+        border-left: 4px solid #9d4a6f;
+        border-radius: 16px;
+    }
 
-        const table = new DataTable('#usuariosTable', {
+    .action-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        min-height: 44px;
+        border: 1px solid rgba(157, 74, 111, 0.8);
+        border-radius: 12px;
+        background: transparent;
+        color: #f5f5f5;
+        padding: 0.8rem 1.1rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
 
-            processing: true,
+    .action-button.success {
+        border-color: rgba(74, 222, 128, 0.7);
+        color: #d9ffe5;
+    }
 
-            serverSide: true,
+    .action-button.danger {
+        border-color: rgba(248, 113, 113, 0.7);
+        color: #ffd3d3;
+    }
 
-            paging: true,
+    .action-button.info {
+        border-color: rgba(96, 165, 250, 0.7);
+        color: #dfeeff;
+    }
 
-            filter: true,
+    .action-button.warning {
+        border-color: rgba(249, 115, 22, 0.7);
+        color: #ffe3c6;
+    }
 
+    .action-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(74, 45, 95, 0.28);
+    }
 
-            ajax: {
+    .import-section {
+        display: flex;
+        flex: 1;
+        min-width: min(100%, 420px);
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(249, 115, 22, 0.5);
+        border-radius: 12px;
+        margin-left: auto;
+    }
 
-                url: '<?= base_url('usuarios/listar'); ?>',
+    .import-input-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
 
-                type: 'POST',
+    .import-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 0.9rem;
+        border: 1px solid rgba(249, 115, 22, 0.7);
+        border-radius: 12px;
+        background: rgba(249, 115, 22, 0.08);
+        color: #ffd7b3;
+        cursor: pointer;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.74rem;
+    }
 
-                data: function (d) {
-                    d.sexo = document.getElementById('filtroSexo').value;
+    #importFile {
+        display: none;
+    }
 
-                }
+    .file-info {
+        color: #d5d5d5;
+        font-size: 0.8rem;
+        display: flex;
+        gap: 0.35rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
 
+    .file-name {
+        color: #f7b267;
+        font-weight: 700;
+    }
+
+    .filters-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+        background: rgba(26, 26, 26, 0.96);
+        border: 1px solid rgba(157, 74, 111, 0.45);
+        border-radius: 16px;
+    }
+
+    .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        min-width: 200px;
+    }
+
+    .filter-group label {
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #d4d4d4;
+    }
+
+    .filter-group select {
+        appearance: none;
+        -webkit-appearance: none;
+        background: #111111;
+        color: #f0f0f0;
+        min-width: 180px;
+        border: 1px solid rgba(157, 74, 111, 0.8);
+        border-radius: 10px;
+        padding: 0.8rem 2.4rem 0.8rem 0.9rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.82rem;
+        background-image: linear-gradient(45deg, transparent 50%, #d0a6c2 50%), linear-gradient(135deg, #d0a6c2 50%, transparent 50%);
+        background-position: calc(100% - 18px) calc(1.1em), calc(100% - 12px) calc(1.1em);
+        background-size: 6px 6px, 6px 6px;
+        background-repeat: no-repeat;
+    }
+
+    .table-container {
+        background: rgba(17, 17, 17, 0.9);
+        border: 1px solid rgba(157, 74, 111, 0.5);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
+    }
+
+    .table-container table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #101010;
+    }
+
+    .table-container thead th {
+        background: linear-gradient(180deg, #4a2d5f, #331d3f);
+        color: #f1ebf5;
+        text-transform: uppercase;
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-align: left;
+        padding: 1rem 0.85rem;
+        border-bottom: 1px solid rgba(157, 74, 111, 0.9);
+    }
+
+    .table-container tbody td {
+        padding: 0.85rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        color: #e5e5e5;
+        vertical-align: middle;
+        background: rgba(255, 255, 255, 0.01);
+    }
+
+    .table-container tbody tr:nth-child(even) td {
+        background: rgba(30, 30, 30, 0.9);
+    }
+
+    .table-container tbody tr:hover td {
+        background: rgba(74, 45, 95, 0.18);
+    }
+
+    .select-checkbox {
+        accent-color: #9d4a6f;
+        width: 18px;
+        height: 18px;
+    }
+
+    @media (max-width: 768px) {
+        .action-section {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .import-section {
+            margin-left: 0;
+            min-width: auto;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+
+<script src="<?= base_url('DataTables/datatables.min.js'); ?>"></script>
+<script>
+    const table = new DataTable('#usuariosTable', {
+        processing: true,
+        serverSide: true,
+        paging: true,
+        filter: true,
+        ajax: {
+            url: '<?= base_url('usuarios/listar'); ?>',
+            type: 'POST',
+            data: function (d) {
+                d.sexo = document.getElementById('filtroSexo').value;
+            }
+        },
+        columns: [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return `<input type="checkbox" class="select-checkbox" value="${row.us_id}">`;
+                },
+                orderable: false,
+                searchable: false
             },
+            { data: 'us_id' },
+            { data: 'us_nombre' },
+            { data: 'us_correo' },
+            { data: 'us_telefono' },
+            { data: 'us_sexo' }
+        ],
+        pageLength: 4,
+        lengthMenu: [
+            [4, 10, 20, 50],
+            [4, 10, 20, 50]
+        ],
+        order: [[0, 'asc'], [2, 'asc']]
+    });
 
-            columns: [
-                
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return `<input type="checkbox" class="select-checkbox" value="${row.us_id}">`;
-                    },
-                    orderable: false
-                },
+    document.getElementById('filtroSexo').addEventListener('change', function () {
+        table.ajax.reload();
+    });
 
-                {
-                    data: 'us_id'
-                },
+    document.getElementById('exportExcel').addEventListener('click', function () {
+        const selectedIds = Array.from(document.querySelectorAll('.select-checkbox:checked')).map(cb => cb.value);
 
-                {
-                    data: 'us_nombre'
-                },
+        if (selectedIds.length === 0) {
+            alert('Por favor, seleccione al menos un usuario para exportar.');
+            return;
+        }
 
-                {
-                    data: 'us_correo'
-                },
+        const url = '<?= base_url('usuarios/exportar_excel'); ?>' + '?ids=' + selectedIds.join(',');
+        window.location.href = url;
+    });
 
-                {
-                    data: 'us_telefono'
-                },
+    document.getElementById('exportPDF').addEventListener('click', function () {
+        const selectedIds = Array.from(document.querySelectorAll('.select-checkbox:checked')).map(cb => cb.value);
 
-                {
-                    data: 'us_sexo'
-                }
+        if (selectedIds.length === 0) {
+            alert('Por favor, seleccione al menos un usuario para exportar.');
+            return;
+        }
 
-            ],
+        const url = '<?= base_url('usuarios/exportar_pdf'); ?>' + '?ids=' + selectedIds.join(',');
+        window.location.href = url;
+    });
 
+    document.getElementById('importFile').addEventListener('change', function (e) {
+        const fileName = e.target.files[0]?.name || 'ninguno seleccionado';
+        document.getElementById('fileName').textContent = fileName;
+    });
 
-            pageLength: 4,
+    document.getElementById('Machote').addEventListener('click', function () {
+        const url = '<?= base_url('usuarios/plantilla_machote'); ?>';
+        window.location.href = url;
+    });
 
+    document.getElementById('importar').addEventListener('click', function () {
+        const fileInput = document.getElementById('importFile');
 
-            lengthMenu: [
+        if (!fileInput.files.length) {
+            alert('Por favor, seleccione un archivo Excel para importar.');
+            return;
+        }
 
-                [4, 10, 20, 50],
+        const formData = new FormData();
+        formData.append('excelFile', fileInput.files[0]);
 
-                [4, 10, 20, 50]
-
-            ],
-
-
-            order: [
-
-                [0, 'asc'],
-                [2, 'asc']
-
-            ]
-
-        });
-
-        document
-            .getElementById('filtroSexo')
-            .addEventListener('change', function () {
-
+        fetch('<?= base_url('usuarios/importar_excel'); ?>', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
                 table.ajax.reload();
-
-            });
-
-            // Seleccion de checkbox para exportar a excel o pdf
-
-            //excel
-
-            document.getElementById('exportExcel').addEventListener('click', function () {
-
-                const selectedIds = Array.from(document.querySelectorAll('.select-checkbox:checked')).map(cb => cb.value);
-
-
-               // console.log('Selected IDs for Excel Export:', selectedIds);
-
-                if (selectedIds.length === 0) {
-
-                    alert('Por favor, seleccione al menos un usuario para exportar.');
-
-                    return;
-
-                }
-
-                const url = '<?= base_url('usuarios/exportar_excel'); ?>' + '?ids=' + selectedIds.join(',');
-
-                window.location.href = url;
-
-            });
-
-            //pdf
-            document.getElementById('exportPDF').addEventListener('click', function () {
-
-                const selectedIds = Array.from(document.querySelectorAll('.select-checkbox:checked')).map(cb => cb.value);
-
-                if (selectedIds.length === 0) {
-
-                    alert('Por favor, seleccione al menos un usuario para exportar.');
-
-                    return;
-
-                }
-
-                //console.log('Selected IDs for PDF Export:', selectedIds);
-
-                const url = '<?= base_url('usuarios/exportar_pdf'); ?>' + '?ids=' + selectedIds.join(',');
-
-                window.location.href = url;
-
-            });
-
-            // Mostrar nombre del archivo seleccionado
-            document.getElementById('importFile').addEventListener('change', function (e) {
-                const fileName = e.target.files[0]?.name || 'ninguno seleccionado';
-                document.getElementById('fileName').textContent = fileName;
-            });
-
-            //generacion de plantilla machote
-            document.getElementById('Machote').addEventListener('click', function () {
-
-                const url = '<?= base_url('usuarios/plantilla_machote'); ?>';
-
-                window.location.href = url;
-
-            });
-
-            //importacion de archivo excel
-            document.getElementById('importar').addEventListener('click', function () {
-
-                const fileInput = document.getElementById('importFile');
-
-                if (!fileInput.files.length) {
-
-                    alert('Por favor, seleccione un archivo Excel para importar.');
-
-                    return;
-
-                }
-
-                const formData = new FormData();
-
-                formData.append('excelFile', fileInput.files[0]);
-
-                fetch('<?= base_url('usuarios/importar_excel'); ?>', {
-
-                    method: 'POST',
-
-                    body: formData
-
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert(data.message);
-                            table.ajax.reload();
-                        } else {
-                            alert(data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error al importar el archivo:', error);
-                        alert('Ocurrió un error al importar el archivo.');
-                    });
-
-            });
-
-    </script>
-
-
-</body>
-
-</html>
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error al importar el archivo:', error);
+            alert('Ocurrió un error al importar el archivo.');
+        });
+    });
+</script>

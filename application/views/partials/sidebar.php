@@ -17,7 +17,7 @@
             </li>
 
             <li>
-                <a href="<?= base_url('Productos'); ?>">
+                <a href="<?= base_url('productos'); ?>">
                     Productos
                 </a>
             </li>

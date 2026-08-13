@@ -23,7 +23,7 @@ class Pedido_Detalle_model extends CI_Model
         return $query->row();
     }
 
-    public function insert_detalle($data)
+    public function crear($data)
     {
         if ($this->session->userdata('rol') !== 'A') {
             // Redirigir al dashboard si no es admin, en lugar de mostrar error
@@ -33,7 +33,7 @@ class Pedido_Detalle_model extends CI_Model
         return $this->db->insert($this->table, $data);
     }
 
-    public function update_detalle($id, $data)
+    public function actualizar($id, $data)
     {
         if ($this->session->userdata('rol') !== 'A') {
             // Redirigir al dashboard si no es admin, en lugar de mostrar error
@@ -43,7 +43,7 @@ class Pedido_Detalle_model extends CI_Model
         return $this->db->where('id', $id)->update($this->table, $data);
     }
 
-    public function delete_detalle($id)
+    public function eliminar($id)
     {
         if ($this->session->userdata('rol') !== 'A') {
             // Redirigir al dashboard si no es admin, en lugar de mostrar error

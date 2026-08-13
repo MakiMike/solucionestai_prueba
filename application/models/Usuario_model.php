@@ -76,7 +76,7 @@ class Usuario_model extends CI_Model
     }
 
     public function listar_datatable()
-{
+    {
     if ($this->session->userdata('rol') !== 'A') {
         // Redirigir al dashboard si no es admin, en lugar de mostrar error
         redirect('dashboard');
