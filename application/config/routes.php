@@ -56,6 +56,8 @@ $route['login/submit'] = 'auth/attempt_login';
 $route['register'] = 'auth/register';
 $route['register/submit'] = 'auth/create_user';
 
+$route['menu'] = 'layouts/menu';
+
 $route['dashboard'] = 'dashboard/index';
 
 $route['usuarios'] = 'usuarios/index';

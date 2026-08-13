@@ -18,6 +18,8 @@ class Dashboard extends CI_Controller
     public function index()
     {
         $data = array(
+            'title' => 'Dashboard',
+            'content' => 'dashboard',
             'us_nombre' => $this->session->userdata('usuario_nombre'),
             'us_correo' => $this->session->userdata('usuario_email'),
             'us_telefono' => $this->session->userdata('telefono'),
@@ -25,6 +27,6 @@ class Dashboard extends CI_Controller
             'us_rol' => $this->session->userdata('rol')
         );
 
-        $this->load->view('dashboard', $data);
+        $this->load->view('layouts/main', $data);
     }
 }

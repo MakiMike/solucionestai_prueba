@@ -18,7 +18,12 @@ class Usuarios extends CI_Controller {
 
 	public function index()
 	{
-        $this->load->view('usuarios');
+        $data = array(
+            'title' => 'Usuarios',
+            'content' => 'usuarios'
+        );
+
+        $this->load->view('layouts/main', $data);
     }
 	
     public function listar()
