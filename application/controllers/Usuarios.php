@@ -42,6 +42,7 @@ class Usuarios extends MY_Admin_Controller {
 
         // Crear un nuevo objeto de Excel
         $objPHPExcel = new PHPExcel();
+        $sheet = $objPHPExcel->getActiveSheet();
 
         // Establecer propiedades del documento
         $objPHPExcel->getProperties()->setCreator("Tu Nombre")
@@ -51,31 +52,80 @@ class Usuarios extends MY_Admin_Controller {
             ->setKeywords("usuarios excel exportación")
             ->setCategory("Exportación");
 
-        // Agregar encabezados de columna
-        $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'ID')
-            ->setCellValue('B1', 'Nombre')
-            ->setCellValue('C1', 'Correo')
-            ->setCellValue('D1', 'Teléfono')
-            ->setCellValue('E1', 'Sexo');
+        $sheet->setTitle('Usuarios');
+
+        // Encabezados
+        $sheet->setCellValue('A1', 'ID');
+        $sheet->setCellValue('B1', 'Nombre');
+        $sheet->setCellValue('C1', 'Correo');
+        $sheet->setCellValue('D1', 'Teléfono');
+        $sheet->setCellValue('E1', 'Sexo');
+
+        // Estilo de encabezados
+        $headerStyle = array(
+            'font' => array(
+                'bold' => true,
+                'color' => array('rgb' => 'FFFFFF'),
+                'size' => 11,
+                'name' => 'Calibri'
+            ),
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array('rgb' => '4A2D5F')
+            ),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array('rgb' => 'D1C4E9')
+                )
+            )
+        );
+        $sheet->getStyle('A1:E1')->applyFromArray($headerStyle);
 
         // Agregar datos de usuarios
-        $row = 2; // Comenzar desde la segunda fila
+        $row = 2;
         foreach ($usuarios as $usuario) {
-            $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A' . $row, $usuario->us_id)
-                ->setCellValue('B' . $row, $usuario->us_nombre)
-                ->setCellValue('C' . $row, $usuario->us_correo)
-                ->setCellValue('D' . $row, $usuario->us_telefono)
-                ->setCellValue('E' . $row, $usuario->us_sexo);
+            $sheet->setCellValue('A' . $row, $usuario->us_id);
+            $sheet->setCellValue('B' . $row, $usuario->us_nombre);
+            $sheet->setCellValue('C' . $row, $usuario->us_correo);
+            $sheet->setCellValue('D' . $row, $usuario->us_telefono);
+            $sheet->setCellValue('E' . $row, $usuario->us_sexo);
+
+            $filaStyle = array(
+                'font' => array(
+                    'color' => array('rgb' => '1F1F1F'),
+                    'size' => 10,
+                    'name' => 'Calibri'
+                ),
+                'borders' => array(
+                    'allborders' => array(
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                        'color' => array('rgb' => 'E5E7EB')
+                    )
+                ),
+                'fill' => array(
+                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    'startcolor' => array('rgb' => ($row % 2 == 0) ? 'F7F3FA' : 'FFFFFF')
+                )
+            );
+
+            $sheet->getStyle('A' . $row . ':E' . $row)->applyFromArray($filaStyle);
             $row++;
         }
 
-        // Renombrar la hoja activa
-        $objPHPExcel->getActiveSheet()->setTitle('Usuarios');
+        // Ajuste de ancho de columnas
+        $sheet->getColumnDimension('A')->setWidth(12);
+        $sheet->getColumnDimension('B')->setWidth(28);
+        $sheet->getColumnDimension('C')->setWidth(30);
+        $sheet->getColumnDimension('D')->setWidth(18);
+        $sheet->getColumnDimension('E')->setWidth(12);
 
-        // Establecer la hoja activa en la primera hoja
-        $objPHPExcel->setActiveSheetIndex(0);
+        $sheet->getStyle('A1:E' . ($row - 1))->getAlignment()->setWrapText(true);
+        $sheet->freezePane('A2');
 
         // Configurar encabezados para la descarga del archivo Excel
         header('Content-Type: application/vnd.ms-excel');
@@ -144,6 +194,7 @@ class Usuarios extends MY_Admin_Controller {
 
         // Crear un nuevo objeto de Excel
         $objPHPExcel = new PHPExcel();
+        $sheet = $objPHPExcel->getActiveSheet();
 
         // Establecer propiedades del documento
         $objPHPExcel->getProperties()->setCreator("Tu Nombre")
@@ -154,16 +205,49 @@ class Usuarios extends MY_Admin_Controller {
             ->setCategory("Plantilla");
 
         // Agregar encabezados de columna
-        $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'Nombre')
-            ->setCellValue('B1', 'Correo')
-            ->setCellValue('C1', 'Teléfono')
-            ->setCellValue('D1', 'Contraseña (Hash)')
-            ->setCellValue('E1', 'Rol')
-            ->setCellValue('F1', 'Sexo');
+        $sheet->setCellValue('A1', 'Nombre');
+        $sheet->setCellValue('B1', 'Correo');
+        $sheet->setCellValue('C1', 'Teléfono');
+        $sheet->setCellValue('D1', 'Contraseña (Hash)');
+        $sheet->setCellValue('E1', 'Rol');
+        $sheet->setCellValue('F1', 'Sexo');
+
+        $headerStyle = array(
+            'font' => array(
+                'bold' => true,
+                'color' => array('rgb' => 'FFFFFF'),
+                'size' => 11,
+                'name' => 'Calibri'
+            ),
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array('rgb' => '4A2D5F')
+            ),
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+            ),
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array('rgb' => 'D1C4E9')
+                )
+            )
+        );
+        $sheet->getStyle('A1:F1')->applyFromArray($headerStyle);
+
+        $sheet->getColumnDimension('A')->setWidth(25);
+        $sheet->getColumnDimension('B')->setWidth(30);
+        $sheet->getColumnDimension('C')->setWidth(18);
+        $sheet->getColumnDimension('D')->setWidth(22);
+        $sheet->getColumnDimension('E')->setWidth(12);
+        $sheet->getColumnDimension('F')->setWidth(12);
+
+        $sheet->getStyle('A1:F100')->getAlignment()->setWrapText(true);
+        $sheet->freezePane('A2');
 
         // Renombrar la hoja activa
-        $objPHPExcel->getActiveSheet()->setTitle('Plantilla Machote');
+        $sheet->setTitle('Plantilla Machote');
 
         // Establecer la hoja activa en la primera hoja
         $objPHPExcel->setActiveSheetIndex(0);
@@ -272,7 +356,7 @@ class Usuarios extends MY_Admin_Controller {
                 continue;
             }
 
-            if (!in_array($sexo, ['M', 'F', 'O'])) {
+            if (!in_array($sexo, ['H', 'M', 'O'])) {
                 $sexo = 'O';
             }
 
