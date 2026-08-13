@@ -291,6 +291,8 @@
 
     </div>
 
+    
+
 </div>
 
 
@@ -354,15 +356,26 @@ const table = new DataTable('#productosTable', {
 
             render: function(data) {
 
-                if (!data) {
-                    return 'Sin imagen';
+                if (!data || data.toString().trim() === '') {
+                    return '<span style="color: #9ca3af; font-size: 0.75rem; font-style: italic;">Sin imagen</span>';
                 }
+
+                let raw = data.toString().trim();
+                let fileName = raw.includes('/') ? raw.split('/').pop() : raw;
+
+                if (!fileName) {
+                    return '<span style="color: #9ca3af; font-size: 0.75rem; font-style: italic;">Sin imagen</span>';
+                }
+
+                const fullUrl = 'http://localhost/sistema/uploads/playeras/' + fileName;
+                const fallbackSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'><rect width='50' height='50' fill='%23171717'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-size='9' font-family='sans-serif'>No Img</text></svg>";
 
                 return `
                     <img
-                        src="<?= base_url('uploads/playeras/'); ?>${data}"
-                        width="60"
-                        height="60">
+                        src="${fullUrl}"
+                        alt="Playera"
+                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(157, 74, 111, 0.5); display: block;"
+                        onerror="this.onerror=null; this.src='${fallbackSvg}';">
                 `;
 
             },
