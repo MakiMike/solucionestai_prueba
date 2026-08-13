@@ -6,6 +6,36 @@ class Usuario_model extends CI_Model
 {
     private $tabla = 'us_usuarios';
 
+    //CRUD
+    public function insertar($data)
+    {
+        return $this->db->insert($this->tabla, $data);
+    }
+
+    public function actualizar($id, $data)
+    {
+        return $this->db
+            ->where('us_id', $id)
+            ->update($this->tabla, $data);
+    }
+
+    public function eliminar($id)
+    {
+        return $this->db
+            ->where('us_id', $id)
+            ->delete($this->tabla);
+    }
+
+    public function obtener_por_id($id)
+    {
+        return $this->db
+            ->where('us_id', $id)
+            ->get($this->tabla)
+            ->row();
+    }
+
+    //metodos personalizados
+
     public function obtener_por_correo($email)
     {
         return $this->db
@@ -182,5 +212,19 @@ class Usuario_model extends CI_Model
             ->get($this->tabla)
             ->result();
         
+    }
+
+    public function guardar_usuario($nombre, $correo, $telefono, $contrasenia_hash, $rol, $sexo)
+    {
+        $data = array(
+            'us_nombre' => $nombre,
+            'us_correo' => $correo,
+            'us_telefono' => $telefono,
+            'us_contrasenia' => $contrasenia_hash,
+            'us_rol' => $rol,
+            'us_sexo' => $sexo
+        );
+
+        return $this->db->insert($this->tabla, $data);
     }
 }
