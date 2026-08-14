@@ -54,11 +54,6 @@
             </a>
         </li>
 
-        <li>
-            <a href="<?= base_url('perfil'); ?>">
-                Mi Perfil
-            </a>
-        </li>
 
     </ul>
 
