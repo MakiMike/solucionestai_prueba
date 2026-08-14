@@ -46,10 +46,11 @@ class Perfil extends MY_Controller
             return;
         }
 
-        $nombre   = trim((string)$this->input->post('us_nombre'));
-        $telefono = trim((string)$this->input->post('us_telefono'));
-        $sexo     = strtoupper(trim((string)$this->input->post('us_sexo')));
-        $password = (string)$this->input->post('nueva_password');
+        $nombre       = trim((string)$this->input->post('us_nombre'));
+        $telefono     = trim((string)$this->input->post('us_telefono'));
+        $sexo         = strtoupper(trim((string)$this->input->post('us_sexo')));
+        $password     = (string)$this->input->post('nueva_password');
+        $confirm_pass = (string)$this->input->post('confirmar_password');
 
         // Validaciones
         if (empty($nombre)) {
@@ -60,8 +61,8 @@ class Perfil extends MY_Controller
             return;
         }
 
-        if (!in_array($sexo, array('H', 'M'))) {
-            $sexo = 'H';
+        if (!in_array($sexo, array('H', 'M', 'O'))) {
+            $sexo = 'O';
         }
 
         // Validar teléfono duplicado si fue ingresado
@@ -99,6 +100,15 @@ class Perfil extends MY_Controller
                     ->set_output(json_encode(array('success' => false, 'error' => 'La contraseña debe tener al menos 4 caracteres.')));
                 return;
             }
+
+            if ($password !== $confirm_pass) {
+                if (ob_get_length() > 0) { @ob_clean(); }
+                $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode(array('success' => false, 'error' => 'La nueva contraseña y su confirmación no coinciden.')));
+                return;
+            }
+
             $update_data['us_contrasenia'] = password_hash($password, PASSWORD_DEFAULT);
         }
 

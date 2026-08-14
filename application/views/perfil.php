@@ -11,19 +11,16 @@
     <!-- CONTENEDOR PRINCIPAL DEL FORMULARIO -->
     <div class="perfil-card-container">
 
-        <!-- AVATAR BANNER -->
-        <div class="user-avatar-banner">
-            <div class="avatar-circle">
-                <i class="fa-solid fa-user"></i>
+        <!-- META BARRA DE INFORMACIÓN-->
+        <div class="user-meta-bar">
+            <div class="meta-info">
+                <h2 id="displayUserName"><?= htmlspecialchars($usuario->us_nombre); ?></h2>
+                <span class="user-email-badge"><i class="fa-solid fa-envelope"></i> <?= htmlspecialchars($usuario->us_correo); ?></span>
             </div>
-            <div class="user-meta">
-                <h2><?= htmlspecialchars($usuario->us_nombre); ?></h2>
-                <span class="user-email-badge"><?= htmlspecialchars($usuario->us_correo); ?></span>
-                <span class="user-role-tag">
-                    <i class="fa-solid fa-shield-halved"></i> 
-                    <?= $usuario->us_rol === 'A' ? 'Administrador' : 'Usuario Cliente'; ?>
-                </span>
-            </div>
+            <span class="user-role-tag">
+                <i class="fa-solid fa-shield-halved"></i> 
+                <?= $usuario->us_rol === 'A' ? 'Administrador' : 'Usuario Cliente'; ?>
+            </span>
         </div>
 
         <hr class="perfil-divider">
@@ -51,7 +48,7 @@
 
                 <!-- CORREO ELECTRÓNICO (SOLO LECTURA) -->
                 <div class="field-group">
-                    <label for="us_correo"><i class="fa-solid fa-envelope"></i> Correo Electrónico:</label>
+                    <label for="us_correo"><i class="fa-solid fa-at"></i> Correo Electrónico:</label>
                     <input 
                         type="email" 
                         id="us_correo" 
@@ -77,7 +74,7 @@
                     <span class="field-hint">Agrega o actualiza tu teléfono de contacto.</span>
                 </div>
 
-                <!-- SEXO / GÉNERO -->
+                <!-- SEXO / GÉNERO (HOMBRE, MUJER, OTRO) -->
                 <div class="field-group">
                     <label for="us_sexo"><i class="fa-solid fa-venus-mars"></i> Sexo / Género:</label>
                     <select id="us_sexo" name="us_sexo" class="select-sexo">
@@ -87,21 +84,37 @@
                         <option value="M" <?= (strtoupper($usuario->us_sexo) === 'M' || strtolower($usuario->us_sexo) === 'mujer') ? 'selected' : ''; ?>>
                             Mujer (M)
                         </option>
+                        <option value="O" <?= (strtoupper($usuario->us_sexo) === 'O' || strtolower($usuario->us_sexo) === 'otro') ? 'selected' : ''; ?>>
+                            Otro (O)
+                        </option>
                     </select>
                     <span class="field-hint">Utilizado para personalizar las recomendaciones en tu Dashboard.</span>
                 </div>
 
                 <!-- CAMBIAR CONTRASEÑA -->
-                <div class="field-group full-width">
-                    <label for="nueva_password"><i class="fa-solid fa-key"></i> Cambiar Contraseña:</label>
+                <div class="field-group">
+                    <label for="nueva_password"><i class="fa-solid fa-key"></i> Nueva Contraseña:</label>
                     <input 
                         type="password" 
                         id="nueva_password" 
                         name="nueva_password" 
-                        placeholder="Dejar en blanco si deseas conservar tu contraseña actual"
+                        placeholder="Dejar en blanco para conservar la actual"
                         autocomplete="new-password"
                     >
-                    <span class="field-hint">Escribe una nueva contraseña solo si deseas cambiarla.</span>
+                    <span class="field-hint">Escribe tu nueva contraseña solo si deseas cambiarla.</span>
+                </div>
+
+                <!-- CONFIRMAR CONTRASEÑA -->
+                <div class="field-group">
+                    <label for="confirmar_password"><i class="fa-solid fa-check-double"></i> Confirmar Nueva Contraseña:</label>
+                    <input 
+                        type="password" 
+                        id="confirmar_password" 
+                        name="confirmar_password" 
+                        placeholder="Vuelve a escribir la nueva contraseña"
+                        autocomplete="new-password"
+                    >
+                    <span class="field-hint">Debe coincidir exactamente con la nueva contraseña.</span>
                 </div>
 
             </div>
@@ -175,48 +188,34 @@
         }
     }
 
-    /* AVATAR Y DATOS DE CABECERA */
-    .user-avatar-banner {
+    /* BARRA META */
+    .user-meta-bar {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        gap: 1.5rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
         flex-wrap: wrap;
+        gap: 1rem;
     }
 
-    .avatar-circle {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #6b3d80, #9d4a6f);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.2rem;
-        color: #ffffff;
-        box-shadow: 0 0 20px rgba(157, 74, 111, 0.4);
-        border: 2px solid #b87399;
-    }
-
-    .user-meta h2 {
-        margin: 0 0 0.3rem 0;
+    .meta-info h2 {
+        margin: 0 0 0.2rem 0;
         font-size: 1.6rem;
         color: #ffffff;
         font-weight: 800;
     }
 
     .user-email-badge {
-        display: block;
-        font-size: 0.9rem;
-        color: #b0b0b0;
-        margin-bottom: 0.5rem;
+        font-size: 0.88rem;
+        color: #b87399;
+        font-weight: 600;
     }
 
     .user-role-tag {
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        padding: 0.3rem 0.8rem;
+        padding: 0.4rem 0.9rem;
         background: rgba(157, 74, 111, 0.2);
         border: 1px solid rgba(157, 74, 111, 0.6);
         border-radius: 20px;
@@ -229,7 +228,7 @@
     .perfil-divider {
         border: none;
         border-top: 1px solid #222222;
-        margin: 1.5rem 0 2rem 0;
+        margin: 1.2rem 0 2rem 0;
     }
 
     /* FORMULARIO GRID */
@@ -245,10 +244,6 @@
             grid-template-columns: 1fr;
             gap: 1.4rem;
         }
-    }
-
-    .field-group.full-width {
-        grid-column: 1 / -1;
     }
 
     .field-group label {
@@ -355,9 +350,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const perfilForm = document.getElementById('perfilForm');
     const btnGuardarPerfil = document.getElementById('btnGuardarPerfil');
     const perfilFeedback = document.getElementById('perfilFeedback');
+    const nuevaPasswordInput = document.getElementById('nueva_password');
+    const confirmarPasswordInput = document.getElementById('confirmar_password');
 
     perfilForm.addEventListener('submit', function(e) {
         e.preventDefault();
+
+        const passVal = nuevaPasswordInput.value;
+        const confirmVal = confirmarPasswordInput.value;
+
+        if (passVal.length > 0 && passVal !== confirmVal) {
+            showFeedback('La nueva contraseña y su confirmación no coinciden.', 'error');
+            return;
+        }
 
         btnGuardarPerfil.disabled = true;
         btnGuardarPerfil.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
@@ -376,13 +381,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (data.success) {
                 showFeedback(data.message, 'success');
-                // Limpiar campo de nueva contraseña si se ingresó
-                document.getElementById('nueva_password').value = '';
-                // Actualizar avatar header con nuevo nombre
+                // Limpiar campos de contraseña
+                nuevaPasswordInput.value = '';
+                confirmarPasswordInput.value = '';
+                // Actualizar nombre mostrado en cabecera
                 const newName = document.getElementById('us_nombre').value.trim();
                 if (newName) {
-                    const metaH2 = document.querySelector('.user-meta h2');
-                    if (metaH2) metaH2.textContent = newName;
+                    const displayUserName = document.getElementById('displayUserName');
+                    if (displayUserName) displayUserName.textContent = newName;
                 }
             } else {
                 showFeedback(data.error || 'Ocurrió un error al actualizar el perfil.', 'error');
