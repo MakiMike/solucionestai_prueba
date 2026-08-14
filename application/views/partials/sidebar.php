@@ -47,6 +47,12 @@
                     Todos los productos
                 </a>
             </li>
+         
+        <li>
+            <a href="<?= base_url('Carrito'); ?>">
+                Carrito <?= $this->session->userdata('carrito') ? '(' . count($this->session->userdata('carrito')) . ')' : ''; ?>
+            </a>
+        </li>
 
     </ul>
 

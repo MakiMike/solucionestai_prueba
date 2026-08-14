@@ -156,6 +156,7 @@ class Ventas extends MY_Admin_Controller
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save('php://output');
+        exit;
     }
 
     public function exportar_pdf()
@@ -214,5 +215,6 @@ class Ventas extends MY_Admin_Controller
 
         $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->Output('reporte_ventas.pdf', 'D');
+        exit;
     }
 }

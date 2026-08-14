@@ -351,4 +351,97 @@ class Playera_model extends CI_Model
 
     );
 }
+    public function listar_por_ids($ids = array())
+    {
+        if ($this->session->userdata('rol') !== 'A') {
+            redirect('dashboard');
+            exit;
+        }
+
+        if (!is_array($ids)) {
+            $ids = array_filter(explode(',', $ids));
+        } else {
+            $ids = array_filter($ids);
+        }
+
+        $this->db->select("
+            p.pla_id,
+            p.pla_nombre,
+            p.pla_descripcion,
+            p.pla_genero,
+            p.pla_precio,
+            p.pla_imagen,
+            p.pla_activa,
+
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN t.tal_nombre = 'S'
+                        THEN ps.pta_stock
+                        ELSE 0
+                    END
+                ), 0
+            ) AS stock_s,
+
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN t.tal_nombre = 'M'
+                        THEN ps.pta_stock
+                        ELSE 0
+                    END
+                ), 0
+            ) AS stock_m,
+
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN t.tal_nombre = 'L'
+                        THEN ps.pta_stock
+                        ELSE 0
+                    END
+                ), 0
+            ) AS stock_l,
+
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN t.tal_nombre = 'XL'
+                        THEN ps.pta_stock
+                        ELSE 0
+                    END
+                ), 0
+            ) AS stock_xl,
+
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN t.tal_nombre = '2XL'
+                        THEN ps.pta_stock
+                        ELSE 0
+                    END
+                ), 0
+            ) AS stock_2xl
+        ", false);
+
+        $this->db->from('playeras p');
+        $this->db->join('playera_tallas ps', 'ps.pla_id = p.pla_id', 'left');
+        $this->db->join('tallas t', 't.tal_id = ps.tal_id', 'left');
+
+        if (!empty($ids)) {
+            $this->db->where_in('p.pla_id', $ids);
+        }
+
+        $this->db->group_by([
+            'p.pla_id',
+            'p.pla_nombre',
+            'p.pla_descripcion',
+            'p.pla_genero',
+            'p.pla_precio',
+            'p.pla_imagen',
+            'p.pla_activa'
+        ]);
+
+        return $this->db->get()->result();
+    }
 }
