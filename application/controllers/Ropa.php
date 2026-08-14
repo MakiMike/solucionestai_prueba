@@ -107,6 +107,18 @@ class Ropa extends MY_Controller
         $query = $this->db->get();
         $productos = $query->result();
 
+        // 3. Computar URLs completas de imagen desde PHP (como en dashboard/detalle)
+        $fallback_img = base_url('assets/img/logo.png');
+        foreach ($productos as &$prod) {
+            $img = trim((string)$prod->pla_imagen);
+            if (!empty($img)) {
+                $prod->imagen_url = base_url('uploads/playeras/' . $img);
+            } else {
+                $prod->imagen_url = $fallback_img;
+            }
+            $prod->detalle_url = site_url('ropa/detalle/' . $prod->pla_id);
+        }
+
         $total_pages = ceil($total_records / $limit);
         if ($total_pages < 1) {
             $total_pages = 1;
@@ -121,7 +133,8 @@ class Ropa extends MY_Controller
                 'productos' => $productos,
                 'page' => $page,
                 'total_pages' => (int)$total_pages,
-                'total_records' => (int)$total_records
+                'total_records' => (int)$total_records,
+                'fallback_img' => $fallback_img
             )));
     }
 

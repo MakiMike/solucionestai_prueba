@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', function() {
             card.href = detailUrlBase + '/' + prod.pla_id;
 
             const imgSrc = prod.pla_imagen 
-                ? '<?= base_url("uploads/playeras/"); ?>' + prod.pla_imagen 
+                ? '<?= base_url("uploads/playeras"); ?>/' + prod.pla_imagen.trim() 
                 : '<?= base_url("assets/img/logo.png"); ?>';
 
             const precioFmt = parseFloat(prod.pla_precio).toFixed(2);
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Renderizar Paginación (1, 2, 3...)
+    // Renderizar Paginación
     function renderPagination(page, totalPages) {
         paginationContainer.innerHTML = '';
 
