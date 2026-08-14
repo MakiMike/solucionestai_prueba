@@ -102,7 +102,11 @@ class Ropa extends MY_Controller
         }
 
         if (!empty($search)) {
-            $this->db->like('pla_nombre', $search);
+            $this->db->where(
+                "pla_nombre ILIKE '%{$search}%'", 
+                NULL,
+                FALSE
+                );
         }
 
         $this->db->order_by('pla_id', 'DESC');
