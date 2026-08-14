@@ -1,6 +1,17 @@
-<IfModule authz_core_module>
-	Require all denied
-</IfModule>
-<IfModule !authz_core_module>
-	Deny from all
+RewriteEngine On
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.+)$ index.php?/$1 [L,QSA]
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    RewriteRule ^application/(.*)$ - [F,L]
+    RewriteRule ^system/(.*)$ - [F,L]
+    RewriteRule ^\.git/(.*)$ - [F,L]
+    RewriteRule ^assets/(.*)$ - [F,L]
+    RewriteRule ^DataTables/(.*)$ - [F,L]
 </IfModule>
