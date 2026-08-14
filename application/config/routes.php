@@ -61,6 +61,8 @@ $route['menu'] = 'layouts/menu';
 $route['dashboard'] = 'dashboard/index';
 
 $route['usuarios'] = 'usuarios/index';
+$route['usuarios/obtener_usuario'] = 'usuarios/obtener_usuario';
+
 
 $route['productos'] = 'productos/index';
 

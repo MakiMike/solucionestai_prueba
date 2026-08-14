@@ -412,4 +412,118 @@ class Usuarios extends MY_Admin_Controller {
     }
 }
 
+ public function obtener_usuario()
+    {
+        $us_id = (int) $this->input->post('us_id');
+
+        if (!$us_id) {
+            if (ob_get_length() > 0) { @ob_clean(); }
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'error' => 'ID no proporcionado.']));
+            return;
+        }
+
+        $usuario = $this->Usuario_model->obtener_por_id($us_id);
+
+        if (!$usuario) {
+            if (ob_get_length() > 0) { @ob_clean(); }
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'error' => 'Usuario no encontrado.']));
+            return;
+        }
+
+        // No enviamos el hash de la contraseÃ±a al frontend
+        $usuario->us_contrasenia = '';
+
+        if (ob_get_length() > 0) { @ob_clean(); }
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['success' => true, 'usuario' => $usuario]));
+    }
+
+    public function actualizar_usuario()
+    {
+        $us_id       = (int)    $this->input->post('us_id');
+        $us_nombre   = trim((string) $this->input->post('us_nombre'));
+        $us_correo   = trim((string) $this->input->post('us_correo'));
+        $us_telefono = trim((string) $this->input->post('us_telefono'));
+        $us_sexo     = trim((string) $this->input->post('us_sexo'));
+        $us_rol      = trim((string) $this->input->post('us_rol'));
+        $nueva_pass  = (string) $this->input->post('us_contrasenia');
+
+        if (!$us_id || empty($us_nombre) || empty($us_correo)) {
+            if (ob_get_length() > 0) { @ob_clean(); }
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'error' => 'Nombre y correo son obligatorios.']));
+            return;
+        }
+
+        if (!in_array($us_sexo, ['H', 'M', 'O'])) {
+            if (ob_get_length() > 0) { @ob_clean(); }
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'error' => 'Sexo no vÃ¡lido.']));
+            return;
+        }
+
+        if (!in_array($us_rol, ['A', 'U'])) {
+            if (ob_get_length() > 0) { @ob_clean(); }
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'error' => 'Rol no vÃ¡lido.']));
+            return;
+        }
+
+        $data = [
+            'us_nombre'   => $us_nombre,
+            'us_correo'   => $us_correo,
+            'us_telefono' => !empty($us_telefono) ? $us_telefono : NULL,
+            'us_sexo'     => $us_sexo,
+            'us_rol'      => $us_rol
+        ];
+
+        if (!empty($nueva_pass)) {
+            $data['us_contrasenia'] = password_hash($nueva_pass, PASSWORD_DEFAULT);
+        }
+
+        $this->Usuario_model->actualizar($us_id, $data);
+
+        if (ob_get_length() > 0) { @ob_clean(); }
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['success' => true, 'message' => 'Usuario actualizado correctamente.']));
+    }
+
+    public function eliminar_usuario()
+    {
+        $us_id = (int) $this->input->post('us_id');
+
+        if (!$us_id) {
+            if (ob_get_length() > 0) { @ob_clean(); }
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'error' => 'ID no proporcionado.']));
+            return;
+        }
+
+        // Evitar que se elimine el admin logueado
+        if ($us_id === (int)$this->session->userdata('usuario_id')) {
+            if (ob_get_length() > 0) { @ob_clean(); }
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(['success' => false, 'error' => 'No puedes eliminar tu propia cuenta.']));
+            return;
+        }
+
+        $this->Usuario_model->eliminar($us_id);
+
+        if (ob_get_length() > 0) { @ob_clean(); }
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode(['success' => true, 'message' => 'Usuario eliminado correctamente.']));
+    }
+
 }
