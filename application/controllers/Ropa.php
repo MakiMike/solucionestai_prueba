@@ -73,7 +73,11 @@ class Ropa extends MY_Controller
         }
 
         if (!empty($search)) {
-            $this->db->like('pla_nombre', $search);
+            $this->db->where(
+                "pla_nombre ILIKE '%{$search}%'", 
+                NULL,
+                FALSE
+                );
         }
 
         $total_records = $this->db->count_all_results();

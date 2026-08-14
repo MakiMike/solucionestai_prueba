@@ -185,184 +185,278 @@ class Playera_model extends CI_Model
     }
 
     public function listar_datatable()
-{
-    if ($this->session->userdata('rol') !== 'A') {
-        // Redirigir al dashboard si no es admin
-        redirect('dashboard');
-        exit;
-    }
+    {
+        if ($this->session->userdata('rol') !== 'A') {
 
-    $start = (int) $this->input->post('start');
-    $length = (int) $this->input->post('length');
-
-    $search = $this->input->post('search');
-
-    $search_value = '';
-
-    if ($search && isset($search['value'])) {
-        $search_value = trim($search['value']);
-    }
-
-    $genero_filter = $this->input->post('genero');
+            redirect('dashboard');
+            exit;
+        }
 
 
-    // Total de playeras
-    $recordsTotal = $this->db
-        ->count_all_results('playeras');
+
+        // Obtener los parámetros de la solicitud
+        $start = (int) $this->input->post('start');
+        $length = (int) $this->input->post('length');
 
 
-    // Consulta principal
-    $this->db->select("
-        p.pla_id,
-        p.pla_nombre,
-        p.pla_genero,
-        p.pla_precio,
-        p.pla_imagen,
-        p.pla_activa,
+        $search = $this->input->post('search');
 
-        COALESCE(
-            SUM(
-                CASE
-                    WHEN t.tal_nombre = 'S'
-                    THEN ps.pta_stock
-                    ELSE 0
-                END
-            ), 0
-        ) AS stock_S,
+        $search_value = '';
 
-        COALESCE(
-            SUM(
-                CASE
-                    WHEN t.tal_nombre = 'M'
-                    THEN ps.pta_stock
-                    ELSE 0
-                END
-            ), 0
-        ) AS stock_M,
+        if ($search && isset($search['value'])) {
 
-        COALESCE(
-            SUM(
-                CASE
-                    WHEN t.tal_nombre = 'L'
-                    THEN ps.pta_stock
-                    ELSE 0
-                END
-            ), 0
-        ) AS stock_L,
+            $search_value = trim($search['value']);
 
-        COALESCE(
-            SUM(
-                CASE
-                    WHEN t.tal_nombre = 'XL'
-                    THEN ps.pta_stock
-                    ELSE 0
-                END
-            ), 0
-        ) AS stock_XL,
-
-        COALESCE(
-            SUM(
-                CASE
-                    WHEN t.tal_nombre = '2XL'
-                    THEN ps.pta_stock
-                    ELSE 0
-                END
-            ), 0
-        ) AS stock_2XL
-
-    ", false);
+        }
 
 
-    $this->db->from('playeras p');
+        $genero_filter = $this->input->post('genero');
 
 
-    // Tabla intermedia
-    $this->db->join(
-        'playera_tallas ps',
-        'ps.pla_id = p.pla_id',
-        'left'
-    );
+        //TOTAL PRODUCTOS SIN FILTRO
+
+        $recordsTotal = $this->db
+            ->count_all('playeras');
 
 
-    // Tabla de tallas
-    $this->db->join(
-        'tallas t',
-        't.tal_id = ps.tal_id',
-        'left'
-    );
+       //CONSULTA BASE
+        $this->db->from('playeras p');
 
-
-    // Filtro por genero
-    if (!empty($genero_filter) && $genero_filter !== 'todos') {
-
-        $this->db->where(
-            'p.pla_genero',
-            $genero_filter
+        $this->db->join(
+            'playera_tallas ps',
+            'ps.pla_id = p.pla_id',
+            'left'
         );
 
-    }
+        $this->db->join(
+            'tallas t',
+            't.tal_id = ps.tal_id',
+            'left'
+        );
 
 
-    // Busqueda general
-    if (!empty($search_value)) {
 
-        $this->db->group_start();
+        // FILTRO GENERO
+        if (!empty($genero_filter) && $genero_filter !== 'todos') {
 
-        $this->db->like(
+            $this->db->where(
+                'p.pla_genero',
+                $genero_filter
+            );
+
+        }
+
+
+
+        // BUSQUEDA
+        if (!empty($search_value)) {
+
+            $search_value =
+                $this->db->escape_like_str($search_value);
+
+
+                $this->db->group_start();
+
+
+                $this->db->where(
+                    "p.pla_nombre ILIKE '%{$search_value}%'",
+                    NULL,
+                    FALSE
+                );
+
+
+                $this->db->or_where(
+                    "p.pla_descripcion ILIKE '%{$search_value}%'",
+                    NULL,
+                    FALSE
+                );
+
+
+                $this->db->or_where(
+                    "CAST(p.pla_precio AS TEXT) ILIKE '%{$search_value}%'",
+                    NULL,
+                    FALSE
+                    );
+
+
+                $this->db->or_where(
+                    "p.pla_genero ILIKE '%{$search_value}%'",
+                    NULL,
+                    FALSE
+                );
+
+
+                $this->db->group_end();
+
+        }   
+
+
+        //FILTRADOS
+        $this->db->select('COUNT(DISTINCT p.pla_id) AS total', FALSE);
+
+        $query = $this->db->get();
+
+        $recordsFiltered =
+            (int) $query->row()->total;
+
+
+   
+
+        $this->db->select("
+            p.pla_id,
+            p.pla_nombre,
+            p.pla_genero,
+            p.pla_precio,
+            p.pla_imagen,
+            p.pla_activa,
+
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN t.tal_nombre = 'S'
+                        THEN ps.pta_stock
+                        ELSE 0
+                    END
+                ), 0
+            ) AS stock_S,
+
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN t.tal_nombre = 'M'
+                        THEN ps.pta_stock
+                        ELSE 0
+                    END
+                ), 0
+            ) AS stock_M,
+
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN t.tal_nombre = 'L'
+                        THEN ps.pta_stock
+                        ELSE 0
+                    END
+                ), 0
+            ) AS stock_L,
+
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN t.tal_nombre = 'XL'
+                        THEN ps.pta_stock
+                        ELSE 0
+                    END
+                ), 0
+            ) AS stock_XL,
+
+            COALESCE(
+                SUM(
+                    CASE
+                        WHEN t.tal_nombre = '2XL'
+                        THEN ps.pta_stock
+                        ELSE 0
+                    END
+                ), 0
+            ) AS stock_2XL
+
+        ", FALSE);
+
+
+        $this->db->from('playeras p');
+
+
+        $this->db->join(
+            'playera_tallas ps',
+            'ps.pla_id = p.pla_id',
+            'left'
+        );
+
+
+        $this->db->join(
+            'tallas t',
+            't.tal_id = ps.tal_id',
+            'left'
+        );
+
+
+   
+        if (!empty($genero_filter) && $genero_filter !== 'todos') {
+
+            $this->db->where(
+                'p.pla_genero',
+                $genero_filter
+            );
+
+        }
+
+        if (!empty($search_value)) {
+
+            $this->db->group_start();
+
+
+            $this->db->where(
+                "p.pla_nombre ILIKE '%{$search_value}%'",
+                NULL,
+                FALSE
+            );
+
+
+            $this->db->or_where(
+                "p.pla_descripcion ILIKE '%{$search_value}%'",
+                NULL,
+                FALSE
+            );
+
+
+            $this->db->or_where(
+                "CAST(p.pla_precio AS TEXT) ILIKE '%{$search_value}%'",
+                NULL,
+                FALSE
+            );
+
+
+            $this->db->or_where(
+                "p.pla_genero ILIKE '%{$search_value}%'",
+                NULL,
+                FALSE
+            );
+
+
+            $this->db->group_end();
+
+        }
+
+
+        //AGRUPAR PRODUCTOS
+        $this->db->group_by([
+            'p.pla_id',
             'p.pla_nombre',
-            $search_value
-        );
-
-        $this->db->or_like(
-            'p.pla_descripcion',
-            $search_value
-        );
-
-        $this->db->or_like(
-            'CAST(p.pla_precio AS TEXT)',
-            $search_value,
-            'both',
-            FALSE
-        );
-
-        $this->db->or_like(
             'p.pla_genero',
-            $search_value
+            'p.pla_precio',
+            'p.pla_imagen',
+            'p.pla_activa'
+        ]);
+
+        $this->db->order_by(
+            'p.pla_id',
+            'DESC'
         );
 
-        $this->db->group_end();
+        //PAGINACION
+        if ($length > 0) {
 
-    }
+            $this->db->limit(
+                $length,
+                $start
+            );
 
+        }
 
-    // Agrupar por playera
-    $this->db->group_by([
-        'p.pla_id',
-        'p.pla_nombre',
-        'p.pla_genero',
-        'p.pla_precio',
-        'p.pla_imagen',
-        'p.pla_activa'
-    ]);
+        $query = $this->db->get();
 
 
-    // Obtener resultados filtrados
-    $query = $this->db->get();
-
-    $playeras_filtradas = $query->result();
-
-
-    // Total de resultados filtrados
-    $recordsFiltered = count($playeras_filtradas);
-
-
-    // Aplicar paginacion
-    if ($length > 0) {
-        $playeras = array_slice($playeras_filtradas, $start, $length);
-    } else {
-        $playeras = array_slice($playeras_filtradas, $start);
-    }
-
+        $playeras = $query->result();
 
     return array(
 
@@ -370,14 +464,17 @@ class Playera_model extends CI_Model
             $this->input->post('draw')
         ),
 
-        'recordsTotal' => $recordsTotal,
+        'recordsTotal' =>
+            $recordsTotal,
 
-        'recordsFiltered' => $recordsFiltered,
+        'recordsFiltered' =>
+            $recordsFiltered,
 
-        'data' => $playeras
+        'data' =>
+            $playeras
 
     );
-}
+    }
     public function listar_por_ids($ids = array())
     {
         if ($this->session->userdata('rol') !== 'A') {
