@@ -218,4 +218,34 @@ class Venta_model extends CI_Model
             )
     );
 }
+
+    public function obtener_ventas_por_ids($ids = array())
+    {
+        $this->db->select("
+            pd.pde_id,
+            p.ped_id,
+            p.ped_fecha,
+            u.us_nombre,
+            pl.pla_nombre,
+            t.tal_nombre,
+            pd.pde_cantidad,
+            pd.pde_precio,
+            (pd.pde_cantidad * pd.pde_precio) AS subtotal,
+            p.ped_estado
+        ", false);
+
+        $this->db->from('pedido_detalle pd');
+        $this->db->join('pedidos p', 'p.ped_id = pd.ped_id', 'inner');
+        $this->db->join('playeras pl', 'pl.pla_id = pd.pla_id', 'inner');
+        $this->db->join('tallas t', 't.tal_id = pd.tal_id', 'inner');
+        $this->db->join('us_usuarios u', 'u.us_id = p.us_id', 'inner');
+
+        if (!empty($ids)) {
+            $this->db->where_in('pd.pde_id', $ids);
+        }
+
+        $this->db->order_by('p.ped_fecha', 'DESC');
+
+        return $this->db->get()->result();
+    }
 }
