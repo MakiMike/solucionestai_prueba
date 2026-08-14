@@ -47,7 +47,10 @@
                 </div>
 
                 <div class="field-group">
-                    <label for="password">Contraseña</label>
+                    <div class="password-label-row">
+                        <label for="password">Contraseña</label>
+                        <a href="<?= base_url('recuperar_password'); ?>" class="forgot-link">¿Olvidaste tu contraseña?</a>
+                    </div>
                     <input
                         id="password"
                         type="password"

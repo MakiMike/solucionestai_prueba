@@ -92,6 +92,12 @@ $route['Perfil'] = 'perfil/index';
 $route['perfil'] = 'perfil/index';
 $route['perfil/actualizar'] = 'perfil/actualizar';
 
+// Rutas de Recuperación de Contraseña
+$route['recuperar_password'] = 'auth/recuperar_password';
+$route['auth/procesar_recuperacion'] = 'auth/procesar_recuperacion';
+$route['restablecer_password/(:any)'] = 'auth/restablecer_password/$1';
+$route['auth/guardar_nueva_password'] = 'auth/guardar_nueva_password';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 

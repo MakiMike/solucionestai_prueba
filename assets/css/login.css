@@ -106,6 +106,15 @@ body::after {
     color: #ffd9d9;
 }
 
+.alert-success {
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(74, 222, 128, 0.35);
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80;
+}
+
 .login-form {
     display: grid;
     gap: 18px;
@@ -114,6 +123,24 @@ body::after {
 .field-group {
     display: grid;
     gap: 8px;
+}
+
+.password-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.forgot-link {
+    font-size: 0.82rem;
+    color: #c415ff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.forgot-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
 }
 
 .field-group label {
