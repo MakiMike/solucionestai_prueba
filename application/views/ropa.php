@@ -1,13 +1,13 @@
 <div class="ropa-catalog-page">
 
-    <!-- CABECERA DE LA SECCIÓN (Ancho completo) -->
+
     <div class="catalog-header">
         <div class="header-titles">
             <span class="catalog-kicker">Catálogo Exclusivo</span>
             <h1><?= isset($title) ? htmlspecialchars($title) : 'Productos'; ?></h1>
         </div>
         
-        <!-- BARRA DE BÚSQUEDA AJAX EN TIEMPO REAL -->
+        <!-- BARRA DE BÚSQUEDA -->
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
             <input 
@@ -22,25 +22,24 @@
         </div>
     </div>
 
-    <!-- ESTADO DE CARGA -->
+    
     <div id="catalogLoading" class="catalog-loading" style="display: none;">
         <i class="fa-solid fa-spinner fa-spin"></i>
         <span>Cargando productos...</span>
     </div>
 
-    <!-- CUADRÍCULA DE PRODUCTOS (GRID DE 9 POR PÁGINA) -->
+    <!-- CUADRÍCULA DE PRODUCTOS  -->
     <div id="productGrid" class="product-grid">
         <!-- Generado dinámicamente mediante AJAX -->
     </div>
 
-    <!-- MENSAJE SIN RESULTADOS -->
     <div id="noResults" class="no-results" style="display: none;">
         <i class="fa-solid fa-box-open"></i>
         <h3>No se encontraron productos</h3>
         <p>Intenta buscar con otro nombre o término de filtro.</p>
     </div>
 
-    <!-- SISTEMA DE PAGINACIÓN -->
+    <!-- PAGINACIÓN -->
     <div id="paginationContainer" class="pagination-container">
         <!-- Paginación dinámica (1, 2, 3... Anterior / Siguiente) -->
     </div>
@@ -48,7 +47,7 @@
 </div>
 
 <style>
-    /* Estilos del Catálogo - Ocupa 100% de la pestaña Main */
+
     .ropa-catalog-page {
         width: 100%;
         max-width: 100%;
@@ -149,7 +148,7 @@
         display: block;
     }
 
-    /* Grid de 9 Productos por página cubriendo 100% de main */
+
     .product-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -172,7 +171,7 @@
         }
     }
 
-    /* DISEÑO EXACTO DE LAS CARDS (ENLACE A LA VISTA DEDICADA DEL PRODUCTO) */
+    
     .product-card {
         background: #000000;
         border: none;
@@ -214,7 +213,7 @@
         display: block;
     }
 
-    /* Título del producto centrado (Ej. Legend Of The Keeper T-shirt) */
+    
     .product-title {
         font-size: 1.15rem;
         font-weight: 700;
@@ -225,7 +224,7 @@
         text-align: center;
     }
 
-    /* Precio del producto centrado (Ej. $35.00) */
+   
     .product-price {
         font-size: 1.2rem;
         font-weight: 700;

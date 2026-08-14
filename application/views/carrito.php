@@ -13,13 +13,12 @@
         <?php endif; ?>
     </div>
 
-    <!-- AVISO INFORMATIVO DE PÁGINA DE PRUEBA -->
     <div class="demo-notice-box">
         <i class="fa-solid fa-circle-info demo-icon"></i>
         <span><strong>Página de Prueba:</strong> Esta es una simulación de venta en línea. Los productos añadidos al carrito son temporales y no se conservan al cerrar sesión.</span>
     </div>
 
-    <!-- NOTIFICACIÓN GLOBAL -->
+    
     <div id="cartGlobalFeedback" class="cart-feedback" style="display: none;"></div>
 
     <?php if (empty($carrito)): ?>

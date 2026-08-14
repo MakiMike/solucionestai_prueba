@@ -12,7 +12,7 @@
         </button>
     </section>
 
-    <!-- TABLA -->
+   
     <div class="table-container" style="overflow-x: auto; width: 100%;">
         <table id="ventasTable" class="display" style="width: 100%; white-space: nowrap;">
             <thead>

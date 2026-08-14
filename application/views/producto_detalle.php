@@ -1,6 +1,6 @@
 <div class="product-detail-page">
 
-    <!-- BREADCRUMBS Y BOTÓN VOLVER -->
+   
     <div class="detail-nav-bar">
         <div class="breadcrumbs">
             <a href="<?= base_url('dashboard'); ?>"><i class="fa-solid fa-house"></i> Inicio</a>
@@ -15,10 +15,9 @@
         </a>
     </div>
 
-    <!-- MAIN PRODUCT SECTION (2 COLUMNAS) -->
     <div class="product-main-grid">
         
-        <!-- COLUMNA IZQUIERDA: IMAGEN PRINCIPAL -->
+
         <div class="product-image-container">
             <div class="image-wrapper">
                 <?php 
@@ -30,7 +29,7 @@
                 <span class="badge-online"><i class="fa-solid fa-vial"></i> Simulación de Venta</span>
             </div>
 
-            <!-- GARANTÍAS RÁPIDAS ABAJO DE LA IMAGEN -->
+        
             <div class="quick-guarantees">
                 <div class="guarantee-item">
                     <i class="fa-solid fa-cart-flatbed"></i>
@@ -118,7 +117,7 @@
                     </div>
                 </div>
 
-                <!-- FEEDBACK DE ACCIÓN -->
+              
                 <div id="cartFeedbackMsg" class="feedback-msg" style="display: none;"></div>
 
                 <!-- BOTÓN ÚNICO: AGREGAR AL CARRITO -->

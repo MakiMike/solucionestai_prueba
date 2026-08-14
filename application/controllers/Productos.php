@@ -330,7 +330,7 @@ class Productos extends MY_Admin_Controller
 
         $sheet->setTitle("Productos");
 
-        // Encabezados pedidos por el usuario: Nombre, Descripción, Género, Precio, S, M, L, XL, 2XL
+        // Encabezados 
         $sheet->setCellValue('A1', 'Nombre');
         $sheet->setCellValue('B1', 'Descripción');
         $sheet->setCellValue('C1', 'Género');
@@ -467,7 +467,7 @@ class Productos extends MY_Admin_Controller
         $sheet = $objPHPExcel->getActiveSheet();
         $sheet->setTitle("Machote Playeras");
 
-        // Encabezados: Nombre, Descripción, Género, Precio, S, M, L, XL, 2XL
+        // Encabezados
         $sheet->setCellValue('A1', 'Nombre');
         $sheet->setCellValue('B1', 'Descripción');
         $sheet->setCellValue('C1', 'Género');
@@ -551,17 +551,13 @@ class Productos extends MY_Admin_Controller
                 $stock_XL  = (int) $sheet->getCell('H' . $row)->getValue();
                 $stock_2XL = (int) $sheet->getCell('I' . $row)->getValue();
 
-                /*
-                 * Validaciones
-                 */
+               //VALIDACIONES
                 if (empty($nombre)) {
                     $omitidos++;
                     continue;
                 }
 
-                /*
-                 * Normalizar Género
-                 */
+                
                 if ($genero_raw === 'HOMBRE' || $genero_raw === 'H') {
                     $genero = 'H';
                 } else if ($genero_raw === 'MUJER' || $genero_raw === 'M') {
@@ -614,9 +610,7 @@ class Productos extends MY_Admin_Controller
                 $importados++;
             }
 
-            /*
-             * Eliminar archivo temporal
-             */
+            //eLIMINAR EL ARCHIVO SUBIDO DESPUÉS DE PROCESARLO
             if (file_exists($ruta_archivo)) {
                 unlink($ruta_archivo);
             }

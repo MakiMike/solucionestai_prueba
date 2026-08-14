@@ -1,6 +1,5 @@
 <div class="dashboard-page">
 
-    <!-- SECCIÓN DE BIENVENIDA Y MENSAJE ALEATORIO CULTURA ALT -->
     <div class="welcome-header">
         <div class="welcome-titles">
             <?php 
@@ -16,7 +15,6 @@
         </div>
     </div>
 
-    <!-- SECCIÓN 1: PRIMEROS 3 PRODUCTOS CON MÁS STOCK -->
     <div class="dashboard-section">
         <div class="section-title-bar">
             <h2><i class="fa-solid fa-fire-flame-curved"></i> Playeras con Mayor Inventario</h2>
@@ -50,10 +48,9 @@
         <?php endif; ?>
     </div>
 
-    <!-- ESPACIO DE ANCHO COMPLETO: BANNER CON TEXTO SOBRE BLUR DE LA IMAGEN -->
     <div class="fullwidth-alt-banner">
         <div class="banner-background">
-            <img src="<?= base_url('assets/img/logo.png'); ?>" alt="Fondo Alternativo" class="banner-bg-img">
+            <img src="<?= base_url('assets/img/login-bg1.jpg'); ?>" alt="Fondo Alternativo" class="banner-bg-img">
         </div>
         <div class="banner-blur-overlay">
             <div class="banner-content">
@@ -67,7 +64,6 @@
         </div>
     </div>
 
-    <!-- SECCIÓN 2: OTROS 3 PRODUCTOS CON MÁS STOCK -->
     <div class="dashboard-section">
         <div class="section-title-bar">
             <h2><i class="fa-solid fa-layer-group"></i> Más Opciones Destacadas</h2>
@@ -113,7 +109,6 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* BIENVENIDA Y CULTURA ALT */
     .welcome-header {
         margin-bottom: 2.5rem;
         padding: 1.8rem 2rem;
@@ -166,7 +161,6 @@
         font-size: 0.9rem;
     }
 
-    /* SECCIÓN DE SECCIONES DE PRODUCTOS */
     .dashboard-section {
         margin-bottom: 3rem;
         width: 100%;
@@ -197,7 +191,6 @@
         color: #888888;
     }
 
-    /* GRID DE 3 PRODUCTOS */
     .product-grid-3 {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -219,7 +212,6 @@
         }
     }
 
-    /* TARJETA DE PRODUCTO */
     .product-card {
         background: #000000;
         border: none;
@@ -335,8 +327,8 @@
         align-items: center;
         justify-content: center;
         background: rgba(0, 0, 0, 0.55);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
         text-align: center;
     }
 

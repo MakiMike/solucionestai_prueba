@@ -24,14 +24,14 @@ class Dashboard extends MY_Controller
             }
         }
 
-        // Obtener hasta 6 productos con más stock según el sexo del usuario
+       
         $all_products = $this->Playera_model->obtener_top_stock_por_genero($us_sexo, 6);
 
         // Dividir en 2 bloques de 3 productos
         $productos_top3 = array_slice($all_products, 0, 3);
         $productos_next3 = array_slice($all_products, 3, 3);
 
-        // Mensajes aleatorios inspirados en la cultura alternativa por sesión/petición
+        // Mensajes aleatorios
         $mensajes_alt = array(
             "Expresa tu esencia oscura y alternativa sin filtros.",
             "El estilo alternativo no es una moda, es una declaración de libertad.",

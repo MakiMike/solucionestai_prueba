@@ -306,10 +306,7 @@ class Usuarios extends MY_Admin_Controller {
             $rol = strtoupper(trim($sheet->getCell('E' . $row)->getValue()));
             $sexo = strtoupper(trim($sheet->getCell('F' . $row)->getValue()));
 
-            /*
-             * Validaciones
-             */
-
+           //VALIDACIONES
             if (empty($nombre) || empty($correo) || empty($contrasenia)) {
                 $omitidos++;
                 continue;
@@ -320,10 +317,7 @@ class Usuarios extends MY_Admin_Controller {
                 continue;
             }
 
-            /*
-             * Teléfono
-             */
-
+        
             if (empty($telefono)) {
                 $telefono = NULL;
 
@@ -347,9 +341,6 @@ class Usuarios extends MY_Admin_Controller {
                 }
             }
 
-            /*
-             * Sexo
-             */
 
             if (empty($sexo)) {
                 $omitidos++;
@@ -360,17 +351,10 @@ class Usuarios extends MY_Admin_Controller {
                 $sexo = 'O';
             }
 
-            /*
-             * Rol
-             */
 
             if (!in_array($rol, ['A', 'U'])) {
                 $rol = 'U';
             }
-
-            /*
-             * Correo existente
-             */
 
             $usuario_existente =
                 $this->Usuario_model->obtener_por_correo($correo);
@@ -380,17 +364,11 @@ class Usuarios extends MY_Admin_Controller {
                 continue;
             }
 
-            /*
-             * Contraseña
-             */
-
             $contrasenia_hash =
                 password_hash($contrasenia, PASSWORD_DEFAULT);
 
-            /*
-             * Guardar
-             */
-
+            
+            //GUARDAR
             $this->Usuario_model->guardar_usuario(
                 $nombre,
                 $correo,
@@ -403,18 +381,12 @@ class Usuarios extends MY_Admin_Controller {
             $importados++;
         }
 
-        /*
-         * Eliminar archivo temporal
-         */
-
+        //ELIMINAR EL ARCHIVO SUBIDO DESPUÉS DE PROCESARLO
         if (file_exists($ruta_archivo)) {
             unlink($ruta_archivo);
         }
 
-        /*
-         * Respuesta JSON
-         */
-
+        //JSON
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode([

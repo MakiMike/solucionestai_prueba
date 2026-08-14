@@ -1,6 +1,5 @@
 <div class="perfil-page">
 
-    <!-- CABECERA DEL PERFIL -->
     <div class="perfil-header">
         <div class="header-titles">
             <span class="perfil-kicker"><i class="fa-solid fa-user-gear"></i> Ajustes de Cuenta</span>
@@ -11,7 +10,7 @@
     <!-- CONTENEDOR PRINCIPAL DEL FORMULARIO -->
     <div class="perfil-card-container">
 
-        <!-- META BARRA DE INFORMACIÓN-->
+  
         <div class="user-meta-bar">
             <div class="meta-info">
                 <h2 id="displayUserName"><?= htmlspecialchars($usuario->us_nombre); ?></h2>
@@ -25,7 +24,7 @@
 
         <hr class="perfil-divider">
 
-        <!-- FEEDBACK ALERT -->
+
         <div id="perfilFeedback" class="perfil-feedback-msg" style="display: none;"></div>
 
         <!-- FORMULARIO DE EDICIÓN DE PERFIL -->
@@ -46,7 +45,7 @@
                     >
                 </div>
 
-                <!-- CORREO ELECTRÓNICO (SOLO LECTURA) -->
+                <!-- CORREO ELECTRÓNICO -->
                 <div class="field-group">
                     <label for="us_correo"><i class="fa-solid fa-at"></i> Correo Electrónico:</label>
                     <input 
@@ -74,7 +73,7 @@
                     <span class="field-hint">Agrega o actualiza tu teléfono de contacto.</span>
                 </div>
 
-                <!-- SEXO / GÉNERO (HOMBRE, MUJER, OTRO) -->
+                <!-- SEXO -->
                 <div class="field-group">
                     <label for="us_sexo"><i class="fa-solid fa-venus-mars"></i> Sexo / Género:</label>
                     <select id="us_sexo" name="us_sexo" class="select-sexo">
@@ -104,7 +103,7 @@
                     <span class="field-hint">Escribe tu nueva contraseña solo si deseas cambiarla.</span>
                 </div>
 
-                <!-- CONFIRMAR CONTRASEÑA -->
+               
                 <div class="field-group">
                     <label for="confirmar_password"><i class="fa-solid fa-check-double"></i> Confirmar Nueva Contraseña:</label>
                     <input 
@@ -119,7 +118,7 @@
 
             </div>
 
-            <!-- BOTÓN GUARDAR -->
+          
             <div class="form-actions">
                 <button type="submit" id="btnGuardarPerfil" class="btn-save-profile">
                     <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios

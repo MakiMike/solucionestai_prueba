@@ -51,10 +51,10 @@ class Ropa extends MY_Controller
             $page = 1;
         }
 
-        $limit = 9; // 9 productos por página según requerimiento
+        $limit = 9; 
         $offset = ($page - 1) * $limit;
 
-        // 1. Consulta de Conteo Total
+        //Conteo Total
         $this->db->from('playeras');
         $this->db->where('pla_activa', true);
 
@@ -78,7 +78,7 @@ class Ropa extends MY_Controller
 
         $total_records = $this->db->count_all_results();
 
-        // 2. Consulta de Datos Paginados
+        // Datos Paginados
         $this->db->select('pla_id, pla_nombre, pla_descripcion, pla_genero, pla_precio, pla_imagen');
         $this->db->from('playeras');
         $this->db->where('pla_activa', true);
@@ -107,7 +107,6 @@ class Ropa extends MY_Controller
         $query = $this->db->get();
         $productos = $query->result();
 
-        // 3. Computar URLs completas de imagen desde PHP (como en dashboard/detalle)
         $fallback_img = base_url('assets/img/logo.png');
         foreach ($productos as &$prod) {
             $img = trim((string)$prod->pla_imagen);
