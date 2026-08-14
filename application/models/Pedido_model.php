@@ -19,38 +19,32 @@ class Pedido_model extends CI_Model
 
     public function get_pedido($id)
     {
-        $query = $this->db->get_where($this->table, array('id' => $id));
+        $query = $this->db->get_where($this->table, array('ped_id' => $id));
         return $query->row();
     }
 
     public function crear($data)
     {
-        if ($this->session->userdata('rol') !== 'A') {
-            // Redirigir al dashboard si no es admin, en lugar de mostrar error
-            redirect('dashboard');
-            exit;
-        }
-        return $this->db->insert($this->table, $data);
+        $this->db->insert($this->table, $data);
+        return $this->db->insert_id();
     }
 
     public function actualizar($id, $data)
     {
         if ($this->session->userdata('rol') !== 'A') {
-            // Redirigir al dashboard si no es admin, en lugar de mostrar error
             redirect('dashboard');
             exit;
         }
-        return $this->db->where('id', $id)->update($this->table, $data);
+        return $this->db->where('ped_id', $id)->update($this->table, $data);
     }
 
     public function eliminar($id)
     {
         if ($this->session->userdata('rol') !== 'A') {
-            // Redirigir al dashboard si no es admin, en lugar de mostrar error
             redirect('dashboard');
             exit;
         }
-        return $this->db->where('id', $id)->delete($this->table);
+        return $this->db->where('ped_id', $id)->delete($this->table);
     }
 
     // Métodos personalizados

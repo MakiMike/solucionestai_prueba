@@ -68,6 +68,29 @@ $route['ventas'] = 'ventas/index';
 
 $route['logout'] = 'auth/logout';
 
+// Rutas de Ropa y Catalogo
+$route['Ropa/hombre'] = 'ropa/hombre';
+$route['Ropa/mujer'] = 'ropa/mujer';
+$route['ropa/hombre'] = 'ropa/hombre';
+$route['ropa/mujer'] = 'ropa/mujer';
+$route['ProductosAll'] = 'ropa/todos';
+$route['ropa/todos'] = 'ropa/todos';
+$route['ropa/obtener_catalogo'] = 'ropa/obtener_catalogo';
+$route['ropa/detalle/(:num)'] = 'ropa/detalle/$1';
+
+// Rutas de Carrito
+$route['Carrito'] = 'carrito/index';
+$route['carrito'] = 'carrito/index';
+$route['carrito/agregar'] = 'carrito/agregar';
+$route['carrito/actualizar'] = 'carrito/actualizar';
+$route['carrito/eliminar'] = 'carrito/eliminar';
+$route['carrito/vaciar'] = 'carrito/vaciar';
+$route['carrito/procesar'] = 'carrito/procesar';
+
+// Rutas de Perfil
+$route['Perfil'] = 'perfil/index';
+$route['perfil'] = 'perfil/index';
+$route['perfil/actualizar'] = 'perfil/actualizar';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

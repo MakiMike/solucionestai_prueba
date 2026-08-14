@@ -137,17 +137,15 @@ class Playera_model extends CI_Model
     {
         return $this->db
             ->select('
+                tallas.tal_id,
                 tallas.tal_nombre,
-                playera_tallas.pta_stock
-            ')
-            ->from('playera_tallas')
+                COALESCE(playera_tallas.pta_stock, 0) AS pta_stock
+            ', FALSE)
+            ->from('tallas')
             ->join(
-                'tallas',
-                'tallas.tal_id = playera_tallas.tal_id'
-            )
-            ->where(
-                'playera_tallas.pla_id',
-                $pla_id
+                'playera_tallas',
+                'playera_tallas.tal_id = tallas.tal_id AND playera_tallas.pla_id = ' . (int)$pla_id,
+                'left'
             )
             ->order_by(
                 'tallas.tal_orden',
@@ -155,6 +153,35 @@ class Playera_model extends CI_Model
             )
             ->get()
             ->result();
+    }
+
+    public function obtener_top_stock_por_genero($genero = NULL, $limit = 6)
+    {
+        $this->db->select('playeras.pla_id, playeras.pla_nombre, playeras.pla_descripcion, playeras.pla_genero, playeras.pla_precio, playeras.pla_imagen, COALESCE(SUM(playera_tallas.pta_stock), 0) AS stock_total', FALSE);
+        $this->db->from('playeras');
+        $this->db->join('playera_tallas', 'playera_tallas.pla_id = playeras.pla_id', 'left');
+        $this->db->where('playeras.pla_activa', true);
+
+        if ($genero === 'H') {
+            $this->db->group_start();
+            $this->db->where('playeras.pla_genero', 'H');
+            $this->db->or_where('playeras.pla_genero', 'Hombre');
+            $this->db->or_where('playeras.pla_genero', 'hombre');
+            $this->db->group_end();
+        } elseif ($genero === 'M') {
+            $this->db->group_start();
+            $this->db->where('playeras.pla_genero', 'M');
+            $this->db->or_where('playeras.pla_genero', 'Mujer');
+            $this->db->or_where('playeras.pla_genero', 'mujer');
+            $this->db->group_end();
+        }
+
+        $this->db->group_by('playeras.pla_id');
+        $this->db->order_by('stock_total', 'DESC');
+        $this->db->order_by('playeras.pla_id', 'DESC');
+        $this->db->limit($limit);
+
+        return $this->db->get()->result();
     }
 
     public function listar_datatable()

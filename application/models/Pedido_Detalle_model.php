@@ -19,47 +19,41 @@ class Pedido_Detalle_model extends CI_Model
 
     public function get_detalle($id)
     {
-        $query = $this->db->get_where($this->table, array('id' => $id));
+        $query = $this->db->get_where($this->table, array('pde_id' => $id));
         return $query->row();
     }
 
     public function crear($data)
     {
-        if ($this->session->userdata('rol') !== 'A') {
-            // Redirigir al dashboard si no es admin, en lugar de mostrar error
-            redirect('dashboard');
-            exit;
-        }
         return $this->db->insert($this->table, $data);
     }
 
     public function actualizar($id, $data)
     {
         if ($this->session->userdata('rol') !== 'A') {
-            // Redirigir al dashboard si no es admin, en lugar de mostrar error
             redirect('dashboard');
             exit;
         }
-        return $this->db->where('id', $id)->update($this->table, $data);
+        return $this->db->where('pde_id', $id)->update($this->table, $data);
     }
 
     public function eliminar($id)
     {
         if ($this->session->userdata('rol') !== 'A') {
-            // Redirigir al dashboard si no es admin, en lugar de mostrar error
             redirect('dashboard');
             exit;
         }
-        return $this->db->where('id', $id)->delete($this->table);
+        return $this->db->where('pde_id', $id)->delete($this->table);
     }
 
     // Métodos personalizados
     public function get_detalles_by_pedido($pedido_id)
     {
-        $this->db->select('pd.*, p.pr_nombre, p.pr_precio');
+        $this->db->select('pd.*, pl.pla_nombre, t.tal_nombre');
         $this->db->from('pedido_detalle pd');
-        $this->db->join('producto p', 'pd.producto_id = p.id');
-        $this->db->where('pd.pedido_id', $pedido_id);
+        $this->db->join('playeras pl', 'pd.pla_id = pl.pla_id');
+        $this->db->join('tallas t', 'pd.tal_id = t.tal_id');
+        $this->db->where('pd.ped_id', $pedido_id);
         $query = $this->db->get();
         return $query->result();
     }

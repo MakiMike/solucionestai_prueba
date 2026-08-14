@@ -13,9 +13,16 @@
         <span></span>
     </label>
 
-    <!-- Menú de Navegación (Solo Perfil) -->
+    <!-- Menú de Navegación -->
     <ul class="navbar-menu">
-        <li><a href="<?= base_url('configuracion'); ?>" class="profile-link">Perfil</a></li>
+        <li>
+            <a href="<?= base_url('Carrito'); ?>" class="cart-link" title="Ver Carrito">
+                <i class="fa-solid fa-cart-shopping"></i> Carrito 
+                <span class="cart-count-badge"><?= $this->session->userdata('carrito') ? '(' . count($this->session->userdata('carrito')) . ')' : ''; ?></span>
+            </a>
+        </li>
+        <li class="navbar-divider"></li>
+        <li><a href="<?= base_url('perfil'); ?>" class="profile-link">Perfil</a></li>
         <li class="navbar-divider"></li>
         <li><a href="<?= base_url('logout'); ?>" class="logout-link">Cerrar Sesión</a></li>
     </ul>

@@ -42,15 +42,21 @@
             </a>
         </li>
 
-         <li>
-                <a href="<?= base_url('ProductosAll'); ?>">
-                    Todos los productos
-                </a>
-            </li>
+        <li>
+            <a href="<?= base_url('ProductosAll'); ?>">
+                Todos los productos
+            </a>
+        </li>
          
         <li>
             <a href="<?= base_url('Carrito'); ?>">
-                Carrito <?= $this->session->userdata('carrito') ? '(' . count($this->session->userdata('carrito')) . ')' : ''; ?>
+                Carrito <span class="cart-count-badge"><?= $this->session->userdata('carrito') ? '(' . count($this->session->userdata('carrito')) . ')' : ''; ?></span>
+            </a>
+        </li>
+
+        <li>
+            <a href="<?= base_url('perfil'); ?>">
+                Mi Perfil
             </a>
         </li>
 
