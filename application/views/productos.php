@@ -367,7 +367,7 @@ const table = new DataTable('#productosTable', {
                     return '<span style="color: #9ca3af; font-size: 0.75rem; font-style: italic;">Sin imagen</span>';
                 }
 
-                const fullUrl = 'http://localhost/sistema/uploads/playeras/' + fileName;
+                const fullUrl = "<?= base_url('uploads/playeras/'); ?>" + fileName;
                 const fallbackSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'><rect width='50' height='50' fill='%23171717'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-size='9' font-family='sans-serif'>No Img</text></svg>";
 
                 return `
