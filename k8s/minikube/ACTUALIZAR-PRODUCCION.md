@@ -6,9 +6,9 @@ desde cero. No vuelve a ejecutar migraciones ni semillas.
 
 Estado declarado para la aplicacion:
 
-- Backend e initContainer preparar-fotos: tienda-backend:0.1.2.
-- Frontend: tienda-frontend:0.1.0.
-- CronJobs vencer-pedidos y sincronizar-historial: tienda-backend:0.1.2.
+- Backend e initContainer preparar-fotos: tienda-backend:0.1.5.
+- Frontend: tienda-frontend:0.1.1.
+- CronJobs vencer-pedidos y sincronizar-historial: tienda-backend:0.1.5.
 - Backend y CronJobs: PostgreSQL verify-full con postgres-ca; mongo-ca montada
   para las URI TLS conservadas en tienda-secrets.
 - Exporters: postgres-ca con verify-full y mongo-ca para la URI de mongo-metrics.
@@ -31,7 +31,7 @@ minikube -p tienda-prod kubectl -- rollout status deployment/postgres-exporter -
 minikube -p tienda-prod kubectl -- rollout status deployment/mongo-exporter -n tienda-prod --timeout=180s
 ```
 
-Las proximas ejecuciones de los CronJobs usaran 0.1.2; los Jobs ya creados
+Las proximas ejecuciones de los CronJobs usaran 0.1.5; los Jobs ya creados
 conservan su plantilla anterior. Un exporter Ready solo demuestra que atiende
 su puerto: comprobar despues pg_up y mongodb_up en Prometheus/Grafana.
 
@@ -46,4 +46,4 @@ procedimiento no aplica ni modifica los StatefulSets.
 
 Una reconstruccion desde cero aun requiere documentar y validar el orden
 completo de instalacion y activacion TLS. No se ha demostrado con este paso.
-Tampoco se ha creado un commit, tag o despliegue automatico desde Git.
+Este procedimiento no configura tags ni despliegue automatico desde Git.

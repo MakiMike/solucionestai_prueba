@@ -74,7 +74,7 @@ class Ropa extends MY_Controller
 
         if (!empty($search)) {
             $this->db->where(
-                "pla_nombre ILIKE '%{$search}%'", 
+                "pla_nombre ILIKE '%" . $this->db->escape_like_str($search) . "%' ESCAPE '!'",
                 NULL,
                 FALSE
                 );
@@ -103,7 +103,7 @@ class Ropa extends MY_Controller
 
         if (!empty($search)) {
             $this->db->where(
-                "pla_nombre ILIKE '%{$search}%'", 
+                "pla_nombre ILIKE '%" . $this->db->escape_like_str($search) . "%' ESCAPE '!'",
                 NULL,
                 FALSE
                 );

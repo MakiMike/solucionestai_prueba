@@ -162,8 +162,9 @@ class TiendaService
         $where = $admin ? 'TRUE' : 'p.us_id = ?';
         $params = $admin ? array() : array($user);
         if ($search !== '') {
-            $where .= ' AND (CAST(p.ped_id AS text) ILIKE ? OR p.ped_estado ILIKE ?)';
-            $params[] = '%' . $search . '%'; $params[] = '%' . $search . '%';
+            $where .= $admin ? ' AND (CAST(p.ped_id AS text) ILIKE ? OR p.ped_estado ILIKE ?)' : ' AND p.ped_estado ILIKE ?';
+            if ($admin) $params[] = '%' . $search . '%';
+            $params[] = '%' . $search . '%';
         }
         return $this->query('SELECT p.*,u.us_nombre, (SELECT COUNT(*) FROM tienda_outbox o WHERE o.ped_id=p.ped_id AND o.enviado_en IS NULL) AS sincronizacion_pendiente FROM pedidos p JOIN us_usuarios u USING (us_id) WHERE ' . $where . ' ORDER BY p.ped_id DESC LIMIT 20 OFFSET ' . ((max(1, (int) $page) - 1) * 20), $params)->fetchAll();
     }

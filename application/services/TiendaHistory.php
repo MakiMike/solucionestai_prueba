@@ -41,7 +41,7 @@ class TiendaHistory
                 $payload = array('evento_id' => (int) $e['evento_id'], 'pedido_id' => (int) $e['ped_id'], 'actor_id' => $e['actor_id'] === null ? null : (int) $e['actor_id'], 'tipo' => $e['tipo'], 'fecha' => new MongoDB\BSON\UTCDateTime((int) (strtotime($e['creado_en']) * 1000)), 'datos' => json_decode($e['datos'], false, 512, JSON_THROW_ON_ERROR));
                 $bulk = new MongoDB\Driver\BulkWrite();
                 $bulk->update(array('evento_id' => (int) $e['evento_id']), array('$setOnInsert' => $payload), array('upsert' => true));
-                $this->mongo()->executeBulkWrite($this->name . '.eventos', $bulk, new MongoDB\Driver\WriteConcern('majority', 3000));
+                $this->mongo()->executeBulkWrite($this->name . '.eventos', $bulk, array('writeConcern' => new MongoDB\Driver\WriteConcern('majority', 3000)));
                 $q = $this->db->prepare('UPDATE tienda_outbox SET enviado_en=clock_timestamp(),intentos=intentos+1,ultimo_error=NULL WHERE evento_id=?');
                 $q->execute(array($e['evento_id']));
                 $this->db->commit(); $sent++;

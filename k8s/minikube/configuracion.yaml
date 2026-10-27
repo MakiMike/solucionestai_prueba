@@ -7,7 +7,7 @@
   },
   "data": {
     "CI_ENV": "production",
-    "APP_BASE_URL": "https://tienda-prod.test:9443/",
+    "APP_BASE_URL": "https://tskull-shirt.test:9443/",
     "APP_SESSION_DRIVER": "database",
     "APP_COOKIE_SECURE": "true",
     "DB_HOST": "postgres",

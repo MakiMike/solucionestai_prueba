@@ -6,8 +6,11 @@ No aplicar estos manifiestos con el contexto tienda-prod. Usar siempre
 
 Los siete manifiestos JSON (validos tambien como YAML) son archivos completos
 adaptados a Minikube. No usar el overlay antiguo de development para este flujo.
-Frontend 0.1.0 y backend 0.1.2, inicialmente una replica de cada uno. La version 0.1.2 incorpora compatibilidad de CI3 con PHP 8.2/8.3 y se valida
-primero aqui, antes de promoverla a produccion. La configuracion y los datos
+Frontend 0.1.1 y backend candidato 0.1.4, inicialmente una replica de cada uno.
+La version 0.1.3 conserva la compatibilidad de CI3, actualiza paquetes del sistema
+y corrige el filtro de busqueda del catalogo. Se valida primero aqui; produccion
+ya valido 0.1.3; 0.1.4 corrige la escritura del historial con el driver MongoDB 2.x.
+La configuracion y los datos
 son independientes.
 
 Orden de instalacion:

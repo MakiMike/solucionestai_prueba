@@ -37,7 +37,7 @@
                 "containers": [
                   {
                     "name": "vencer-pedidos",
-                    "image": "tienda-backend:0.1.2",
+                    "image": "tienda-backend:0.1.5",
                     "imagePullPolicy": "IfNotPresent",
                     "securityContext": {
                       "runAsNonRoot": true,
@@ -190,7 +190,7 @@
                 "containers": [
                   {
                     "name": "sincronizar-historial",
-                    "image": "tienda-backend:0.1.2",
+                    "image": "tienda-backend:0.1.5",
                     "imagePullPolicy": "IfNotPresent",
                     "securityContext": {
                       "runAsNonRoot": true,

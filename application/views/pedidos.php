@@ -8,13 +8,13 @@ $labels = array('pendiente_pago'=>'Pendiente de pago','confirmado'=>'Confirmado'
     <p>Tienes 30 minutos para pagar cada pedido. Si vence el plazo, las prendas vuelven a estar disponibles.</p>
     <?php if ($notice = $this->session->flashdata('pedido_aviso')): ?><p role="status"><?= $escape($notice); ?></p><?php endif; ?>
     <form method="get" action="<?= site_url('pedidos'); ?>">
-        <label>Buscar por número o estado <input name="q" value="<?= $escape($search); ?>" maxlength="100"></label>
+        <label><?= $admin ? 'Buscar por número o estado' : 'Buscar por estado'; ?> <input name="q" value="<?= $escape($search); ?>" maxlength="100"></label>
         <button>Buscar</button>
     </form>
     <?php if (!$orders): ?><p>No hay pedidos para mostrar.</p><?php endif; ?>
     <?php foreach ($orders as $order): ?>
     <article class="pedido-card">
-        <h2>Pedido #<?= (int) $order['ped_id']; ?> · <?= $escape(isset($labels[$order['ped_estado']]) ? $labels[$order['ped_estado']] : $order['ped_estado']); ?></h2>
+        <h2>Pedido<?= $admin ? ' #' . (int) $order['ped_id'] : ''; ?> · <?= $escape(isset($labels[$order['ped_estado']]) ? $labels[$order['ped_estado']] : $order['ped_estado']); ?></h2>
         <p><?= $escape($order['us_nombre']); ?> · $<?= $escape($order['ped_total']); ?></p>
         <?php if ($order['ped_estado'] === 'pendiente_pago'): ?>
             <p>Tiempo para pagar: <strong class="countdown" data-deadline="<?= $escape(date('c', strtotime($order['ped_vence_en']))); ?>">calculando…</strong></p>
@@ -43,7 +43,7 @@ $labels = array('pendiente_pago'=>'Pendiente de pago','confirmado'=>'Confirmado'
         <?php if (count($orders) === 20): ?><a href="<?= site_url('pedidos') . '?page=' . ($page+1) . '&q=' . urlencode($search); ?>">Siguiente</a><?php endif; ?>
     </nav>
     <?php if ($selected): ?>
-        <h2>Prendas del pedido #<?= (int) $selected; ?></h2>
+        <h2>Prendas del pedido<?= $admin ? ' #' . (int) $selected : ''; ?></h2>
         <?php foreach ($details as $d): ?><p><?= $escape($d['nombre']); ?> · <?= $escape($d['talla']); ?> · <?= (int) $d['pde_cantidad']; ?> unidades · $<?= $escape($d['pde_precio']); ?> cada una</p><?php endforeach; ?>
         <h2>Historial del pedido</h2>
         <?php if (!$historyAvailable): ?><p>El historial no está disponible temporalmente. Tu pedido se conserva y los eventos pendientes se sincronizarán al recuperar la conexión.</p><?php elseif (!$events): ?><p>Sin eventos sincronizados todavía.</p><?php endif; ?>

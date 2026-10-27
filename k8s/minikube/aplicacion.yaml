@@ -73,7 +73,7 @@
             "containers": [
               {
                 "name": "backend",
-                "image": "tienda-backend:0.1.2",
+                "image": "tienda-backend:0.1.5",
                 "imagePullPolicy": "IfNotPresent",
                 "securityContext": {
                   "runAsNonRoot": true,
@@ -236,7 +236,7 @@
             "initContainers": [
               {
                 "name": "preparar-fotos",
-                "image": "tienda-backend:0.1.2",
+                "image": "tienda-backend:0.1.5",
                 "imagePullPolicy": "IfNotPresent",
                 "command": [
                   "sh",
@@ -310,7 +310,7 @@
             "containers": [
               {
                 "name": "frontend",
-                "image": "tienda-frontend:0.1.0",
+                "image": "tienda-frontend:0.1.1",
                 "imagePullPolicy": "IfNotPresent",
                 "securityContext": {
                   "runAsNonRoot": true,
