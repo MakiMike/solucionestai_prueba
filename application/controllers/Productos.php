@@ -51,7 +51,8 @@ class Productos extends MY_Admin_Controller
             'pla_nombre' => $this->input->post('pla_nombre'),
             'pla_descripcion' => $this->input->post('pla_descripcion'),
             'pla_genero' => $this->input->post('pla_genero'),
-            'pla_precio' => $this->input->post('pla_precio')
+            'pla_precio' => $this->input->post('pla_precio'),
+            'pla_edicion_limitada' => $this->input->post('pla_edicion_limitada') === '1' ? 'true' : 'false'
         );
 
         $imagen = NULL;
@@ -145,7 +146,8 @@ class Productos extends MY_Admin_Controller
             'pla_nombre' => $this->input->post('pla_nombre'),
             'pla_descripcion' => $this->input->post('pla_descripcion'),
             'pla_genero' => $this->input->post('pla_genero'),
-            'pla_precio' => $this->input->post('pla_precio')
+            'pla_precio' => $this->input->post('pla_precio'),
+            'pla_edicion_limitada' => $this->input->post('pla_edicion_limitada') === '1' ? 'true' : 'false'
         );
 
         $stocks = array(

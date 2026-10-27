@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="<?= base_url('assets/css/login.css') ?>">
 
+<?php $this->load->view('partials/csrf'); ?>
 </head>
 
 

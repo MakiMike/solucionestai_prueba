@@ -28,7 +28,7 @@ class Auth extends CI_Controller
 
         $usuario = $this->Usuario_model->obtener_por_correo($correo);
 
-         if (!$usuario) {
+         if (!$usuario || !in_array($usuario->us_activo, array(true, 1, '1', 't'), true)) {
 
             $this->session->set_flashdata(
                 'error',
@@ -73,7 +73,12 @@ class Auth extends CI_Controller
         $correo = $this->input->post('email');
         $telefono = $this->input->post('telefono');
         $sexo = $this->input->post('sexo');
-        $contrasenia = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
+        $rawPassword = (string) $this->input->post('password');
+        if (strlen($rawPassword) < 8 || !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            $this->session->set_flashdata('error', 'Correo inválido o contraseña de menos de 8 caracteres.');
+            redirect('register'); return;
+        }
+        $contrasenia = password_hash($rawPassword, PASSWORD_DEFAULT);
 
         if (
             empty ($nombre) ||

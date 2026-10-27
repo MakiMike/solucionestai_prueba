@@ -1,0 +1,13 @@
+# Volumen exclusivo de la prueba; no contiene datos de la tienda.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prueba-persistencia
+  namespace: tienda-prod
+spec:
+  storageClassName: csi-hostpath-sc
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi

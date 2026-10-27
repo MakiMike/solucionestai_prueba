@@ -1,0 +1,400 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "backend",
+        "namespace": "tienda-prod"
+      },
+      "spec": {
+        "selector": {
+          "app": "backend"
+        },
+        "ports": [
+          {
+            "port": 9000,
+            "targetPort": 9000
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "frontend",
+        "namespace": "tienda-prod"
+      },
+      "spec": {
+        "selector": {
+          "app": "frontend"
+        },
+        "ports": [
+          {
+            "port": 8080,
+            "targetPort": 8080
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "backend",
+        "namespace": "tienda-prod"
+      },
+      "spec": {
+        "replicas": 2,
+        "selector": {
+          "matchLabels": {
+            "app": "backend"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "backend"
+            }
+          },
+          "spec": {
+            "serviceAccountName": "tienda",
+            "automountServiceAccountToken": false,
+            "securityContext": {
+              "fsGroup": 33,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              },
+              "fsGroupChangePolicy": "OnRootMismatch"
+            },
+            "containers": [
+              {
+                "name": "backend",
+                "image": "tienda-backend:0.1.2",
+                "imagePullPolicy": "IfNotPresent",
+                "securityContext": {
+                  "runAsNonRoot": true,
+                  "allowPrivilegeEscalation": false,
+                  "readOnlyRootFilesystem": true,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  },
+                  "runAsUser": 33
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "100m",
+                    "memory": "128Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "ports": [
+                  {
+                    "containerPort": 9000
+                  }
+                ],
+                "envFrom": [
+                  {
+                    "configMapRef": {
+                      "name": "tienda-config"
+                    }
+                  }
+                ],
+                "env": [
+                  {
+                    "name": "DB_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "tienda-secrets",
+                        "key": "DB_PASSWORD"
+                      }
+                    }
+                  },
+                  {
+                    "name": "MONGO_URI",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "tienda-secrets",
+                        "key": "MONGO_URI"
+                      }
+                    }
+                  },
+                  {
+                    "name": "APP_ENCRYPTION_KEY",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "tienda-secrets",
+                        "key": "APP_ENCRYPTION_KEY"
+                      }
+                    }
+                  },
+                  {
+                    "name": "DB_SSLMODE",
+                    "value": "verify-full"
+                  },
+                  {
+                    "name": "DB_SSLROOTCERT",
+                    "value": "/etc/postgres-ca/ca.crt"
+                  }
+                ],
+                "livenessProbe": {
+                  "tcpSocket": {
+                    "port": 9000
+                  },
+                  "initialDelaySeconds": 10,
+                  "periodSeconds": 15
+                },
+                "readinessProbe": {
+                  "exec": {
+                    "command": [
+                      "php",
+                      "-r",
+                      "require 'application/services/TiendaConnection.php'; TiendaConnection::open()->query('SELECT evento_id FROM tienda_outbox LIMIT 0');"
+                    ]
+                  },
+                  "initialDelaySeconds": 5,
+                  "timeoutSeconds": 5
+                },
+                "volumeMounts": [
+                  {
+                    "name": "uploads",
+                    "mountPath": "/var/www/html/uploads",
+                    "readOnly": false
+                  },
+                  {
+                    "name": "tmp",
+                    "mountPath": "/tmp"
+                  },
+                  {
+                    "name": "logs",
+                    "mountPath": "/var/www/html/application/logs"
+                  },
+                  {
+                    "name": "postgres-ca",
+                    "mountPath": "/etc/postgres-ca",
+                    "readOnly": true
+                  },
+                  {
+                    "name": "mongo-ca",
+                    "mountPath": "/etc/mongo-ca",
+                    "readOnly": true
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "uploads",
+                "persistentVolumeClaim": {
+                  "claimName": "uploads"
+                }
+              },
+              {
+                "name": "tmp",
+                "emptyDir": {}
+              },
+              {
+                "name": "logs",
+                "emptyDir": {}
+              },
+              {
+                "name": "postgres-ca",
+                "configMap": {
+                  "name": "postgres-ca"
+                }
+              },
+              {
+                "name": "mongo-ca",
+                "configMap": {
+                  "name": "mongo-ca"
+                }
+              }
+            ],
+            "topologySpreadConstraints": [
+              {
+                "maxSkew": 1,
+                "topologyKey": "kubernetes.io/hostname",
+                "whenUnsatisfiable": "DoNotSchedule",
+                "labelSelector": {
+                  "matchLabels": {
+                    "app": "backend"
+                  }
+                }
+              }
+            ],
+            "initContainers": [
+              {
+                "name": "preparar-fotos",
+                "image": "tienda-backend:0.1.2",
+                "imagePullPolicy": "IfNotPresent",
+                "command": [
+                  "sh",
+                  "-ec",
+                  "mkdir -p /var/www/html/uploads/playeras; chmod 2770 /var/www/html/uploads/playeras"
+                ],
+                "securityContext": {
+                  "readOnlyRootFilesystem": true,
+                  "allowPrivilegeEscalation": false,
+                  "runAsNonRoot": true,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "runAsUser": 33,
+                  "runAsGroup": 33
+                },
+                "resources": {
+                  "limits": {
+                    "cpu": "100m",
+                    "memory": "64Mi"
+                  },
+                  "requests": {
+                    "cpu": "10m",
+                    "memory": "16Mi"
+                  }
+                },
+                "volumeMounts": [
+                  {
+                    "name": "uploads",
+                    "mountPath": "/var/www/html/uploads"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "frontend",
+        "namespace": "tienda-prod"
+      },
+      "spec": {
+        "replicas": 2,
+        "selector": {
+          "matchLabels": {
+            "app": "frontend"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "frontend"
+            }
+          },
+          "spec": {
+            "serviceAccountName": "tienda",
+            "automountServiceAccountToken": false,
+            "securityContext": {
+              "fsGroup": 33,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              },
+              "fsGroupChangePolicy": "OnRootMismatch"
+            },
+            "containers": [
+              {
+                "name": "frontend",
+                "image": "tienda-frontend:0.1.0",
+                "imagePullPolicy": "IfNotPresent",
+                "securityContext": {
+                  "runAsNonRoot": true,
+                  "allowPrivilegeEscalation": false,
+                  "readOnlyRootFilesystem": true,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  },
+                  "runAsUser": 101
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "100m",
+                    "memory": "128Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "ports": [
+                  {
+                    "containerPort": 8080
+                  }
+                ],
+                "livenessProbe": {
+                  "httpGet": {
+                    "path": "/healthz",
+                    "port": 8080
+                  },
+                  "initialDelaySeconds": 5
+                },
+                "readinessProbe": {
+                  "httpGet": {
+                    "path": "/health/ready",
+                    "port": 8080
+                  },
+                  "timeoutSeconds": 5
+                },
+                "volumeMounts": [
+                  {
+                    "name": "uploads",
+                    "mountPath": "/var/www/html/uploads",
+                    "readOnly": true
+                  },
+                  {
+                    "name": "tmp",
+                    "mountPath": "/tmp"
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "uploads",
+                "persistentVolumeClaim": {
+                  "claimName": "uploads"
+                }
+              },
+              {
+                "name": "tmp",
+                "emptyDir": {}
+              }
+            ],
+            "topologySpreadConstraints": [
+              {
+                "maxSkew": 1,
+                "topologyKey": "kubernetes.io/hostname",
+                "whenUnsatisfiable": "DoNotSchedule",
+                "labelSelector": {
+                  "matchLabels": {
+                    "app": "frontend"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

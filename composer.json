@@ -1,19 +1,20 @@
 {
-	"description": "The CodeIgniter framework",
-	"name": "codeigniter/framework",
-	"type": "project",
-	"homepage": "https://codeigniter.com",
-	"license": "MIT",
-	"support": {
-		"forum": "http://forum.codeigniter.com/",
-		"wiki": "https://github.com/bcit-ci/CodeIgniter/wiki",
-		"irc": "irc://irc.freenode.net/codeigniter",
-		"source": "https://github.com/bcit-ci/CodeIgniter"
-	},
-	"require": {
-		"php": ">=5.2.4"
-	},
-	"require-dev": {
-		"mikey179/vfsStream": "1.1.*"
-	}
+  "name": "tienda-alternativa/sistema",
+  "description": "Tienda de ropa alternativa con reservas y Kubernetes",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "php": "^8.3",
+    "ext-pdo": "*",
+    "ext-pdo_pgsql": "*",
+    "ext-pgsql": "*",
+    "codeigniter/framework": "3.1.13"
+  },
+  "scripts": {
+    "post-install-cmd": "@php bin/compat-codeigniter.php",
+    "post-update-cmd": "@php bin/compat-codeigniter.php"
+  },
+  "config": {
+    "sort-packages": true
+  }
 }

@@ -1,0 +1,17 @@
+.git
+.env*
+tmp
+output
+vendor
+node_modules
+application/config/database.local.php
+application/logs/*
+application/cache/*
+uploads
+user_guide
+docs
+tests
+router.php
+system
+k8s/secrets.env
+k8s/tls

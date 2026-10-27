@@ -1,0 +1,145 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-exporter
+  namespace: tienda-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-exporter
+  template:
+    metadata:
+      labels:
+        app: mongo-exporter
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: exporter
+          image: percona/mongodb_exporter:0.53
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          env:
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-metrics
+                  key: uri
+          volumeMounts:
+            - name: mongo-ca
+              mountPath: /etc/mongo-ca
+              readOnly: true
+          ports:
+            - name: metrics
+              containerPort: 9216
+          readinessProbe:
+            tcpSocket:
+              port: metrics
+          resources:
+            requests:
+              cpu: 30m
+              memory: 32Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+      volumes:
+        - name: mongo-ca
+          configMap:
+            name: mongo-ca
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-exporter
+  namespace: tienda-prod
+  labels:
+    app: mongo-exporter
+spec:
+  selector:
+    app: mongo-exporter
+  ports:
+    - name: metrics
+      port: 9216
+      targetPort: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mongo-exporter
+  namespace: tienda-prod
+  labels:
+    release: monitoreo
+spec:
+  selector:
+    matchLabels:
+      app: mongo-exporter
+  endpoints:
+    - port: metrics
+      interval: 30s
+      scrapeTimeout: 10s
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mongo-exporter-salida
+  namespace: tienda-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: mongo-exporter
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: mongo
+      ports:
+        - protocol: TCP
+          port: 27017
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mongo-desde-exporter
+  namespace: tienda-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: mongo
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: mongo-exporter
+      ports:
+        - protocol: TCP
+          port: 27017
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mongo-exporter-desde-monitoreo
+  namespace: tienda-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: mongo-exporter
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoreo
+      ports:
+        - protocol: TCP
+          port: 9216

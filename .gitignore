@@ -1,4 +1,15 @@
 .DS_Store
+.env
+.env.*
+!.env.example
+application/config/database.local.php
+/tmp/
+/output/
+/k8s/secrets.env
+/k8s/tls/
+/k8s/kind/calico-original.yaml
+/k8s/kind/calico-development.yaml
+/k8s/kind/calico-production.yaml
 
 application/cache/*
 !application/cache/index.html

@@ -1,0 +1,21 @@
+{
+  "apiVersion": "v1",
+  "kind": "ConfigMap",
+  "metadata": {
+    "name": "tienda-config",
+    "namespace": "tienda-prod"
+  },
+  "data": {
+    "CI_ENV": "production",
+    "APP_BASE_URL": "https://tienda-prod.test:9443/",
+    "APP_SESSION_DRIVER": "database",
+    "APP_COOKIE_SECURE": "true",
+    "DB_HOST": "postgres",
+    "DB_PORT": "5432",
+    "DB_DATABASE": "tienda",
+    "DB_USERNAME": "tienda_app",
+    "DB_SSLMODE": "prefer",
+    "MONGO_DATABASE": "tienda",
+    "HOME": "/tmp"
+  }
+}

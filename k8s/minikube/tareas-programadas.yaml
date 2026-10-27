@@ -1,0 +1,312 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "batch/v1",
+      "kind": "CronJob",
+      "metadata": {
+        "name": "vencer-pedidos",
+        "namespace": "tienda-prod"
+      },
+      "spec": {
+        "schedule": "* * * * *",
+        "concurrencyPolicy": "Forbid",
+        "startingDeadlineSeconds": 60,
+        "successfulJobsHistoryLimit": 1,
+        "failedJobsHistoryLimit": 2,
+        "jobTemplate": {
+          "spec": {
+            "backoffLimit": 2,
+            "activeDeadlineSeconds": 50,
+            "template": {
+              "metadata": {
+                "labels": {
+                  "app": "worker"
+                }
+              },
+              "spec": {
+                "serviceAccountName": "tienda",
+                "automountServiceAccountToken": false,
+                "securityContext": {
+                  "fsGroup": 33,
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  }
+                },
+                "containers": [
+                  {
+                    "name": "vencer-pedidos",
+                    "image": "tienda-backend:0.1.2",
+                    "imagePullPolicy": "IfNotPresent",
+                    "securityContext": {
+                      "runAsNonRoot": true,
+                      "allowPrivilegeEscalation": false,
+                      "readOnlyRootFilesystem": true,
+                      "capabilities": {
+                        "drop": [
+                          "ALL"
+                        ]
+                      },
+                      "seccompProfile": {
+                        "type": "RuntimeDefault"
+                      },
+                      "runAsUser": 33
+                    },
+                    "resources": {
+                      "requests": {
+                        "cpu": "100m",
+                        "memory": "128Mi"
+                      },
+                      "limits": {
+                        "cpu": "1",
+                        "memory": "512Mi"
+                      }
+                    },
+                    "envFrom": [
+                      {
+                        "configMapRef": {
+                          "name": "tienda-config"
+                        }
+                      }
+                    ],
+                    "env": [
+                      {
+                        "name": "DB_PASSWORD",
+                        "valueFrom": {
+                          "secretKeyRef": {
+                            "name": "tienda-secrets",
+                            "key": "DB_PASSWORD"
+                          }
+                        }
+                      },
+                      {
+                        "name": "MONGO_URI",
+                        "valueFrom": {
+                          "secretKeyRef": {
+                            "name": "tienda-secrets",
+                            "key": "MONGO_URI"
+                          }
+                        }
+                      },
+                      {
+                        "name": "APP_ENCRYPTION_KEY",
+                        "valueFrom": {
+                          "secretKeyRef": {
+                            "name": "tienda-secrets",
+                            "key": "APP_ENCRYPTION_KEY"
+                          }
+                        }
+                      },
+                      {
+                        "name": "DB_SSLMODE",
+                        "value": "verify-full"
+                      },
+                      {
+                        "name": "DB_SSLROOTCERT",
+                        "value": "/etc/postgres-ca/ca.crt"
+                      }
+                    ],
+                    "command": [
+                      "php",
+                      "bin/tienda.php",
+                      "expire"
+                    ],
+                    "volumeMounts": [
+                      {
+                        "name": "tmp",
+                        "mountPath": "/tmp"
+                      },
+                      {
+                        "name": "postgres-ca",
+                        "mountPath": "/etc/postgres-ca",
+                        "readOnly": true
+                      },
+                      {
+                        "name": "mongo-ca",
+                        "mountPath": "/etc/mongo-ca",
+                        "readOnly": true
+                      }
+                    ]
+                  }
+                ],
+                "restartPolicy": "OnFailure",
+                "volumes": [
+                  {
+                    "name": "tmp",
+                    "emptyDir": {}
+                  },
+                  {
+                    "name": "postgres-ca",
+                    "configMap": {
+                      "name": "postgres-ca"
+                    }
+                  },
+                  {
+                    "name": "mongo-ca",
+                    "configMap": {
+                      "name": "mongo-ca"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "batch/v1",
+      "kind": "CronJob",
+      "metadata": {
+        "name": "sincronizar-historial",
+        "namespace": "tienda-prod"
+      },
+      "spec": {
+        "schedule": "* * * * *",
+        "concurrencyPolicy": "Forbid",
+        "startingDeadlineSeconds": 60,
+        "successfulJobsHistoryLimit": 1,
+        "failedJobsHistoryLimit": 2,
+        "jobTemplate": {
+          "spec": {
+            "backoffLimit": 2,
+            "activeDeadlineSeconds": 50,
+            "template": {
+              "metadata": {
+                "labels": {
+                  "app": "worker"
+                }
+              },
+              "spec": {
+                "serviceAccountName": "tienda",
+                "automountServiceAccountToken": false,
+                "securityContext": {
+                  "fsGroup": 33,
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  }
+                },
+                "containers": [
+                  {
+                    "name": "sincronizar-historial",
+                    "image": "tienda-backend:0.1.2",
+                    "imagePullPolicy": "IfNotPresent",
+                    "securityContext": {
+                      "runAsNonRoot": true,
+                      "allowPrivilegeEscalation": false,
+                      "readOnlyRootFilesystem": true,
+                      "capabilities": {
+                        "drop": [
+                          "ALL"
+                        ]
+                      },
+                      "seccompProfile": {
+                        "type": "RuntimeDefault"
+                      },
+                      "runAsUser": 33
+                    },
+                    "resources": {
+                      "requests": {
+                        "cpu": "100m",
+                        "memory": "128Mi"
+                      },
+                      "limits": {
+                        "cpu": "1",
+                        "memory": "512Mi"
+                      }
+                    },
+                    "envFrom": [
+                      {
+                        "configMapRef": {
+                          "name": "tienda-config"
+                        }
+                      }
+                    ],
+                    "env": [
+                      {
+                        "name": "DB_PASSWORD",
+                        "valueFrom": {
+                          "secretKeyRef": {
+                            "name": "tienda-secrets",
+                            "key": "DB_PASSWORD"
+                          }
+                        }
+                      },
+                      {
+                        "name": "MONGO_URI",
+                        "valueFrom": {
+                          "secretKeyRef": {
+                            "name": "tienda-secrets",
+                            "key": "MONGO_URI"
+                          }
+                        }
+                      },
+                      {
+                        "name": "APP_ENCRYPTION_KEY",
+                        "valueFrom": {
+                          "secretKeyRef": {
+                            "name": "tienda-secrets",
+                            "key": "APP_ENCRYPTION_KEY"
+                          }
+                        }
+                      },
+                      {
+                        "name": "DB_SSLMODE",
+                        "value": "verify-full"
+                      },
+                      {
+                        "name": "DB_SSLROOTCERT",
+                        "value": "/etc/postgres-ca/ca.crt"
+                      }
+                    ],
+                    "command": [
+                      "php",
+                      "bin/tienda.php",
+                      "sync"
+                    ],
+                    "volumeMounts": [
+                      {
+                        "name": "tmp",
+                        "mountPath": "/tmp"
+                      },
+                      {
+                        "name": "postgres-ca",
+                        "mountPath": "/etc/postgres-ca",
+                        "readOnly": true
+                      },
+                      {
+                        "name": "mongo-ca",
+                        "mountPath": "/etc/mongo-ca",
+                        "readOnly": true
+                      }
+                    ]
+                  }
+                ],
+                "restartPolicy": "OnFailure",
+                "volumes": [
+                  {
+                    "name": "tmp",
+                    "emptyDir": {}
+                  },
+                  {
+                    "name": "postgres-ca",
+                    "configMap": {
+                      "name": "postgres-ca"
+                    }
+                  },
+                  {
+                    "name": "mongo-ca",
+                    "configMap": {
+                      "name": "mongo-ca"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

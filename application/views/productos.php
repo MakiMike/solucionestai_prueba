@@ -81,6 +81,7 @@
                 enctype="multipart/form-data"
                 class="playera-form">
 
+                <label><input type="checkbox" id="pla_edicion_limitada" name="pla_edicion_limitada" value="1"> Edición limitada máximo dos unidades por cliente</label>
                 <!-- ID -->
                 <input
                     type="hidden"
@@ -550,6 +551,7 @@ document.addEventListener('click', function (e) {
             document.getElementById('pla_nombre').value = producto.pla_nombre;
             document.getElementById('pla_genero').value = producto.pla_genero;
             document.getElementById('pla_precio').value = producto.pla_precio;
+            document.getElementById('pla_edicion_limitada').checked = [true, 't', 'true', 1, '1'].includes(producto.pla_edicion_limitada);
             document.getElementById('pla_descripcion').value = producto.pla_descripcion || '';
 
             // STOCK
