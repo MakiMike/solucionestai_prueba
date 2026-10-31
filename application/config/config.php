@@ -24,6 +24,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $config['base_url'] = getenv('APP_BASE_URL') ?: 'http://localhost/sistema/';
+// Alias LAN explicito: no confiar en un Host arbitrario ni en X-Forwarded-Host.
+$lanHost = getenv('APP_LAN_HOST') ?: '';
+if (preg_match('/\A([0-9.]+):9443\z/D', $lanHost, $lanMatch)
+    && filter_var($lanMatch[1], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)
+    && isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === $lanHost) {
+    $config['base_url'] = 'https://' . $lanHost . '/';
+}
 
 /*
 |--------------------------------------------------------------------------
