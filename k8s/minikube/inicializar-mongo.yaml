@@ -25,7 +25,7 @@
         "containers": [
           {
             "name": "migrate",
-            "image": "tienda-backend:0.1.0",
+            "image": "tienda-backend:0.1.6",
             "imagePullPolicy": "IfNotPresent",
             "securityContext": {
               "runAsNonRoot": true,

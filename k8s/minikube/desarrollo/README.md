@@ -1,3 +1,5 @@
+Manual completo para un clon nuevo: [README principal](../../../README.md).
+
 # Desarrollo independiente en Minikube
 
 Perfil/contexto tienda-dev, namespace tienda-dev, un nodo, 2 CPU y 3072 MiB.
@@ -6,7 +8,7 @@ No aplicar estos manifiestos con el contexto tienda-prod. Usar siempre
 
 Los siete manifiestos JSON (validos tambien como YAML) son archivos completos
 adaptados a Minikube. No usar el overlay antiguo de development para este flujo.
-Frontend 0.1.1 y backend candidato 0.1.4, inicialmente una replica de cada uno.
+Frontend 0.1.1 y backend 0.1.6, inicialmente una replica de cada uno.
 La version 0.1.3 conserva la compatibilidad de CI3, actualiza paquetes del sistema
 y corrige el filtro de busqueda del catalogo. Se valida primero aqui; produccion
 ya valido 0.1.3; 0.1.4 corrige la escritura del historial con el driver MongoDB 2.x.

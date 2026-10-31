@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="white"/>
+<text x="28" y="50" font-family="Arial" font-size="30" font-weight="700" fill="#243247">2. Secuencia CRUD: modificar una prenda</text>
+<rect x="15.0" y="80" width="210" height="62" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="51.5" y="110" font-family="Arial" font-size="20" font-weight="700" fill="#243247">Administrador</text>
+<line x1="120.0" y1="145" x2="120.0" y2="705" stroke="#c6cfd9"/>
+<rect x="335.0" y="80" width="210" height="62" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="412.5" y="110" font-family="Arial" font-size="20" font-weight="700" fill="#243247">Nginx</text>
+<line x1="440.0" y1="145" x2="440.0" y2="705" stroke="#c6cfd9"/>
+<rect x="655.0" y="80" width="210" height="62" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="703.0" y="110" font-family="Arial" font-size="20" font-weight="700" fill="#243247">Controlador</text>
+<line x1="760.0" y1="145" x2="760.0" y2="705" stroke="#c6cfd9"/>
+<rect x="975.0" y="80" width="210" height="62" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="1022.5" y="110" font-family="Arial" font-size="20" font-weight="700" fill="#243247">PostgreSQL</text>
+<line x1="1080.0" y1="145" x2="1080.0" y2="705" stroke="#c6cfd9"/>
+<text x="455.5" y="196" font-family="Arial" font-size="21" font-weight="400" fill="#243247">1. GET formulario de producto</text>
+<polyline points="120.0,211 440.0,211" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="440.0,211 429.4690092573155,216.75310646325045 429.4690092573155,205.24689353674955" fill="#425d78"/>
+<text x="413.0078125" y="261" font-family="Arial" font-size="21" font-weight="400" fill="#243247">2. Validar sesión y rol de administrador</text>
+<polyline points="440.0,276 760.0,276" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="760.0,276 749.4690092573155,281.75310646325045 749.4690092573155,270.24689353674955" fill="#425d78"/>
+<text x="460.0" y="326" font-family="Arial" font-size="21" font-weight="400" fill="#243247">3. Consultar producto y tallas</text>
+<polyline points="760.0,341 1080.0,341" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="1080.0,341 1069.4690092573155,346.75310646325045 1069.4690092573155,335.24689353674955" fill="#425d78"/>
+<text x="436.5" y="391" font-family="Arial" font-size="21" font-weight="400" fill="#243247">4. Renderizar datos y token CSRF</text>
+<polyline points="1080.0,406 120.0,406" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="120.0,406 130.53099074268448,400.24689353674955 130.53099074268448,411.75310646325045" fill="#425d78"/>
+<text x="425.5" y="456" font-family="Arial" font-size="21" font-weight="400" fill="#243247">5. POST con datos editados y CSRF</text>
+<polyline points="120.0,471 760.0,471" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="760.0,471 749.4690092573155,476.75310646325045 749.4690092573155,465.24689353674955" fill="#425d78"/>
+<text x="336.5078125" y="521" font-family="Arial" font-size="21" font-weight="400" fill="#243247">6. Validar campos; transacción de producto y variantes</text>
+<polyline points="760.0,536 1080.0,536" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="1080.0,536 1069.4690092573155,541.7531064632504 1069.4690092573155,530.2468935367496" fill="#425d78"/>
+<text x="477.0" y="586" font-family="Arial" font-size="21" font-weight="400" fill="#243247">7. COMMIT o ROLLBACK</text>
+<polyline points="1080.0,601 760.0,601" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="760.0,601 770.5309907426845,595.2468935367496 770.5309907426845,606.7531064632504" fill="#425d78"/>
+<text x="383.0" y="651" font-family="Arial" font-size="21" font-weight="400" fill="#243247">8. Confirmación o error sin cambios parciales</text>
+<polyline points="760.0,666 120.0,666" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="120.0,666 130.53099074268448,660.2468935367496 130.53099074268448,671.7531064632504" fill="#425d78"/>
+<text x="35" y="740" font-family="Arial" font-size="20" font-weight="400" fill="#243247">Sin rol o CSRF: rechazar. Cantidad inválida: corregir. Error SQL: revertir.</text>
+<text x="28" y="789" font-family="Arial" font-size="17" font-weight="400" fill="#243247">TSkull-Shirt | Minikube | Corte: 31-10-2026 | Diagrama, no captura de pantalla</text></svg>

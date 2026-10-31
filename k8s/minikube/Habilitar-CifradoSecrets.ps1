@@ -36,13 +36,13 @@ if ($remoteHash -eq 'ausente') {
     [IO.File]::WriteAllBytes($clearFile, $configBytes)
     try {
         # Crear el destino de transferencia con permisos privados antes de copiar.
-        & minikube -p tienda-prod ssh -- 'umask 077; touch /tmp/tienda-encryption-config.json; chmod 600 /tmp/tienda-encryption-config.json'
+        & minikube -p tienda-prod ssh -- 'sudo install -d -o root -g root -m 700 /var/lib/minikube/encryption-stage'
         Assert-Command 'No se pudo preparar la transferencia privada.'
         Push-Location $privateFolder
-        try { & minikube -p tienda-prod cp './encryption-config.json' 'tienda-prod:/tmp/tienda-encryption-config.json' }
+        try { & minikube -p tienda-prod cp './encryption-config.json' 'tienda-prod:/var/lib/minikube/encryption-stage/encryption-config.json' }
         finally { Pop-Location }
         Assert-Command 'No se pudo transferir la configuracion.'
-        & minikube -p tienda-prod ssh -- 'sudo install -o root -g root -m 600 /tmp/tienda-encryption-config.json /var/lib/minikube/certs/encryption-config.json && rm -f /tmp/tienda-encryption-config.json'
+        & minikube -p tienda-prod ssh -- 'sudo install -o root -g root -m 600 /var/lib/minikube/encryption-stage/encryption-config.json /var/lib/minikube/certs/encryption-config.json && sudo rm -f /var/lib/minikube/encryption-stage/encryption-config.json'
         Assert-Command 'No se pudo instalar la configuracion protegida en el nodo.'
     } finally {
         if (Test-Path -LiteralPath $clearFile) { Remove-Item -LiteralPath $clearFile -Force }
@@ -53,11 +53,13 @@ Write-Host '2/4 Activando cifrado en la API de Kubernetes...'
 $helperFile = Join-Path $privateFolder 'activar-cifrado-api.sh'
 $helper = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'activar-cifrado-api.sh')).Replace("`r`n", "`n")
 [IO.File]::WriteAllText($helperFile, $helper, (New-Object Text.UTF8Encoding($false)))
+& minikube -p tienda-prod ssh -- 'sudo install -d -o root -g root -m 700 /var/lib/minikube/encryption-stage'
+Assert-Command 'No se pudo preparar el directorio privado del procedimiento.'
 Push-Location $privateFolder
-try { & minikube -p tienda-prod cp './activar-cifrado-api.sh' 'tienda-prod:/tmp/tienda-activar-cifrado.sh' }
+try { & minikube -p tienda-prod cp './activar-cifrado-api.sh' 'tienda-prod:/var/lib/minikube/encryption-stage/activar-cifrado-api.sh' }
 finally { Pop-Location }
 Assert-Command 'No se pudo transferir el procedimiento de activacion.'
-& minikube -p tienda-prod ssh -- 'sudo sh /tmp/tienda-activar-cifrado.sh'
+& minikube -p tienda-prod ssh -- 'sudo sh /var/lib/minikube/encryption-stage/activar-cifrado-api.sh'
 Assert-Command 'No se pudo activar el cifrado en la API.'
 Write-Host 'Esperando la API y su configuracion de cifrado (hasta 4 minutos)...'
 $ready = $false

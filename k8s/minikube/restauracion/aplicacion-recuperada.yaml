@@ -6,8 +6,7 @@
       "apiVersion": "v1",
       "kind": "ConfigMap",
       "metadata": {
-        "name": "restore-app-config",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "restore-app-config"
       },
       "data": {
         "CI_ENV": "production",
@@ -27,8 +26,7 @@
       "apiVersion": "v1",
       "kind": "Service",
       "metadata": {
-        "name": "backend",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "backend"
       },
       "spec": {
         "selector": {
@@ -46,8 +44,7 @@
       "apiVersion": "v1",
       "kind": "Service",
       "metadata": {
-        "name": "frontend",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "frontend"
       },
       "spec": {
         "selector": {
@@ -65,8 +62,7 @@
       "apiVersion": "apps/v1",
       "kind": "Deployment",
       "metadata": {
-        "name": "backend",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "backend"
       },
       "spec": {
         "replicas": 1,
@@ -93,7 +89,7 @@
             "containers": [
               {
                 "name": "backend",
-                "image": "tienda-backend:0.1.2",
+                "image": "tienda-backend:0.1.6",
                 "imagePullPolicy": "IfNotPresent",
                 "securityContext": {
                   "runAsNonRoot": true,
@@ -231,8 +227,7 @@
       "apiVersion": "apps/v1",
       "kind": "Deployment",
       "metadata": {
-        "name": "frontend",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "frontend"
       },
       "spec": {
         "replicas": 1,
@@ -259,7 +254,7 @@
             "containers": [
               {
                 "name": "frontend",
-                "image": "tienda-frontend:0.1.0",
+                "image": "tienda-frontend:0.1.1",
                 "imagePullPolicy": "IfNotPresent",
                 "securityContext": {
                   "runAsNonRoot": true,
@@ -346,8 +341,7 @@
       "apiVersion": "v1",
       "kind": "Service",
       "metadata": {
-        "name": "postgres",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "postgres"
       },
       "spec": {
         "selector": {
@@ -365,8 +359,7 @@
       "apiVersion": "v1",
       "kind": "Service",
       "metadata": {
-        "name": "mongo",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "mongo"
       },
       "spec": {
         "selector": {
@@ -384,8 +377,7 @@
       "apiVersion": "networking.k8s.io/v1",
       "kind": "NetworkPolicy",
       "metadata": {
-        "name": "restore-frontend-backend",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "restore-frontend-backend"
       },
       "spec": {
         "podSelector": {
@@ -421,8 +413,7 @@
       "apiVersion": "networking.k8s.io/v1",
       "kind": "NetworkPolicy",
       "metadata": {
-        "name": "restore-backend",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "restore-backend"
       },
       "spec": {
         "podSelector": {
@@ -495,8 +486,7 @@
       "apiVersion": "networking.k8s.io/v1",
       "kind": "NetworkPolicy",
       "metadata": {
-        "name": "restore-dns-backend",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "restore-dns-backend"
       },
       "spec": {
         "podSelector": {
@@ -541,8 +531,7 @@
       "apiVersion": "networking.k8s.io/v1",
       "kind": "NetworkPolicy",
       "metadata": {
-        "name": "restore-dns-frontend",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "restore-dns-frontend"
       },
       "spec": {
         "podSelector": {
@@ -587,8 +576,7 @@
       "apiVersion": "networking.k8s.io/v1",
       "kind": "NetworkPolicy",
       "metadata": {
-        "name": "restore-postgres",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "restore-postgres"
       },
       "spec": {
         "podSelector": {
@@ -624,8 +612,7 @@
       "apiVersion": "networking.k8s.io/v1",
       "kind": "NetworkPolicy",
       "metadata": {
-        "name": "restore-mongo",
-        "namespace": "tienda-restore-20261025-235828"
+        "name": "restore-mongo"
       },
       "spec": {
         "podSelector": {
