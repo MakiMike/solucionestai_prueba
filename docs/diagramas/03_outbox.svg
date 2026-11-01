@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="white"/>
+<text x="28" y="50" font-family="Arial" font-size="30" font-weight="700" fill="#243247">3. Reserva y recuperación del historial</text>
+<rect x="15.0" y="80" width="210" height="62" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="86.5" y="110" font-family="Arial" font-size="20" font-weight="700" fill="#243247">Cliente</text>
+<line x1="120.0" y1="145" x2="120.0" y2="705" stroke="#c6cfd9"/>
+<rect x="255.0" y="80" width="210" height="62" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="319.0" y="110" font-family="Arial" font-size="20" font-weight="700" fill="#243247">Backend</text>
+<line x1="360.0" y1="145" x2="360.0" y2="705" stroke="#c6cfd9"/>
+<rect x="495.0" y="80" width="210" height="62" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="542.5" y="110" font-family="Arial" font-size="20" font-weight="700" fill="#243247">PostgreSQL</text>
+<line x1="600.0" y1="145" x2="600.0" y2="705" stroke="#c6cfd9"/>
+<rect x="735.0" y="80" width="210" height="62" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="799.5" y="110" font-family="Arial" font-size="20" font-weight="700" fill="#243247">CronJob</text>
+<line x1="840.0" y1="145" x2="840.0" y2="705" stroke="#c6cfd9"/>
+<rect x="975.0" y="80" width="210" height="62" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="1033.5" y="110" font-family="Arial" font-size="20" font-weight="700" fill="#243247">MongoDB</text>
+<line x1="1080.0" y1="145" x2="1080.0" y2="705" stroke="#c6cfd9"/>
+<text x="386.0" y="196" font-family="Arial" font-size="21" font-weight="400" fill="#243247">1. Crear pedido; el carrito todavía no reserva</text>
+<polyline points="120.0,211 360.0,211" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="360.0,211 349.4690092573155,216.75310646325045 349.4690092573155,205.24689353674955" fill="#425d78"/>
+<text x="352.5" y="261" font-family="Arial" font-size="21" font-weight="400" fill="#243247">2. Bloquear stock y guardar pedido + evento outbox</text>
+<polyline points="360.0,276 600.0,276" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="600.0,276 589.4690092573155,281.75310646325045 589.4690092573155,270.24689353674955" fill="#425d78"/>
+<text x="376.015625" y="326" font-family="Arial" font-size="21" font-weight="400" fill="#243247">3. COMMIT; reserva válida durante 30 minutos</text>
+<polyline points="600.0,341 120.0,341" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="120.0,341 130.53099074268448,335.24689353674955 130.53099074268448,346.75310646325045" fill="#425d78"/>
+<text x="386.5" y="391" font-family="Arial" font-size="21" font-weight="400" fill="#243247">4. Leer evento pendiente con bloqueo de fila</text>
+<polyline points="840.0,406 600.0,406" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="600.0,406 610.5309907426845,400.24689353674955 610.5309907426845,411.75310646325045" fill="#425d78"/>
+<text x="427.5" y="456" font-family="Arial" font-size="21" font-weight="400" fill="#243247">5. Upsert por evento_id; clave única</text>
+<polyline points="840.0,471 1080.0,471" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="1080.0,471 1069.4690092573155,476.75310646325045 1069.4690092573155,465.24689353674955" fill="#425d78"/>
+<text x="365.5" y="521" font-family="Arial" font-size="21" font-weight="400" fill="#243247">6. Si falla MongoDB: conservar evento pendiente</text>
+<polyline points="1080.0,536 840.0,536" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="840.0,536 850.5309907426845,530.2468935367496 850.5309907426845,541.7531064632504" fill="#425d78"/>
+<text x="345.5" y="586" font-family="Arial" font-size="21" font-weight="400" fill="#243247">7. Reintentar el mismo evento al recuperar MongoDB</text>
+<polyline points="840.0,601 1080.0,601" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="1080.0,601 1069.4690092573155,606.7531064632504 1069.4690092573155,595.2468935367496" fill="#425d78"/>
+<text x="372.5" y="651" font-family="Arial" font-size="21" font-weight="400" fill="#243247">8. Solo tras confirmar escritura: marcar enviado</text>
+<polyline points="840.0,666 600.0,666" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="600.0,666 610.5309907426845,660.2468935367496 610.5309907426845,671.7531064632504" fill="#425d78"/>
+<text x="35" y="740" font-family="Arial" font-size="20" font-weight="400" fill="#243247">No hay transacción distribuida. Repetir el envío no duplica el documento.</text>
+<text x="28" y="789" font-family="Arial" font-size="17" font-weight="400" fill="#243247">TSkull-Shirt | Minikube | Corte: 31-10-2026 | Diagrama, no captura de pantalla</text></svg>

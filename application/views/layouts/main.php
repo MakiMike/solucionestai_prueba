@@ -168,6 +168,7 @@
             background: var(--pink-dark);
         }
     </style>
+<?php $this->load->view('partials/csrf'); ?>
 </head>
 
 <body>

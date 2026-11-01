@@ -73,25 +73,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
+$localFile = __DIR__ . '/database.local.php';
+$local = is_file($localFile) ? require $localFile : array();
+$setting = function ($name, $key, $default) use ($local) {
+    $value = getenv($name);
+    return $value !== false ? $value : (isset($local[$key]) ? $local[$key] : $default);
+};
 $db['default'] = array(
-	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'postgres',
-	'password' => 'finnyjake@2014',
-	'database' => 'Tarea',
-	'dbdriver' => 'postgre',
-	'port' => '5432',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
+    'schema' => preg_match('/^[a-z_][a-z0-9_]*$/D', getenv('DB_SCHEMA') ?: 'public') ? (getenv('DB_SCHEMA') ?: 'public') : 'public',
+    'dsn' => '',
+    'connect_timeout' => '5',
+    'hostname' => $setting('DB_HOST', 'hostname', '127.0.0.1'),
+    'username' => $setting('DB_USERNAME', 'username', 'tienda_app'),
+    'password' => $setting('DB_PASSWORD', 'password', ''),
+    'database' => $setting('DB_DATABASE', 'database', 'tienda'),
+    'dbdriver' => 'postgre',
+    'port' => $setting('DB_PORT', 'port', '5432'),
+    'dbprefix' => '', 'pconnect' => FALSE,
+    'db_debug' => ENVIRONMENT === 'development',
+    'cache_on' => FALSE, 'cachedir' => '', 'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci', 'swap_pre' => '', 'encrypt' => FALSE,
+    'compress' => FALSE, 'stricton' => FALSE, 'failover' => array(),
+    'save_queries' => ENVIRONMENT === 'development'
 );
+// libpq aplica estos parámetros también al driver nativo de CodeIgniter.
+if (getenv('DB_SSLMODE')) putenv('PGSSLMODE=' . getenv('DB_SSLMODE'));
+if (getenv('DB_SSLROOTCERT')) putenv('PGSSLROOTCERT=' . getenv('DB_SSLROOTCERT'));

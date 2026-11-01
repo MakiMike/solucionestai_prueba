@@ -53,7 +53,7 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+	define('ENVIRONMENT', getenv('CI_ENV') ?: 'production');
 
 /*
  *---------------------------------------------------------------
@@ -98,7 +98,7 @@ switch (ENVIRONMENT)
  * Include the path if the folder is not in the same directory
  * as this file.
  */
-	$system_path = 'system';
+	$system_path = is_dir(__DIR__ . '/vendor/codeigniter/framework/system') ? __DIR__ . '/vendor/codeigniter/framework/system' : 'system';
 
 /*
  *---------------------------------------------------------------

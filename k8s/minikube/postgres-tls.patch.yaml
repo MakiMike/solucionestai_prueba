@@ -1,0 +1,32 @@
+spec:
+  template:
+    spec:
+      containers:
+        - name: postgres
+          args:
+            - postgres
+            - -c
+            - ssl=on
+            - -c
+            - ssl_min_protocol_version=TLSv1.2
+            - -c
+            - ssl_cert_file=/etc/postgres-tls/tls.crt
+            - -c
+            - ssl_key_file=/etc/postgres-tls/tls.key
+            - -c
+            - hba_file=/etc/postgres-config/pg_hba.conf
+          volumeMounts:
+            - name: postgres-tls
+              mountPath: /etc/postgres-tls
+              readOnly: true
+            - name: postgres-config
+              mountPath: /etc/postgres-config
+              readOnly: true
+      volumes:
+        - name: postgres-tls
+          secret:
+            secretName: postgres-tls
+            defaultMode: 288
+        - name: postgres-config
+          configMap:
+            name: postgres-tls-config

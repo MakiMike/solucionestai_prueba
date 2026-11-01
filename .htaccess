@@ -2,6 +2,12 @@ Options followSymLinks
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Archivos privados del proyecto y respaldos nunca se publican por HTTP.
+    RewriteRule ^(?:application|system|vendor|bin|database|tests|docker|k8s|tmp|output|docs)(?:/|$) - [F,L,NC]
+    RewriteRule (^|/)\. - [F,L]
+    RewriteRule ^(?:composer\.(?:json|lock)|compose\.yaml|router\.php)$ - [F,L,NC]
+    RewriteRule ^uploads/.*\.(?:php|phtml|phar)(?:/|$) - [F,L,NC]
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
 

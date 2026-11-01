@@ -1,0 +1,97 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "namespace": "tienda-prod",
+    "name": "diagnostico-mongo",
+    "labels": {
+      "app": "migration"
+    }
+  },
+  "spec": {
+    "serviceAccountName": "tienda",
+    "automountServiceAccountToken": false,
+    "securityContext": {
+      "fsGroup": 33,
+      "seccompProfile": {
+        "type": "RuntimeDefault"
+      }
+    },
+    "containers": [
+      {
+        "name": "diagnostico",
+        "image": "tienda-backend:0.1.0",
+        "imagePullPolicy": "IfNotPresent",
+        "securityContext": {
+          "runAsNonRoot": true,
+          "allowPrivilegeEscalation": false,
+          "readOnlyRootFilesystem": true,
+          "capabilities": {
+            "drop": [
+              "ALL"
+            ]
+          },
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          },
+          "runAsUser": 33
+        },
+        "resources": {
+          "requests": {
+            "cpu": "100m",
+            "memory": "128Mi"
+          },
+          "limits": {
+            "cpu": "1",
+            "memory": "512Mi"
+          }
+        },
+        "envFrom": [
+          {
+            "configMapRef": {
+              "name": "tienda-config"
+            }
+          }
+        ],
+        "env": [
+          {
+            "name": "MONGO_URI",
+            "valueFrom": {
+              "secretKeyRef": {
+                "name": "tienda-secrets",
+                "key": "MONGO_OWNER_URI"
+              }
+            }
+          },
+          {
+            "name": "MONGO_OWNER_PASSWORD",
+            "valueFrom": {
+              "secretKeyRef": {
+                "name": "tienda-secrets",
+                "key": "MONGO_OWNER_PASSWORD"
+              }
+            }
+          }
+        ],
+        "command": [
+          "php",
+          "-r",
+          "$uri=getenv('MONGO_URI');\n$p=parse_url($uri); parse_str($p['query']??'', $q);\necho 'Host esperado mongo: '.(($p['host']??'')==='mongo'?'SI':'NO').PHP_EOL;\necho 'Puerto esperado 27017: '.(($p['port']??27017)===27017?'SI':'NO').PHP_EOL;\necho 'Usuario esperado tienda_owner: '.(($p['user']??'')==='tienda_owner'?'SI':'NO').PHP_EOL;\necho 'authSource admin: '.(($q['authSource']??'')==='admin'?'SI':'NO').PHP_EOL;\necho 'Clave URI coincide con Secret: '.(hash_equals(getenv('MONGO_OWNER_PASSWORD'),rawurldecode($p['pass']??''))?'SI':'NO').PHP_EOL;\n$ip=gethostbyname('mongo'); echo 'DNS mongo: '.$ip.PHP_EOL;\n$s=@fsockopen('mongo',27017,$errno,$errstr,5); echo 'TCP mongo:27017: '.($s?'OK':'FALLO codigo '.$errno).PHP_EOL; if($s)fclose($s);\ntry {\n$m=new MongoDB\\Driver\\Manager($uri,['serverSelectionTimeoutMS'=>10000,'connectTimeoutMS'=>5000]);\n$m->executeCommand('admin',new MongoDB\\Driver\\Command(['ping'=>1]));\necho 'Conexion autenticada: OK'.PHP_EOL;\n} catch(Throwable $e) {\necho 'Conexion autenticada: FALLO '.get_class($e).' codigo '.$e->getCode().PHP_EOL;\nforeach(['Authentication failed','Connection refused','timed out','Failed to resolve','No suitable servers','TLS','SSL'] as $hint) {if(stripos($e->getMessage(),$hint)!==false)echo 'Detalle: '.$hint.PHP_EOL;}\n}"
+        ],
+        "volumeMounts": [
+          {
+            "name": "tmp",
+            "mountPath": "/tmp"
+          }
+        ]
+      }
+    ],
+    "restartPolicy": "Never",
+    "volumes": [
+      {
+        "name": "tmp",
+        "emptyDir": {}
+      }
+    ]
+  }
+}

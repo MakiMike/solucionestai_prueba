@@ -1,0 +1,33 @@
+spec:
+  template:
+    spec:
+      containers:
+        - name: mongo
+          args:
+            - mongod
+            - --auth
+            - --bind_ip_all
+            - --tlsMode
+            - requireTLS
+            - --tlsCertificateKeyFile
+            - /etc/mongo-tls/server.pem
+            - --tlsCAFile
+            - /etc/mongo-ca/ca.crt
+            - --tlsAllowConnectionsWithoutCertificates
+            - --tlsDisabledProtocols
+            - TLS1_0,TLS1_1
+          volumeMounts:
+            - name: mongo-tls
+              mountPath: /etc/mongo-tls
+              readOnly: true
+            - name: mongo-ca
+              mountPath: /etc/mongo-ca
+              readOnly: true
+      volumes:
+        - name: mongo-tls
+          secret:
+            secretName: mongo-tls
+            defaultMode: 288
+        - name: mongo-ca
+          configMap:
+            name: mongo-ca

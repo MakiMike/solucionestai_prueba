@@ -103,7 +103,7 @@
                     </div>
 
                     <button type="button" id="btnComprarPedido" class="btn-checkout">
-                        <i class="fa-solid fa-circle-check"></i> Finalizar Compra (Simular Venta)
+                        <i class="fa-solid fa-circle-check"></i> Reservar pedido por 30 minutos
                     </button>
 
                     <a href="<?= base_url('ProductosAll'); ?>" class="btn-continue-shopping">
@@ -124,8 +124,8 @@
         <div class="success-icon-box">
             <i class="fa-solid fa-circle-check"></i>
         </div>
-        <h2>¡Venta Simulada con Éxito!</h2>
-        <p id="purchaseSuccessMessage">El pedido ha sido registrado en la pestaña Ventas del Admin.</p>
+        <h2>¡Pedido reservado!</h2>
+        <p id="purchaseSuccessMessage">Tienes 30 minutos para pagar en Mis pedidos.</p>
         <div class="success-actions">
             <a href="<?= base_url('ProductosAll'); ?>" class="btn-explore">Volver a la Tienda</a>
             <?php if ($this->session->userdata('rol') === 'A'): ?>
@@ -609,28 +609,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Finalizar Compra (Simular Venta)
+    // Reservar pedido por 30 minutos
     if (btnComprarPedido) {
         btnComprarPedido.addEventListener('click', function() {
             btnComprarPedido.disabled = true;
             btnComprarPedido.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando...';
 
-            fetch('<?= site_url("carrito/procesar"); ?>', { method: 'POST' })
+            fetch('<?= site_url("carrito/procesar"); ?>', { method: 'POST', body: new URLSearchParams({pedido_token: <?= json_encode($this->session->userdata('pedido_token')); ?>}) })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
+                    window.location.assign(data.redirect);
                     purchaseSuccessMessage.textContent = data.message;
                     purchaseSuccessModal.style.display = 'flex';
                     updateCartBadgeCount(0);
                 } else {
                     btnComprarPedido.disabled = false;
-                    btnComprarPedido.innerHTML = '<i class="fa-solid fa-circle-check"></i> Finalizar Compra (Simular Venta)';
+                    btnComprarPedido.innerHTML = '<i class="fa-solid fa-circle-check"></i> Reservar pedido por 30 minutos';
                     showGlobalFeedback(data.error || 'Ocurrió un error al procesar el pedido.', 'error');
                 }
             })
             .catch(err => {
                 btnComprarPedido.disabled = false;
-                btnComprarPedido.innerHTML = '<i class="fa-solid fa-circle-check"></i> Finalizar Compra (Simular Venta)';
+                btnComprarPedido.innerHTML = '<i class="fa-solid fa-circle-check"></i> Reservar pedido por 30 minutos';
                 console.error(err);
                 showGlobalFeedback('Error al procesar la compra.', 'error');
             });

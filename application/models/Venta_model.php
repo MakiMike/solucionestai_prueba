@@ -35,7 +35,7 @@ class Venta_model extends CI_Model
 
     // Total de registros
     $recordsTotal = $this->db
-        ->count_all_results('pedido_detalle');
+        ->join('pedidos', 'pedidos.ped_id = pedido_detalle.ped_id')->where_in('pedidos.ped_estado', array('confirmado','en_preparacion','listo_entrega','entregado','pagado'))->count_all_results('pedido_detalle');
 
 
     // Consulta principal
@@ -44,8 +44,8 @@ class Venta_model extends CI_Model
         p.ped_id,
         p.ped_fecha,
         u.us_nombre,
-        pl.pla_nombre,
-        t.tal_nombre,
+        COALESCE(pd.pde_nombre, pl.pla_nombre) AS pla_nombre,
+        COALESCE(pd.pde_talla, t.tal_nombre) AS tal_nombre,
         pd.pde_cantidad,
         pd.pde_precio,
         (pd.pde_cantidad * pd.pde_precio) AS subtotal,
@@ -55,6 +55,7 @@ class Venta_model extends CI_Model
 
     // Tabla principal
     $this->db->from('pedido_detalle pd');
+    $this->db->where_in('p.ped_estado', array('confirmado','en_preparacion','listo_entrega','entregado','pagado'));
 
 
     // Relación con pedidos
@@ -226,8 +227,8 @@ class Venta_model extends CI_Model
             p.ped_id,
             p.ped_fecha,
             u.us_nombre,
-            pl.pla_nombre,
-            t.tal_nombre,
+            COALESCE(pd.pde_nombre, pl.pla_nombre) AS pla_nombre,
+            COALESCE(pd.pde_talla, t.tal_nombre) AS tal_nombre,
             pd.pde_cantidad,
             pd.pde_precio,
             (pd.pde_cantidad * pd.pde_precio) AS subtotal,
@@ -235,6 +236,7 @@ class Venta_model extends CI_Model
         ", false);
 
         $this->db->from('pedido_detalle pd');
+    $this->db->where_in('p.ped_estado', array('confirmado','en_preparacion','listo_entrega','entregado','pagado'));
         $this->db->join('pedidos p', 'p.ped_id = pd.ped_id', 'inner');
         $this->db->join('playeras pl', 'pl.pla_id = pd.pla_id', 'inner');
         $this->db->join('tallas t', 't.tal_id = pd.tal_id', 'inner');

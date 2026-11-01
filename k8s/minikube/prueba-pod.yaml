@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: prueba-persistencia
+  namespace: tienda-prod
+  labels:
+    app: prueba-persistencia
+spec:
+  automountServiceAccountToken: false
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: prueba
+      image: busybox:1.37.0
+      command:
+        - sh
+        - -ec
+        - |
+          if [ ! -f /datos/prueba.txt ]; then
+            date -u > /datos/prueba.txt
+          fi
+          cat /datos/prueba.txt
+          sleep 86400
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+            - ALL
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 100m
+          memory: 32Mi
+      volumeMounts:
+        - name: datos
+          mountPath: /datos
+  volumes:
+    - name: datos
+      persistentVolumeClaim:
+        claimName: prueba-persistencia

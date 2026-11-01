@@ -1,0 +1,31 @@
+tabla,restriccion,definicion
+ci_sessions,ci_sessions_pkey,PRIMARY KEY (id)
+pedido_detalle,pedido_detalle_pde_cantidad_check,CHECK ((pde_cantidad > 0))
+pedido_detalle,pedido_detalle_pde_precio_check,CHECK ((pde_precio >= (0)::numeric))
+pedido_detalle,pedido_detalle_ped_id_fkey,FOREIGN KEY (ped_id) REFERENCES pedidos(ped_id)
+pedido_detalle,pedido_detalle_pkey,PRIMARY KEY (pde_id)
+pedido_detalle,pedido_detalle_pla_id_fkey,FOREIGN KEY (pla_id) REFERENCES playeras(pla_id)
+pedido_detalle,pedido_detalle_tal_id_fkey,FOREIGN KEY (tal_id) REFERENCES tallas(tal_id)
+pedidos,chk_pedido_estado,"CHECK (((ped_estado)::text = ANY ((ARRAY['pendiente_pago'::character varying, 'confirmado'::character varying, 'en_preparacion'::character varying, 'listo_entrega'::character varying, 'entregado'::character varying, 'cancelado'::character varying, 'vencido'::character varying, 'pendiente'::character varying, 'pagado'::character varying, 'procesando'::character varying, 'enviado'::character varying])::text[])))"
+pedidos,pedidos_ped_total_check,CHECK ((ped_total >= (0)::numeric))
+pedidos,pedidos_pkey,PRIMARY KEY (ped_id)
+pedidos,pedidos_us_id_fkey,FOREIGN KEY (us_id) REFERENCES us_usuarios(us_id)
+playeras,playeras_pkey,PRIMARY KEY (pla_id)
+playeras,playeras_pla_genero_check,"CHECK ((pla_genero = ANY (ARRAY['H'::bpchar, 'M'::bpchar, 'U'::bpchar])))"
+playeras,playeras_pla_precio_check,CHECK ((pla_precio >= (0)::numeric))
+playera_tallas,playera_tallas_pkey,PRIMARY KEY (pta_id)
+playera_tallas,playera_tallas_pla_id_fkey,FOREIGN KEY (pla_id) REFERENCES playeras(pla_id)
+playera_tallas,playera_tallas_pla_id_tal_id_key,"UNIQUE (pla_id, tal_id)"
+playera_tallas,playera_tallas_pta_stock_check,CHECK ((pta_stock >= 0))
+playera_tallas,playera_tallas_tal_id_fkey,FOREIGN KEY (tal_id) REFERENCES tallas(tal_id)
+tallas,tallas_pkey,PRIMARY KEY (tal_id)
+tallas,tallas_tal_nombre_key,UNIQUE (tal_nombre)
+tienda_migrations,tienda_migrations_pkey,PRIMARY KEY (version)
+tienda_outbox,tienda_outbox_actor_id_fkey,FOREIGN KEY (actor_id) REFERENCES us_usuarios(us_id)
+tienda_outbox,tienda_outbox_ped_id_fkey,FOREIGN KEY (ped_id) REFERENCES pedidos(ped_id)
+tienda_outbox,tienda_outbox_pkey,PRIMARY KEY (evento_id)
+us_usuarios,us_usuarios_pkey,PRIMARY KEY (us_id)
+us_usuarios,us_usuarios_us_correo_key,UNIQUE (us_correo)
+us_usuarios,us_usuarios_us_rol_check,"CHECK ((us_rol = ANY (ARRAY['A'::bpchar, 'U'::bpchar])))"
+us_usuarios,us_usuarios_us_sexo_check,"CHECK ((us_sexo = ANY (ARRAY['H'::bpchar, 'M'::bpchar, 'O'::bpchar])))"
+us_usuarios,us_usuarios_us_telefono_key,UNIQUE (us_telefono)

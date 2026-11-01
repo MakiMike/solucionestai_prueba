@@ -1,6 +1,7 @@
 <aside>
 
     <ul>
+        <li><a href="<?= site_url('pedidos'); ?>">Mis pedidos</a></li>
 
         <li>
             <a href="<?= base_url('dashboard'); ?>">

@@ -1,0 +1,12 @@
+# Usar exclusivamente con --dry-run=server: no crea un PVC ni reserva disco.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prueba-cuota-almacenamiento
+  namespace: tienda-prod
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: csi-hostpath-sc
+  resources:
+    requests:
+      storage: 25Gi

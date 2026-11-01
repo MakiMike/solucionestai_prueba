@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="white"/>
+<text x="28" y="50" font-family="Arial" font-size="30" font-weight="700" fill="#243247">7. Modelo relacional y vínculo con el historial</text>
+<rect x="25" y="100" width="330" height="140" rx="10" fill="#e5f2eb" stroke="#91a3b7" stroke-width="2"/>
+<text x="122.0" y="133" font-family="Arial" font-size="23" font-weight="700" fill="#243247">us_usuarios</text>
+<text x="60.5" y="169" font-family="Arial" font-size="22" font-weight="400" fill="#243247">PK us_id | correo UNIQUE</text>
+<text x="91.0078125" y="198" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Rol A/U | baja lógica</text>
+<rect x="435" y="100" width="330" height="140" rx="10" fill="#e5f2eb" stroke="#91a3b7" stroke-width="2"/>
+<text x="556.0" y="133" font-family="Arial" font-size="23" font-weight="700" fill="#243247">pedidos</text>
+<text x="497.5" y="169" font-family="Arial" font-size="22" font-weight="400" fill="#243247">PK ped_id | FK us_id</text>
+<text x="507.5" y="198" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Estado, total, plazo</text>
+<text x="509.5" y="227" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Clave idempotente</text>
+<rect x="845" y="100" width="330" height="140" rx="10" fill="#e5f2eb" stroke="#91a3b7" stroke-width="2"/>
+<text x="931.0" y="133" font-family="Arial" font-size="23" font-weight="700" fill="#243247">tienda_outbox</text>
+<text x="886.5" y="169" font-family="Arial" font-size="22" font-weight="400" fill="#243247">PK evento_id | FK ped_id</text>
+<text x="896.5" y="198" font-family="Arial" font-size="22" font-weight="400" fill="#243247">JSONB, fecha, enviado</text>
+<text x="937.5" y="227" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Intentos y error</text>
+<rect x="25" y="380" width="330" height="140" rx="10" fill="#e5f2eb" stroke="#91a3b7" stroke-width="2"/>
+<text x="143.0" y="413" font-family="Arial" font-size="23" font-weight="700" fill="#243247">playeras</text>
+<text x="86.5" y="449" font-family="Arial" font-size="22" font-weight="400" fill="#243247">PK pla_id | precio ≥ 0</text>
+<text x="113.5" y="478" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Edición limitada</text>
+<text x="99.0" y="507" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Activa / baja lógica</text>
+<rect x="435" y="380" width="330" height="140" rx="10" fill="#e5f2eb" stroke="#91a3b7" stroke-width="2"/>
+<text x="519.5" y="413" font-family="Arial" font-size="23" font-weight="700" fill="#243247">pedido_detalle</text>
+<text x="549.5" y="449" font-family="Arial" font-size="22" font-weight="400" fill="#243247">PK pde_id</text>
+<text x="485.0" y="478" font-family="Arial" font-size="22" font-weight="400" fill="#243247">FK pedido, prenda, talla</text>
+<text x="497.0" y="507" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Cantidad &gt; 0 y precio</text>
+<rect x="845" y="380" width="330" height="140" rx="10" fill="#f0eafb" stroke="#91a3b7" stroke-width="2"/>
+<text x="892.0" y="413" font-family="Arial" font-size="23" font-weight="700" fill="#243247">eventos en MongoDB</text>
+<text x="917.0" y="449" font-family="Arial" font-size="22" font-weight="400" fill="#243247">evento_id UNIQUE</text>
+<text x="924.0" y="478" font-family="Arial" font-size="22" font-weight="400" fill="#243247">pedido_id + fecha</text>
+<text x="921.0078125" y="507" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Tipo, actor y datos</text>
+<rect x="25" y="625" width="330" height="95" rx="10" fill="#e5f2eb" stroke="#91a3b7" stroke-width="2"/>
+<text x="160.5" y="658" font-family="Arial" font-size="23" font-weight="700" fill="#243247">tallas</text>
+<text x="54.5" y="694" font-family="Arial" font-size="22" font-weight="400" fill="#243247">PK tal_id | nombre UNIQUE</text>
+<rect x="435" y="625" width="330" height="110" rx="10" fill="#e5f2eb" stroke="#91a3b7" stroke-width="2"/>
+<text x="529.0" y="656" font-family="Arial" font-size="21" font-weight="700" fill="#243247">playera_tallas</text>
+<text x="481.5" y="692" font-family="Arial" font-size="20" font-weight="400" fill="#243247">FK pla_id + tal_id UNIQUE</text>
+<text x="558.0" y="719" font-family="Arial" font-size="20" font-weight="400" fill="#243247">Stock ≥ 0</text>
+<polyline points="355,165 435,165" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="435,165 424.4690092573155,170.75310646325045 424.4690092573155,159.24689353674955" fill="#425d78"/>
+<text x="380.0" y="144" font-family="Arial" font-size="19" font-weight="400" fill="#243247">1:N</text>
+<polyline points="765,165 845,165" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="845,165 834.4690092573155,170.75310646325045 834.4690092573155,159.24689353674955" fill="#425d78"/>
+<text x="790.0" y="144" font-family="Arial" font-size="19" font-weight="400" fill="#243247">1:N</text>
+<polyline points="600,240 600,380" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="600,380 594.2468935367496,369.4690092573155 605.7531064632504,369.4690092573155" fill="#425d78"/>
+<text x="630.0" y="319" font-family="Arial" font-size="19" font-weight="400" fill="#243247">1:N</text>
+<polyline points="355,450 435,450" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="435,450 424.4690092573155,455.75310646325045 424.4690092573155,444.24689353674955" fill="#425d78"/>
+<text x="380.0" y="429" font-family="Arial" font-size="19" font-weight="400" fill="#243247">1:N</text>
+<polyline points="190,520 190,570 600,570 600,625" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="600,625 594.2468935367496,614.4690092573155 605.7531064632504,614.4690092573155" fill="#425d78"/>
+<polyline points="355,675 435,675" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="435,675 424.4690092573155,680.7531064632504 424.4690092573155,669.2468935367496" fill="#425d78"/>
+<text x="380.0" y="654" font-family="Arial" font-size="19" font-weight="400" fill="#243247">1:N</text>
+<polyline points="1010,240 1010,380" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="1010,380 1004.2468935367496,369.4690092573155 1015.7531064632504,369.4690092573155" fill="#425d78"/>
+<text x="1028.5" y="319" font-family="Arial" font-size="19" font-weight="400" fill="#243247">Outbox</text>
+<polyline points="355,650 405,650 405,500 435,500" fill="none" stroke="#425d78" stroke-width="3"/>
+<polygon points="435,500 424.4690092573155,505.75310646325045 424.4690092573155,494.24689353674955" fill="#425d78"/>
+<text x="830" y="641" font-family="Arial" font-size="21" font-weight="400" fill="#243247">El historial no sustituye</text>
+<text x="830" y="669" font-family="Arial" font-size="21" font-weight="400" fill="#243247">las relaciones ni la</text>
+<text x="830" y="697" font-family="Arial" font-size="21" font-weight="400" fill="#243247">transacción PostgreSQL.</text>
+<text x="28" y="789" font-family="Arial" font-size="17" font-weight="400" fill="#243247">TSkull-Shirt | Minikube | Corte: 31-10-2026 | Diagrama, no captura de pantalla</text></svg>

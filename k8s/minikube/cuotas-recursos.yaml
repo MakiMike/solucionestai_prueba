@@ -1,0 +1,37 @@
+# Presupuesto logico del namespace; no equivale a capacidad fisica reservada.
+# Incluye margen para HPA (6+6), rolling updates, bases, exporters y Jobs.
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: tienda-contenedores
+  namespace: tienda-prod
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 100m
+        memory: 128Mi
+      default:
+        cpu: '1'
+        memory: 512Mi
+      min:
+        cpu: 5m
+        memory: 8Mi
+      max:
+        cpu: '2'
+        memory: 2Gi
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: tienda-presupuesto
+  namespace: tienda-prod
+spec:
+  hard:
+    requests.cpu: '4'
+    requests.memory: 4Gi
+    limits.cpu: '24'
+    limits.memory: 12Gi
+    pods: '40'
+    persistentvolumeclaims: '8'
+    requests.storage: 24Gi

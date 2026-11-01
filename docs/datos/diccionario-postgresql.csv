@@ -1,0 +1,57 @@
+table_name,column_name,data_type,is_nullable,valor_predeterminado
+ci_sessions,id,character varying,NO,""
+ci_sessions,ip_address,character varying,NO,""
+ci_sessions,timestamp,bigint,NO,0
+ci_sessions,data,text,NO,""
+pedido_detalle,pde_id,integer,NO,nextval('pedido_detalle_pde_id_seq'::regclass)
+pedido_detalle,ped_id,integer,NO,""
+pedido_detalle,pla_id,integer,NO,""
+pedido_detalle,tal_id,integer,NO,""
+pedido_detalle,pde_cantidad,integer,NO,""
+pedido_detalle,pde_precio,numeric,NO,""
+pedido_detalle,pde_nombre,character varying,YES,""
+pedido_detalle,pde_talla,character varying,YES,""
+pedidos,ped_id,integer,NO,nextval('pedidos_ped_id_seq'::regclass)
+pedidos,us_id,integer,NO,""
+pedidos,ped_fecha,timestamp without time zone,NO,CURRENT_TIMESTAMP
+pedidos,ped_estado,character varying,NO,'pendiente_pago'::character varying
+pedidos,ped_total,numeric,NO,0
+pedidos,ped_clave,character varying,YES,""
+pedidos,ped_vence_en,timestamp with time zone,YES,""
+pedidos,ped_actualizado_en,timestamp with time zone,NO,CURRENT_TIMESTAMP
+playera_tallas,pta_id,integer,NO,nextval('playera_tallas_pta_id_seq'::regclass)
+playera_tallas,pla_id,integer,NO,""
+playera_tallas,tal_id,integer,NO,""
+playera_tallas,pta_stock,integer,NO,0
+playeras,pla_id,integer,NO,nextval('playeras_pla_id_seq'::regclass)
+playeras,pla_nombre,character varying,NO,""
+playeras,pla_descripcion,text,YES,""
+playeras,pla_genero,character,NO,""
+playeras,pla_precio,numeric,NO,""
+playeras,pla_imagen,character varying,YES,""
+playeras,pla_activa,boolean,NO,true
+playeras,created_at,timestamp without time zone,YES,CURRENT_TIMESTAMP
+playeras,pla_edicion_limitada,boolean,NO,false
+tallas,tal_id,integer,NO,nextval('tallas_tal_id_seq'::regclass)
+tallas,tal_nombre,character varying,NO,""
+tallas,tal_orden,integer,NO,""
+tienda_outbox,evento_id,bigint,NO,nextval('tienda_outbox_evento_id_seq'::regclass)
+tienda_outbox,ped_id,integer,NO,""
+tienda_outbox,actor_id,integer,YES,""
+tienda_outbox,tipo,character varying,NO,""
+tienda_outbox,datos,jsonb,NO,""
+tienda_outbox,creado_en,timestamp with time zone,NO,CURRENT_TIMESTAMP
+tienda_outbox,enviado_en,timestamp with time zone,YES,""
+tienda_outbox,intentos,integer,NO,0
+tienda_outbox,ultimo_error,character varying,YES,""
+us_usuarios,us_id,integer,NO,nextval('us_usuarios_us_id_seq'::regclass)
+us_usuarios,us_nombre,character varying,NO,""
+us_usuarios,us_correo,character varying,NO,""
+us_usuarios,us_telefono,character varying,YES,""
+us_usuarios,us_contrasenia,character varying,NO,""
+us_usuarios,us_rol,character,NO,'U'::bpchar
+us_usuarios,us_sexo,character,NO,'O'::bpchar
+us_usuarios,created_at,timestamp with time zone,YES,CURRENT_TIMESTAMP
+us_usuarios,us_reset_token,character varying,YES,""
+us_usuarios,us_reset_token_expires,timestamp without time zone,YES,""
+us_usuarios,us_activo,boolean,NO,true

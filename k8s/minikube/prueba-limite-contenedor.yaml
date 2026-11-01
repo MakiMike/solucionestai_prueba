@@ -1,0 +1,31 @@
+# Usar exclusivamente con --dry-run=server: verifica admision sin crear un Pod.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: prueba-limite-contenedor
+  namespace: tienda-prod
+spec:
+  automountServiceAccountToken: false
+  restartPolicy: Never
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 33
+    runAsGroup: 33
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: prueba
+      image: tienda-frontend:0.1.0
+      command: [sh, -c, 'sleep 30']
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: '3'
+          memory: 512Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: [ALL]

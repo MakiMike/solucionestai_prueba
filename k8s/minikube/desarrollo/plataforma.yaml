@@ -1,0 +1,617 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "name": "tienda-dev",
+        "labels": {
+          "pod-security.kubernetes.io/enforce": "restricted",
+          "pod-security.kubernetes.io/audit": "restricted",
+          "pod-security.kubernetes.io/warn": "restricted"
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ServiceAccount",
+      "metadata": {
+        "name": "tienda",
+        "namespace": "tienda-dev"
+      },
+      "automountServiceAccountToken": false
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "database-init",
+        "namespace": "tienda-dev"
+      },
+      "data": {
+        "postgres.sh": "#!/bin/sh\nset -eu\npsql -v ON_ERROR_STOP=1 --username \"$POSTGRES_USER\" --dbname \"$POSTGRES_DB\" --set=app_password=\"$DB_PASSWORD\" <<'SQL'\nSELECT format('CREATE ROLE tienda_app LOGIN PASSWORD %L', :'app_password') WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='tienda_app') \\gexec\nSQL\n",
+        "mongo.js": "const target = db.getSiblingDB(process.env.MONGO_DATABASE || 'tienda');\nif (!target.getUser('tienda_app')) {\n  target.createUser({user:'tienda_app',pwd:process.env.MONGO_APP_PASSWORD,roles:[{role:'readWrite',db:target.getName()}]});\n}\n"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "tienda-config",
+        "namespace": "tienda-dev"
+      },
+      "data": {
+        "CI_ENV": "development",
+        "APP_BASE_URL": "https://tienda-dev.test:9444/",
+        "APP_SESSION_DRIVER": "database",
+        "APP_COOKIE_SECURE": "true",
+        "DB_HOST": "postgres",
+        "DB_PORT": "5432",
+        "DB_DATABASE": "tienda",
+        "DB_USERNAME": "tienda_app",
+        "DB_SSLMODE": "disable",
+        "MONGO_DATABASE": "tienda",
+        "HOME": "/tmp"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "LimitRange",
+      "metadata": {
+        "name": "tienda-contenedores",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "limits": [
+          {
+            "type": "Container",
+            "defaultRequest": {
+              "cpu": "100m",
+              "memory": "128Mi"
+            },
+            "default": {
+              "cpu": "1",
+              "memory": "512Mi"
+            },
+            "max": {
+              "cpu": "2",
+              "memory": "1Gi"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ResourceQuota",
+      "metadata": {
+        "name": "tienda-presupuesto",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "hard": {
+          "requests.cpu": "2",
+          "requests.memory": "2Gi",
+          "limits.cpu": "10",
+          "limits.memory": "5Gi",
+          "pods": "15",
+          "requests.storage": "8Gi",
+          "persistentvolumeclaims": "4"
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "metadata": {
+        "name": "uploads",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "storageClassName": "csi-hostpath-sc",
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "deny-all",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {},
+        "policyTypes": [
+          "Ingress",
+          "Egress"
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "allow-dns",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {},
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "namespaceSelector": {
+                  "matchLabels": {
+                    "kubernetes.io/metadata.name": "kube-system"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "UDP",
+                "port": 53
+              },
+              {
+                "protocol": "TCP",
+                "port": 53
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "ingress-backend",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "backend"
+          }
+        },
+        "policyTypes": [
+          "Ingress"
+        ],
+        "ingress": [
+          {
+            "from": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "frontend"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 9000
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "egress-frontend-backend",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "frontend"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "backend"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 9000
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "ingress-postgres",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "postgres"
+          }
+        },
+        "policyTypes": [
+          "Ingress"
+        ],
+        "ingress": [
+          {
+            "from": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "backend"
+                  }
+                }
+              },
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "worker"
+                  }
+                }
+              },
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "migration"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 5432
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "egress-backend-postgres",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "backend"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "postgres"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 5432
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "egress-worker-postgres",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "worker"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "postgres"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 5432
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "egress-migration-postgres",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "migration"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "postgres"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 5432
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "ingress-mongo",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "mongo"
+          }
+        },
+        "policyTypes": [
+          "Ingress"
+        ],
+        "ingress": [
+          {
+            "from": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "backend"
+                  }
+                }
+              },
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "worker"
+                  }
+                }
+              },
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "migration"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 27017
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "egress-backend-mongo",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "backend"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "mongo"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 27017
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "egress-worker-mongo",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "worker"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "mongo"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 27017
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "egress-migration-mongo",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "migration"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "mongo"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 27017
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "ingress-frontend",
+        "namespace": "tienda-dev"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "frontend"
+          }
+        },
+        "policyTypes": [
+          "Ingress"
+        ],
+        "ingress": [
+          {
+            "from": [
+              {
+                "namespaceSelector": {
+                  "matchLabels": {
+                    "kubernetes.io/metadata.name": "kube-system"
+                  }
+                },
+                "podSelector": {
+                  "matchLabels": {
+                    "app.kubernetes.io/name": "traefik"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 8080
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

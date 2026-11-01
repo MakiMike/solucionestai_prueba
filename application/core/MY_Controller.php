@@ -11,5 +11,10 @@ class MY_Controller extends CI_Controller
             redirect('login');
             exit;
         }
+        $mutations = array('agregar','actualizar','eliminar','vaciar','procesar','crear','editar','guardar','guardar_usuario','importar','accion');
+        if (in_array($this->router->fetch_method(), $mutations, true) && $this->input->method() !== 'post') {
+            show_error('Método no permitido.', 405);
+            exit;
+        }
     }
 }

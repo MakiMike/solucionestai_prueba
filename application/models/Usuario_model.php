@@ -33,7 +33,7 @@ class Usuario_model extends CI_Model
         }
         return $this->db
             ->where('us_id', $id)
-            ->delete($this->tabla);
+            ->update($this->tabla, array('us_activo' => 'false'));
     }
 
     public function obtener_por_id($id)
@@ -70,7 +70,7 @@ class Usuario_model extends CI_Model
             exit;
         }
         return $this->db
-            ->where('us_rol', 'U')
+            ->where('us_rol', 'U')->where('us_activo', true)
             ->get($this->tabla)
             ->result();
     }

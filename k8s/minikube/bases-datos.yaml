@@ -1,0 +1,425 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "ServiceAccount",
+      "metadata": {
+        "name": "tienda",
+        "namespace": "tienda-prod"
+      },
+      "automountServiceAccountToken": false
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "database-init",
+        "namespace": "tienda-prod"
+      },
+      "data": {
+        "postgres.sh": "#!/bin/sh\nset -eu\npsql -v ON_ERROR_STOP=1 --username \"$POSTGRES_USER\" --dbname \"$POSTGRES_DB\" --set=app_password=\"$DB_PASSWORD\" <<'SQL'\nSELECT format('CREATE ROLE tienda_app LOGIN PASSWORD %L', :'app_password') WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='tienda_app') \\gexec\nSQL\n",
+        "mongo.js": "const target = db.getSiblingDB(process.env.MONGO_DATABASE || 'tienda');\nif (!target.getUser('tienda_app')) {\n  target.createUser({user:'tienda_app',pwd:process.env.MONGO_APP_PASSWORD,roles:[{role:'readWrite',db:target.getName()}]});\n}\n"
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "StatefulSet",
+      "metadata": {
+        "name": "postgres",
+        "namespace": "tienda-prod"
+      },
+      "spec": {
+        "serviceName": "postgres",
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "postgres"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "postgres"
+            }
+          },
+          "spec": {
+            "serviceAccountName": "tienda",
+            "automountServiceAccountToken": false,
+            "securityContext": {
+              "fsGroup": 999,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "containers": [
+              {
+                "name": "postgres",
+                "image": "postgres:17.6-bookworm",
+                "imagePullPolicy": "IfNotPresent",
+                "securityContext": {
+                  "runAsNonRoot": true,
+                  "allowPrivilegeEscalation": false,
+                  "readOnlyRootFilesystem": true,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  },
+                  "runAsUser": 999
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "250m",
+                    "memory": "256Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "1Gi"
+                  }
+                },
+                "ports": [
+                  {
+                    "containerPort": 5432
+                  }
+                ],
+                "env": [
+                  {
+                    "name": "POSTGRES_DB",
+                    "value": "tienda"
+                  },
+                  {
+                    "name": "POSTGRES_USER",
+                    "value": "tienda_owner"
+                  },
+                  {
+                    "name": "POSTGRES_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "tienda-secrets",
+                        "key": "DB_OWNER_PASSWORD"
+                      }
+                    }
+                  },
+                  {
+                    "name": "DB_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "tienda-secrets",
+                        "key": "DB_PASSWORD"
+                      }
+                    }
+                  },
+                  {
+                    "name": "PGDATA",
+                    "value": "/var/lib/postgresql/data/pgdata"
+                  }
+                ],
+                "readinessProbe": {
+                  "exec": {
+                    "command": [
+                      "pg_isready",
+                      "-U",
+                      "tienda_owner",
+                      "-d",
+                      "tienda"
+                    ]
+                  },
+                  "initialDelaySeconds": 5
+                },
+                "startupProbe": {
+                  "tcpSocket": {
+                    "port": 5432
+                  },
+                  "periodSeconds": 5,
+                  "failureThreshold": 60
+                },
+                "livenessProbe": {
+                  "tcpSocket": {
+                    "port": 5432
+                  },
+                  "initialDelaySeconds": 30,
+                  "periodSeconds": 15
+                },
+                "volumeMounts": [
+                  {
+                    "name": "data",
+                    "mountPath": "/var/lib/postgresql/data"
+                  },
+                  {
+                    "name": "init",
+                    "mountPath": "/docker-entrypoint-initdb.d/10-app.sh",
+                    "subPath": "postgres.sh",
+                    "readOnly": true
+                  },
+                  {
+                    "name": "tmp",
+                    "mountPath": "/tmp"
+                  },
+                  {
+                    "name": "runtime",
+                    "mountPath": "/var/run/postgresql"
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "init",
+                "configMap": {
+                  "name": "database-init",
+                  "defaultMode": 365
+                }
+              },
+              {
+                "name": "tmp",
+                "emptyDir": {}
+              },
+              {
+                "name": "runtime",
+                "emptyDir": {}
+              }
+            ]
+          }
+        },
+        "volumeClaimTemplates": [
+          {
+            "metadata": {
+              "name": "data"
+            },
+            "spec": {
+              "accessModes": [
+                "ReadWriteOnce"
+              ],
+              "resources": {
+                "requests": {
+                  "storage": "5Gi"
+                }
+              },
+              "storageClassName": "csi-hostpath-sc"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "postgres",
+        "namespace": "tienda-prod"
+      },
+      "spec": {
+        "selector": {
+          "app": "postgres"
+        },
+        "ports": [
+          {
+            "port": 5432,
+            "targetPort": 5432
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "StatefulSet",
+      "metadata": {
+        "name": "mongo",
+        "namespace": "tienda-prod"
+      },
+      "spec": {
+        "serviceName": "mongo",
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "mongo"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "mongo"
+            }
+          },
+          "spec": {
+            "serviceAccountName": "tienda",
+            "automountServiceAccountToken": false,
+            "securityContext": {
+              "fsGroup": 999,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "containers": [
+              {
+                "name": "mongo",
+                "image": "mongo:8.0.14",
+                "imagePullPolicy": "IfNotPresent",
+                "securityContext": {
+                  "runAsNonRoot": true,
+                  "allowPrivilegeEscalation": false,
+                  "readOnlyRootFilesystem": true,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  },
+                  "runAsUser": 999
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "250m",
+                    "memory": "256Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "1Gi"
+                  }
+                },
+                "ports": [
+                  {
+                    "containerPort": 27017
+                  }
+                ],
+                "env": [
+                  {
+                    "name": "HOME",
+                    "value": "/tmp"
+                  },
+                  {
+                    "name": "MONGO_DATABASE",
+                    "value": "tienda"
+                  },
+                  {
+                    "name": "MONGO_INITDB_ROOT_USERNAME",
+                    "value": "tienda_owner"
+                  },
+                  {
+                    "name": "MONGO_INITDB_ROOT_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "tienda-secrets",
+                        "key": "MONGO_OWNER_PASSWORD"
+                      }
+                    }
+                  },
+                  {
+                    "name": "MONGO_APP_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "tienda-secrets",
+                        "key": "MONGO_APP_PASSWORD"
+                      }
+                    }
+                  }
+                ],
+                "readinessProbe": {
+                  "tcpSocket": {
+                    "port": 27017
+                  },
+                  "initialDelaySeconds": 10
+                },
+                "startupProbe": {
+                  "tcpSocket": {
+                    "port": 27017
+                  },
+                  "periodSeconds": 5,
+                  "failureThreshold": 60
+                },
+                "livenessProbe": {
+                  "tcpSocket": {
+                    "port": 27017
+                  },
+                  "initialDelaySeconds": 30,
+                  "periodSeconds": 15
+                },
+                "volumeMounts": [
+                  {
+                    "name": "data",
+                    "mountPath": "/data/db"
+                  },
+                  {
+                    "name": "init",
+                    "mountPath": "/docker-entrypoint-initdb.d/10-app.js",
+                    "subPath": "mongo.js",
+                    "readOnly": true
+                  },
+                  {
+                    "name": "tmp",
+                    "mountPath": "/tmp"
+                  },
+                  {
+                    "name": "runtime",
+                    "mountPath": "/data/configdb"
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "init",
+                "configMap": {
+                  "name": "database-init",
+                  "defaultMode": 365
+                }
+              },
+              {
+                "name": "tmp",
+                "emptyDir": {}
+              },
+              {
+                "name": "runtime",
+                "emptyDir": {}
+              }
+            ]
+          }
+        },
+        "volumeClaimTemplates": [
+          {
+            "metadata": {
+              "name": "data"
+            },
+            "spec": {
+              "accessModes": [
+                "ReadWriteOnce"
+              ],
+              "resources": {
+                "requests": {
+                  "storage": "5Gi"
+                }
+              },
+              "storageClassName": "csi-hostpath-sc"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "mongo",
+        "namespace": "tienda-prod"
+      },
+      "spec": {
+        "selector": {
+          "app": "mongo"
+        },
+        "ports": [
+          {
+            "port": 27017,
+            "targetPort": 27017
+          }
+        ]
+      }
+    }
+  ]
+}

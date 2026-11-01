@@ -1,0 +1,126 @@
+# Permisos temporales exclusivos de la prueba. No modifica deny-all.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: prueba-carga-salida
+  namespace: tienda-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: prueba-carga
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: frontend
+      ports:
+        - protocol: TCP
+          port: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: prueba-carga-entrada
+  namespace: tienda-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: prueba-carga
+      ports:
+        - protocol: TCP
+          port: 8080
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: carga-hpa
+  namespace: tienda-prod
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 420
+  template:
+    metadata:
+      labels:
+        app: prueba-carga
+    spec:
+      automountServiceAccountToken: false
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: carga
+          # Reutiliza la imagen de la tienda y su wget; no instala herramientas.
+          image: tienda-frontend:0.1.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 32Mi
+            limits:
+              cpu: '1'
+              memory: 128Mi
+          env:
+            - name: CONCURRENCIA
+              value: '24'
+            - name: DURACION
+              value: '360'
+          command:
+            - sh
+            - -ec
+            - |
+              url=http://frontend:8080/health/ready
+              intento=0
+              until wget -q -T 5 -O /dev/null "$url"; do
+                intento=$((intento + 1))
+                if [ "$intento" -ge 10 ]; then
+                  echo 'ERROR: el frontend no responde; no se inicia la carga.'
+                  exit 1
+                fi
+                sleep 1
+              done
+              inicio=$(date +%s)
+              fin=$((inicio + DURACION))
+              echo "Inicio UTC: $(date -u)"
+              echo "Solicitudes concurrentes: $CONCURRENCIA; duracion: $DURACION segundos"
+              for i in $(seq 1 "$CONCURRENCIA"); do
+                (
+                  ok=0
+                  error=0
+                  while [ "$(date +%s)" -lt "$fin" ]; do
+                    if wget -q -T 5 -O /dev/null "$url" 2>/dev/null; then
+                      ok=$((ok + 1))
+                    else
+                      error=$((error + 1))
+                    fi
+                  done
+                  printf '%s %s\n' "$ok" "$error" > "/tmp/worker-$i.stats"
+                ) &
+              done
+              wait
+              echo "Fin UTC: $(date -u)"
+              awk '{ok+=$1;error+=$2} END {total=ok+error; printf "Solicitudes exitosas: %d\nSolicitudes fallidas: %d\nTotal: %d\n",ok,error,total; if(total>0) printf "Porcentaje de errores: %.2f%%\n",100*error/total;}' /tmp/worker-*.stats
+              segundos=$(($(date +%s) - inicio))
+              awk -v segundos="$segundos" '{total+=$1+$2} END {if(segundos>0) printf "Solicitudes por segundo (promedio): %.2f\n",total/segundos;}' /tmp/worker-*.stats
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

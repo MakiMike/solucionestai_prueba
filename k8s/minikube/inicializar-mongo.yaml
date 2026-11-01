@@ -1,0 +1,108 @@
+{
+  "apiVersion": "batch/v1",
+  "kind": "Job",
+  "metadata": {
+    "name": "tienda-mongo-init",
+    "namespace": "tienda-prod"
+  },
+  "spec": {
+    "backoffLimit": 0,
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "migration"
+        }
+      },
+      "spec": {
+        "serviceAccountName": "tienda",
+        "automountServiceAccountToken": false,
+        "securityContext": {
+          "fsGroup": 33,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "containers": [
+          {
+            "name": "migrate",
+            "image": "tienda-backend:0.1.6",
+            "imagePullPolicy": "IfNotPresent",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "allowPrivilegeEscalation": false,
+              "readOnlyRootFilesystem": true,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              },
+              "runAsUser": 33
+            },
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              }
+            },
+            "envFrom": [
+              {
+                "configMapRef": {
+                  "name": "tienda-config"
+                }
+              }
+            ],
+            "env": [
+              {
+                "name": "DB_USERNAME",
+                "value": "tienda_owner"
+              },
+              {
+                "name": "DB_PASSWORD",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "tienda-secrets",
+                    "key": "DB_OWNER_PASSWORD"
+                  }
+                }
+              },
+              {
+                "name": "MONGO_URI",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "tienda-secrets",
+                    "key": "MONGO_OWNER_URI"
+                  }
+                }
+              }
+            ],
+            "command": [
+              "php",
+              "bin/tienda.php",
+              "mongo-init"
+            ],
+            "volumeMounts": [
+              {
+                "name": "tmp",
+                "mountPath": "/tmp"
+              }
+            ]
+          }
+        ],
+        "restartPolicy": "Never",
+        "volumes": [
+          {
+            "name": "tmp",
+            "emptyDir": {}
+          }
+        ]
+      }
+    }
+  }
+}

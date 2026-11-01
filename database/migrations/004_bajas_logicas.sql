@@ -1,0 +1,1 @@
+ALTER TABLE us_usuarios ADD COLUMN IF NOT EXISTS us_activo boolean NOT NULL DEFAULT TRUE;
