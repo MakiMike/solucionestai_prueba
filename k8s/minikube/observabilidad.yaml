@@ -1,0 +1,615 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "metadata": {
+        "name": "loki-datos",
+        "namespace": "monitoreo"
+      },
+      "spec": {
+        "storageClassName": "csi-hostpath-sc",
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "loki-config",
+        "namespace": "monitoreo"
+      },
+      "data": {
+        "loki.yaml": "auth_enabled: false\nserver:\n  http_listen_port: 3100\ncommon:\n  path_prefix: /loki\n  replication_factor: 1\n  ring:\n    kvstore:\n      store: inmemory\n  storage:\n    filesystem:\n      chunks_directory: /loki/chunks\n      rules_directory: /loki/rules\nschema_config:\n  configs:\n    - from: 2024-01-01\n      store: tsdb\n      object_store: filesystem\n      schema: v13\n      index:\n        prefix: index_\n        period: 24h\ncompactor:\n  working_directory: /loki/compactor\n  retention_enabled: true\n  delete_request_store: filesystem\nlimits_config:\n  retention_period: 24h\n  ingestion_rate_mb: 2\n  ingestion_burst_size_mb: 4\n  max_query_parallelism: 2\n  max_global_streams_per_user: 1000\nanalytics:\n  reporting_enabled: false\n"
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "loki-tienda",
+        "namespace": "monitoreo"
+      },
+      "spec": {
+        "replicas": 1,
+        "strategy": {
+          "type": "Recreate"
+        },
+        "selector": {
+          "matchLabels": {
+            "app": "loki-tienda"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "loki-tienda"
+            }
+          },
+          "spec": {
+            "automountServiceAccountToken": false,
+            "securityContext": {
+              "fsGroup": 10001,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "containers": [
+              {
+                "name": "loki-tienda",
+                "image": "grafana/loki:3.7.9",
+                "args": [
+                  "-config.file=/etc/loki/loki.yaml"
+                ],
+                "ports": [
+                  {
+                    "name": "http",
+                    "containerPort": 3100
+                  }
+                ],
+                "resources": {
+                  "requests": {
+                    "cpu": "20m",
+                    "memory": "96Mi"
+                  },
+                  "limits": {
+                    "cpu": "500m",
+                    "memory": "384Mi"
+                  }
+                },
+                "securityContext": {
+                  "runAsNonRoot": true,
+                  "runAsUser": 10001,
+                  "allowPrivilegeEscalation": false,
+                  "readOnlyRootFilesystem": true,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  }
+                },
+                "volumeMounts": [
+                  {
+                    "name": "config",
+                    "mountPath": "/etc/loki",
+                    "readOnly": true
+                  },
+                  {
+                    "name": "datos",
+                    "mountPath": "/loki"
+                  },
+                  {
+                    "name": "tmp",
+                    "mountPath": "/tmp"
+                  }
+                ],
+                "readinessProbe": {
+                  "httpGet": {
+                    "path": "/ready",
+                    "port": "http"
+                  },
+                  "initialDelaySeconds": 15,
+                  "periodSeconds": 10
+                }
+              }
+            ],
+            "volumes": [
+              {
+                "name": "config",
+                "configMap": {
+                  "name": "loki-config"
+                }
+              },
+              {
+                "name": "datos",
+                "persistentVolumeClaim": {
+                  "claimName": "loki-datos"
+                }
+              },
+              {
+                "name": "tmp",
+                "emptyDir": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "loki-tienda",
+        "namespace": "monitoreo",
+        "labels": {
+          "app": "loki-tienda"
+        }
+      },
+      "spec": {
+        "selector": {
+          "app": "loki-tienda"
+        },
+        "ports": [
+          {
+            "name": "http",
+            "port": 3100,
+            "targetPort": "http"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ServiceAccount",
+      "metadata": {
+        "name": "alloy-logs",
+        "namespace": "monitoreo"
+      },
+      "automountServiceAccountToken": true
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "Role",
+      "metadata": {
+        "name": "tienda-lector-logs",
+        "namespace": "tienda-prod"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/log"
+          ],
+          "verbs": [
+            "get"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "RoleBinding",
+      "metadata": {
+        "name": "tienda-lector-logs",
+        "namespace": "tienda-prod"
+      },
+      "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "Role",
+        "name": "tienda-lector-logs"
+      },
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "alloy-logs",
+          "namespace": "monitoreo"
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "Role",
+      "metadata": {
+        "name": "tienda-lector-logs",
+        "namespace": "kube-system"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/log"
+          ],
+          "verbs": [
+            "get"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "RoleBinding",
+      "metadata": {
+        "name": "tienda-lector-logs",
+        "namespace": "kube-system"
+      },
+      "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "Role",
+        "name": "tienda-lector-logs"
+      },
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "alloy-logs",
+          "namespace": "monitoreo"
+        }
+      ]
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "alloy-config",
+        "namespace": "monitoreo"
+      },
+      "data": {
+        "config.alloy": "logging { level = \"warn\" }\ndiscovery.kubernetes \"pods\" {\n  role = \"pod\"\n  namespaces { names = [\"tienda-prod\", \"kube-system\"] }\n}\ndiscovery.relabel \"logs\" {\n  targets = discovery.kubernetes.pods.targets\n  rule {\n    source_labels = [\"__meta_kubernetes_namespace\", \"__meta_kubernetes_pod_label_app\", \"__meta_kubernetes_pod_label_app_kubernetes_io_name\"]\n    regex = \"tienda-prod;(backend|frontend);.*|kube-system;.*;traefik\"\n    action = \"keep\"\n  }\n  rule {\n    source_labels = [\"__meta_kubernetes_namespace\"]\n    target_label = \"namespace\"\n  }\n  rule {\n    source_labels = [\"__meta_kubernetes_pod_name\"]\n    target_label = \"pod\"\n  }\n  rule {\n    source_labels = [\"__meta_kubernetes_pod_container_name\"]\n    target_label = \"container\"\n  }\n  rule {\n    source_labels = [\"__meta_kubernetes_pod_node_name\"]\n    target_label = \"node\"\n  }\n}\nloki.source.kubernetes \"pods\" {\n  targets = discovery.relabel.logs.output\n  forward_to = [loki.write.local.receiver]\n}\nloki.write \"local\" {\n  endpoint { url = \"http://loki-tienda:3100/loki/api/v1/push\" }\n}\n"
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "alloy-logs",
+        "namespace": "monitoreo"
+      },
+      "spec": {
+        "replicas": 1,
+        "strategy": {
+          "type": "Recreate"
+        },
+        "selector": {
+          "matchLabels": {
+            "app": "alloy-logs"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "alloy-logs"
+            }
+          },
+          "spec": {
+            "automountServiceAccountToken": true,
+            "securityContext": {
+              "fsGroup": 473,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "containers": [
+              {
+                "name": "alloy-logs",
+                "image": "grafana/alloy:v1.21.3",
+                "args": [
+                  "run",
+                  "/etc/alloy/config.alloy",
+                  "--storage.path=/var/lib/alloy",
+                  "--server.http.listen-addr=0.0.0.0:12345"
+                ],
+                "ports": [
+                  {
+                    "name": "http",
+                    "containerPort": 12345
+                  }
+                ],
+                "resources": {
+                  "requests": {
+                    "cpu": "20m",
+                    "memory": "32Mi"
+                  },
+                  "limits": {
+                    "cpu": "500m",
+                    "memory": "192Mi"
+                  }
+                },
+                "securityContext": {
+                  "runAsNonRoot": true,
+                  "runAsUser": 473,
+                  "allowPrivilegeEscalation": false,
+                  "readOnlyRootFilesystem": true,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  }
+                },
+                "volumeMounts": [
+                  {
+                    "name": "config",
+                    "mountPath": "/etc/alloy",
+                    "readOnly": true
+                  },
+                  {
+                    "name": "datos",
+                    "mountPath": "/var/lib/alloy"
+                  },
+                  {
+                    "name": "tmp",
+                    "mountPath": "/tmp"
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "config",
+                "configMap": {
+                  "name": "alloy-config"
+                }
+              },
+              {
+                "name": "datos",
+                "emptyDir": {}
+              },
+              {
+                "name": "tmp",
+                "emptyDir": {}
+              }
+            ],
+            "serviceAccountName": "alloy-logs"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "alloy-logs",
+        "namespace": "monitoreo",
+        "labels": {
+          "app": "alloy-logs"
+        }
+      },
+      "spec": {
+        "selector": {
+          "app": "alloy-logs"
+        },
+        "ports": [
+          {
+            "name": "http",
+            "port": 12345,
+            "targetPort": "http"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "tienda-backup-metrics",
+        "namespace": "monitoreo"
+      },
+      "data": {
+        "backup.prom": "tienda_backup_last_success_timestamp_seconds 0\ntienda_backup_last_run_success 0\n"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "backup-nginx",
+        "namespace": "monitoreo"
+      },
+      "data": {
+        "default.conf": "server { listen 8080; location = /metrics { default_type text/plain; alias /metrics/backup.prom; } location = /healthz { return 200 \"ok\"; } }"
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "backup-metrics",
+        "namespace": "monitoreo"
+      },
+      "spec": {
+        "replicas": 1,
+        "strategy": {
+          "type": "Recreate"
+        },
+        "selector": {
+          "matchLabels": {
+            "app": "backup-metrics"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "backup-metrics"
+            }
+          },
+          "spec": {
+            "automountServiceAccountToken": false,
+            "securityContext": {
+              "fsGroup": 101,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              }
+            },
+            "containers": [
+              {
+                "name": "backup-metrics",
+                "image": "tienda-frontend:0.1.1",
+                "args": [],
+                "ports": [
+                  {
+                    "name": "http",
+                    "containerPort": 8080
+                  }
+                ],
+                "resources": {
+                  "requests": {
+                    "cpu": "20m",
+                    "memory": "16Mi"
+                  },
+                  "limits": {
+                    "cpu": "500m",
+                    "memory": "64Mi"
+                  }
+                },
+                "securityContext": {
+                  "runAsNonRoot": true,
+                  "runAsUser": 101,
+                  "allowPrivilegeEscalation": false,
+                  "readOnlyRootFilesystem": true,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  }
+                },
+                "volumeMounts": [
+                  {
+                    "name": "config",
+                    "mountPath": "/etc/nginx/conf.d",
+                    "readOnly": true
+                  },
+                  {
+                    "name": "metrics",
+                    "mountPath": "/metrics",
+                    "readOnly": true
+                  },
+                  {
+                    "name": "tmp",
+                    "mountPath": "/tmp"
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "config",
+                "configMap": {
+                  "name": "backup-nginx"
+                }
+              },
+              {
+                "name": "metrics",
+                "configMap": {
+                  "name": "tienda-backup-metrics"
+                }
+              },
+              {
+                "name": "tmp",
+                "emptyDir": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "backup-metrics",
+        "namespace": "monitoreo",
+        "labels": {
+          "app": "backup-metrics"
+        }
+      },
+      "spec": {
+        "selector": {
+          "app": "backup-metrics"
+        },
+        "ports": [
+          {
+            "name": "http",
+            "port": 8080,
+            "targetPort": "http"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "monitoring.coreos.com/v1",
+      "kind": "ServiceMonitor",
+      "metadata": {
+        "name": "tienda-backup",
+        "namespace": "monitoreo",
+        "labels": {
+          "release": "monitoreo"
+        }
+      },
+      "spec": {
+        "selector": {
+          "matchLabels": {
+            "app": "backup-metrics"
+          }
+        },
+        "endpoints": [
+          {
+            "port": "http",
+            "path": "/metrics",
+            "interval": "30s"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "grafana-loki-tienda",
+        "namespace": "monitoreo",
+        "labels": {
+          "grafana_datasource": "1"
+        }
+      },
+      "data": {
+        "loki.yaml": "{\"apiVersion\": 1, \"datasources\": [{\"name\": \"Logs TSkull-Shirt\", \"uid\": \"loki-tienda\", \"type\": \"loki\", \"access\": \"proxy\", \"url\": \"http://loki-tienda:3100\", \"isDefault\": false, \"editable\": false}]}"
+      }
+    }
+  ]
+}

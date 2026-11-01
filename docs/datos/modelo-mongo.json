@@ -1,8 +1,8 @@
 {
   "coleccion": "eventos",
-  "nota": "Ejemplo sintético, no registro extraído de un usuario real",
+  "nota": "Ejemplo sintÃ©tico, no registro extraÃ­do de un usuario real",
   "documento": {
-    "evento_id": "ejemplo-uuid",
+    "evento_id": 1,
     "pedido_id": 1,
     "tipo": "reserva_creada",
     "fecha": {
@@ -25,7 +25,10 @@
       ],
       "properties": {
         "evento_id": {
-          "bsonType": "string"
+          "bsonType": [
+            "int",
+            "long"
+          ]
         },
         "pedido_id": {
           "bsonType": [
@@ -79,5 +82,5 @@
     "db.eventos.find({pedido_id:1}).sort({fecha:-1})",
     "db.eventos.find({evento_id:\"ejemplo-uuid\"})"
   ],
-  "presupuesto": "Clientes con conexiones acotadas; dos réplicas backend en reposo, hasta seis con HPA y Jobs concurrentes. No se midió el máximo real de conexiones. Revisar pools y límites antes de aumentar réplicas."
+  "presupuesto": "Clientes con conexiones acotadas; dos rÃ©plicas backend en reposo, hasta seis con HPA y Jobs concurrentes. No se midiÃ³ el mÃ¡ximo real de conexiones. Revisar pools y lÃ­mites antes de aumentar rÃ©plicas."
 }

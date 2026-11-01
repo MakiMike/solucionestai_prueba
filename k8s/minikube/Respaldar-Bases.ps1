@@ -23,7 +23,7 @@ trap 'rm -f "$config"' EXIT
 mongosh --quiet --nodb --eval 'print(JSON.stringify({password:process.env.MONGO_INITDB_ROOT_PASSWORD}))' > "$config"
 set --
 if [ -f /etc/mongo-ca/ca.crt ]; then
-    set -- --tls --tlsCAFile=/etc/mongo-ca/ca.crt
+    set -- --ssl --sslCAFile=/etc/mongo-ca/ca.crt
 fi
 mongodump --quiet --config="$config" --host=127.0.0.1 --username="$MONGO_INITDB_ROOT_USERNAME" --authenticationDatabase=admin --db=tienda --archive=__ARCHIVE__ --gzip "$@"
 echo 'Archivo MongoDB generado.'

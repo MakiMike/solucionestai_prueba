@@ -340,8 +340,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File k8s/minikube/Restaurar-Prueb
 Verificar SHA256, conteos, índices y archivos; seguir
 [restauración de la aplicación](k8s/minikube/restauracion/README.md).
 No restaurar sobre producción para obtener evidencia. Objetivos RPO 24 h y
-RTO 30 min; aún no se midió un RTO integral. Los 7.1 s de una continuación
-histórica no representan el tiempo total de recuperación.
+RTO 30 min. En la copia aislada nueva del 31/10/2026 se midieron 391.9 s hasta
+validar catálogo e historial autenticados; antigüedad puntual del respaldo 7.76 s.
+No representa pérdida física del host ni garantiza ejecución diaria. Los 7.1 s
+de la continuación histórica no son el tiempo total de recuperación.
 
 ## 11. Actualización, rollback y pruebas
 
@@ -407,10 +409,30 @@ eliminar un perfil o PVC puede destruir sus datos.
 | Imágenes con CVE | Analizar y actualizar dependencias; un build correcto no las elimina |
 
 No hay HA de motores, NFS ni control plane; las réplicas web no sustituyen
-esa redundancia. No se implementaron logs centralizados ni la matriz completa
-de cinco alertas; faltan la comparación idéntica con/sin HPA, trazabilidad por
-réplica y una reconstrucción limpia integral. Declarar esas limitaciones en la
-entrega; no presentarlas como pruebas superadas.
+esa redundancia. Se añadieron Loki/Alloy, panel de operación y cinco categorías
+de alertas. Promtool validó las reglas con series sintéticas; respaldo se activó
+y resolvió realmente. No se presenta comparación causal con/sin HPA ni traza
+dedicada por réplica. La reconstrucción limpia integral no se ejecutó por falta
+de recursos; el profesor autorizó documentar esa limitación según el alumno.
+
+### Observabilidad de cierre y exposición
+
+Después de instalar la pila y exporters:
+
+```powershell
+minikube -p tienda-prod kubectl -- apply -f k8s/minikube/observabilidad.yaml -f k8s/minikube/alertas-operacion.yaml -f k8s/minikube/dashboard-operacion.yaml
+powershell -NoProfile -ExecutionPolicy Bypass -File k8s/minikube/Publicar-MetricasRespaldo.ps1
+```
+
+La ConfigMap inicial del respaldo se reinicia al aplicar observabilidad: volver
+a publicar sus métricas. Sin copia cifrada verificada, la alerta es esperable.
+Traefik usa los valores de métricas/ServiceMonitor en `traefik-values.yaml`;
+actualizarlos con el mismo release/chart descrito en la instalación. Reabrir
+su port-forward si el Pod cambia. No publicar Loki en LAN.
+
+Resultados, límites y respuesta a alertas: [operación y validación](docs/OPERACION_Y_VALIDACION.md).
+Acordeón para encender/apagar, cambio de red, explicación y demostración:
+[guía de exposición](docs/GUIA_EXPOSICION.md).
 
 ## 14. Organización y entrega
 

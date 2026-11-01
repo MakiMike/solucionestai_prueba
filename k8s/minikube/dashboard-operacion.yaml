@@ -1,0 +1,14 @@
+{
+  "apiVersion": "v1",
+  "kind": "ConfigMap",
+  "metadata": {
+    "name": "grafana-dashboard-tskull",
+    "namespace": "monitoreo",
+    "labels": {
+      "grafana_dashboard": "1"
+    }
+  },
+  "data": {
+    "tskull-operacion.json": "{\"uid\": \"tskull-operacion\", \"title\": \"TSkull-Shirt — operacion\", \"schemaVersion\": 39, \"version\": 1, \"refresh\": \"30s\", \"time\": {\"from\": \"now-30m\", \"to\": \"now\"}, \"panels\": [{\"id\": 1, \"title\": \"Replicas disponibles\", \"type\": \"timeseries\", \"gridPos\": {\"x\": 0, \"y\": 0, \"w\": 12, \"h\": 7}, \"datasource\": {\"type\": \"prometheus\", \"uid\": \"prometheus\"}, \"targets\": [{\"refId\": \"A\", \"expr\": \"kube_deployment_status_replicas_available{namespace=\\\"tienda-prod\\\",deployment=~\\\"backend|frontend\\\"}\"}]}, {\"id\": 2, \"title\": \"CPU por Pod\", \"type\": \"timeseries\", \"gridPos\": {\"x\": 12, \"y\": 0, \"w\": 12, \"h\": 7}, \"datasource\": {\"type\": \"prometheus\", \"uid\": \"prometheus\"}, \"targets\": [{\"refId\": \"A\", \"expr\": \"sum by(pod)(rate(container_cpu_usage_seconds_total{namespace=\\\"tienda-prod\\\",container!=\\\"\\\",container!=\\\"POD\\\"}[5m]))\"}]}, {\"id\": 3, \"title\": \"Memoria por Pod\", \"type\": \"timeseries\", \"gridPos\": {\"x\": 0, \"y\": 7, \"w\": 12, \"h\": 7}, \"datasource\": {\"type\": \"prometheus\", \"uid\": \"prometheus\"}, \"targets\": [{\"refId\": \"A\", \"expr\": \"sum by(pod)(container_memory_working_set_bytes{namespace=\\\"tienda-prod\\\",container!=\\\"\\\",container!=\\\"POD\\\"})\"}]}, {\"id\": 4, \"title\": \"p95 HTTP (s)\", \"type\": \"timeseries\", \"gridPos\": {\"x\": 12, \"y\": 7, \"w\": 12, \"h\": 7}, \"datasource\": {\"type\": \"prometheus\", \"uid\": \"prometheus\"}, \"targets\": [{\"refId\": \"A\", \"expr\": \"histogram_quantile(0.95, sum by(le)(rate(traefik_service_request_duration_seconds_bucket{service=~\\\".*tienda-prod.*\\\"}[5m])))\"}]}, {\"id\": 5, \"title\": \"Errores 5xx (req/s)\", \"type\": \"timeseries\", \"gridPos\": {\"x\": 0, \"y\": 14, \"w\": 12, \"h\": 7}, \"datasource\": {\"type\": \"prometheus\", \"uid\": \"prometheus\"}, \"targets\": [{\"refId\": \"A\", \"expr\": \"sum(rate(traefik_service_requests_total{service=~\\\".*tienda-prod.*\\\",code=~\\\"5..\\\"}[5m]))\"}]}, {\"id\": 6, \"title\": \"Antiguedad respaldo (horas)\", \"type\": \"timeseries\", \"gridPos\": {\"x\": 12, \"y\": 14, \"w\": 12, \"h\": 7}, \"datasource\": {\"type\": \"prometheus\", \"uid\": \"prometheus\"}, \"targets\": [{\"refId\": \"A\", \"expr\": \"(time()-tienda_backup_last_success_timestamp_seconds)/3600\"}]}, {\"id\": 7, \"title\": \"Logs centralizados de aplicacion por Pod/nodo\", \"type\": \"logs\", \"gridPos\": {\"x\": 0, \"y\": 21, \"w\": 24, \"h\": 10}, \"datasource\": {\"type\": \"loki\", \"uid\": \"loki-tienda\"}, \"targets\": [{\"refId\": \"A\", \"expr\": \"{namespace=\\\"tienda-prod\\\"}\"}]}], \"tags\": [\"tienda\", \"practica\"]}"
+  }
+}

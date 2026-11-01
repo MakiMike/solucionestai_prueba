@@ -1,6 +1,7 @@
 param([ValidateRange(1,90)][int]$Conservar = 7)
 $ErrorActionPreference = 'Stop'
 trap {
+    try { & (Join-Path $PSScriptRoot 'Publicar-MetricasRespaldo.ps1') -Fallo } catch { Write-Warning 'No se pudo publicar el fallo; la alerta de antiguedad sigue siendo el control de respaldo.' }
     $errorFolder = Join-Path $env:LOCALAPPDATA 'TiendaProd'
     New-Item -ItemType Directory -Force -Path $errorFolder | Out-Null
     $errorMessage = (Get-Date -Format o) + ' ' + $_.Exception.Message + [Environment]::NewLine + $_.ScriptStackTrace
@@ -73,4 +74,5 @@ try {
     Write-Host ('Bytes: ' + $metadata.bytes)
     Write-Host ('SHA256: ' + $cipherHash)
     Write-Host 'Los respaldos manuales anteriores se conservan.'
+    try { & (Join-Path $PSScriptRoot 'Publicar-MetricasRespaldo.ps1') } catch { Write-Warning 'Respaldo correcto, pero no se actualizaron sus metricas; revisar monitoreo.' }
 } finally { $lock.Dispose() }

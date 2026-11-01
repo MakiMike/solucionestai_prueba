@@ -1,0 +1,209 @@
+{
+  "rule_files": [
+    "alertas-operacion.rules.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "kube_deployment_status_replicas_available{namespace=\"tienda-prod\",deployment=\"backend\"}",
+          "values": "0+0x10"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "2m",
+          "alertname": "TiendaAplicacionNoDisponible",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "critical",
+                "proyecto": "tienda",
+                "namespace": "tienda-prod",
+                "deployment": "backend"
+              },
+              "exp_annotations": {
+                "summary": "Aplicacion sin replicas disponibles",
+                "description": "Consultar docs/OPERACION_Y_VALIDACION.md y registrar diagnostico, intervencion y recuperacion."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "kube_node_status_condition{node=\"tienda-prod-m03\",condition=\"Ready\",status=\"true\"}",
+          "values": "0+0x10"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "2m",
+          "alertname": "TiendaNodoNoDisponible",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "critical",
+                "proyecto": "tienda",
+                "node": "tienda-prod-m03",
+                "condition": "Ready",
+                "status": "true"
+              },
+              "exp_annotations": {
+                "summary": "Nodo de produccion no Ready",
+                "description": "Consultar docs/OPERACION_Y_VALIDACION.md y registrar diagnostico, intervencion y recuperacion."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "traefik_service_requests_total{service=\"tienda-prod-frontend\",code=\"200\"}",
+          "values": "0+98x20"
+        },
+        {
+          "series": "traefik_service_requests_total{service=\"tienda-prod-frontend\",code=\"500\"}",
+          "values": "0+2x20"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "10m",
+          "alertname": "TiendaTasaErroresAlta",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "warning",
+                "proyecto": "tienda"
+              },
+              "exp_annotations": {
+                "summary": "Mas del 1 por ciento de solicitudes con 5xx",
+                "description": "Consultar docs/OPERACION_Y_VALIDACION.md y registrar diagnostico, intervencion y recuperacion."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "container_memory_working_set_bytes{namespace=\"tienda-prod\",container=\"backend\",pod=\"backend-prueba\"}",
+          "values": "900+0x20"
+        },
+        {
+          "series": "kube_pod_container_resource_limits{namespace=\"tienda-prod\",resource=\"memory\",pod=\"backend-prueba\"}",
+          "values": "1000+0x20"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "6m",
+          "alertname": "TiendaSaturacion",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "warning",
+                "proyecto": "tienda",
+                "pod": "backend-prueba"
+              },
+              "exp_annotations": {
+                "summary": "CPU o memoria cerca del limite",
+                "description": "Consultar docs/OPERACION_Y_VALIDACION.md y registrar diagnostico, intervencion y recuperacion."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "tienda_backup_last_success_timestamp_seconds",
+          "values": "0+0x10"
+        },
+        {
+          "series": "tienda_backup_last_run_success",
+          "values": "0+0x10"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "2m",
+          "alertname": "TiendaRespaldoVencidoOFallido",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "critical",
+                "proyecto": "tienda"
+              },
+              "exp_annotations": {
+                "summary": "Respaldo fallido, sin metrica o con mas de 26 horas",
+                "description": "Consultar docs/OPERACION_Y_VALIDACION.md y registrar diagnostico, intervencion y recuperacion."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "kube_deployment_status_replicas_available{namespace=\"tienda-prod\",deployment=\"backend\"}",
+          "values": "2+0x20"
+        },
+        {
+          "series": "kube_node_status_condition{node=\"tienda-prod-m03\",condition=\"Ready\",status=\"true\"}",
+          "values": "1+0x20"
+        },
+        {
+          "series": "tienda_backup_last_success_timestamp_seconds",
+          "values": "1000000000+0x20"
+        },
+        {
+          "series": "tienda_backup_last_run_success",
+          "values": "1+0x20"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "10m",
+          "alertname": "TiendaAplicacionNoDisponible",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "10m",
+          "alertname": "TiendaNodoNoDisponible",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "10m",
+          "alertname": "TiendaTasaErroresAlta",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "10m",
+          "alertname": "TiendaSaturacion",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "10m",
+          "alertname": "TiendaRespaldoVencidoOFallido",
+          "exp_alerts": []
+        }
+      ]
+    }
+  ]
+}
