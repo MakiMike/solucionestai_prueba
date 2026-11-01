@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1150" viewBox="0 0 1800 1150"><rect width="1800" height="1150" fill="#faf9f6"/>
+<text x="55" y="71" font-family="Arial" font-size="36" font-weight="700" fill="#263444">4  Desarrollo en Docker Desktop y kind</text>
+<text x="55" y="110" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Una laptop Windows · entorno Linux WSL 2 de Docker · sin máquinas virtuales administradas por separado</text>
+<text x="55" y="1114" font-family="Arial" font-size="19" font-weight="400" fill="#263444">Tienda de ropa alternativa · Referencia para redibujar · Diseño previsto, no evidencia de despliegue</text>
+<rect x="55" y="145" width="1690" height="875" rx="14" fill="#f1f3f5" stroke="#6d7a88" stroke-width="2"/>
+<text x="73" y="179" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Laptop · Docker Desktop · clúster kind-tienda-dev · namespace tienda-dev</text>
+<rect x="90" y="215" width="390" height="130" rx="14" fill="#ffffff" stroke="#6d7a88" stroke-width="2"/>
+<text x="163.0" y="252" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Navegador en Windows</text>
+<text x="184.0" y="289" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Futura entrada HTTPS</text>
+<text x="194.0078125" y="316" font-family="Arial" font-size="20" font-weight="400" fill="#263444">tienda-dev.test:8443</text>
+<rect x="570" y="215" width="1120" height="130" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="909.5" y="252" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Nodo contenedor: tienda-dev-control-plane</text>
+<text x="821.0" y="289" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Control plane + cargas de desarrollo · IP interna asignada por Docker</text>
+<polyline points="480,280 570,280" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="570,280 557.7138441335347,286.71195754045885 557.7138441335347,273.28804245954115" fill="#506576"/>
+<text x="505.0" y="253" font-family="Arial" font-size="18" font-weight="400" fill="#506576">8443</text>
+<rect x="570" y="385" width="1120" height="570" rx="14" fill="#f1f3f5" stroke="#6d7a88" stroke-width="2"/>
+<text x="588" y="419" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Cargas previstas en el único nodo</text>
+<rect x="610" y="440" width="440" height="130" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="738.5078125" y="477" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Traefik + frontend</text>
+<text x="665.0078125" y="514" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Traefik por instalar · NodePort 30443</text>
+<text x="684.0" y="541" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Service frontend:8080 · Nginx x1</text>
+<rect x="1200" y="440" width="450" height="130" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="1312.5" y="477" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Backend PHP-FPM x1</text>
+<text x="1326.5" y="514" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Service backend:9000</text>
+<text x="1255.5" y="541" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Sesiones compartidas en PostgreSQL</text>
+<polyline points="1050,505 1200,505" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1200,505 1187.7138441335348,511.71195754045885 1187.7138441335348,498.28804245954115" fill="#506576"/>
+<text x="1091.5" y="483" font-family="Arial" font-size="18" font-weight="400" fill="#506576">FastCGI</text>
+<rect x="610" y="640" width="440" height="145" rx="14" fill="#e1f0eb" stroke="#6d7a88" stroke-width="2"/>
+<text x="752.0" y="677" font-family="Arial" font-size="22" font-weight="700" fill="#263444">PostgreSQL x1</text>
+<text x="710.5" y="714" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Service :5432 · StatefulSet</text>
+<text x="702.0" y="741" font-family="Arial" font-size="20" font-weight="400" fill="#263444">PVC data-postgres-0 · 5 GiB</text>
+<rect x="1200" y="640" width="450" height="145" rx="14" fill="#e1f0eb" stroke="#6d7a88" stroke-width="2"/>
+<text x="1359.0" y="677" font-family="Arial" font-size="22" font-weight="700" fill="#263444">MongoDB x1</text>
+<text x="1300.0" y="714" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Service :27017 · StatefulSet</text>
+<text x="1305.0" y="741" font-family="Arial" font-size="20" font-weight="400" fill="#263444">PVC data-mongo-0 · 5 GiB</text>
+<polyline points="1360,570 1360,605 830,605 830,640" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="830,640 823.2880424595412,627.7138441335347 836.7119575404588,627.7138441335347" fill="#506576"/>
+<polyline points="1450,570 1450,640" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1450,640 1443.2880424595412,627.7138441335347 1456.7119575404588,627.7138441335347" fill="#506576"/>
+<text x="620" y="847" font-family="Arial" font-size="22" font-weight="400" fill="#263444">PVC uploads: 2 GiB · RWO · almacenamiento local de kind</text>
+<text x="620" y="876" font-family="Arial" font-size="22" font-weight="400" fill="#263444">Job de migración y semilla · CronJobs de vencimiento y outbox</text>
+<rect x="90" y="420" width="390" height="185" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="207.5" y="457" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Red del clúster</text>
+<text x="160.5" y="494" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Calico: CNI + NetworkPolicy</text>
+<text x="157.0" y="521" font-family="Arial" font-size="20" font-weight="400" fill="#263444">CoreDNS · Services internos</text>
+<text x="156.0" y="548" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Red Docker compartida: kind</text>
+<rect x="90" y="670" width="390" height="215" rx="14" fill="#fff1d9" stroke="#6d7a88" stroke-width="2"/>
+<text x="153.5" y="707" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Observabilidad pendiente</text>
+<text x="200.0" y="744" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Sondas declaradas</text>
+<text x="177.5" y="771" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Métricas, logs y paneles</text>
+<text x="184.0" y="798" font-family="Arial" font-size="20" font-weight="400" fill="#263444">se incorporan después</text>
+<text x="65" y="1055" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Mapeo futuro 127.0.0.1:8443 → nodo:30443. Sin controlador y certificado no hay sitio publicado.</text>
+<text x="55" y="1083" font-family="Arial" font-size="18" font-weight="400" fill="#263444">Leyenda: morado = aplicación · verde = datos · azul = infraestructura · amarillo = pendiente o excepción</text></svg>

@@ -1,0 +1,129 @@
+{
+  "CapturadoUTC": "2026-10-27T06:54:11.5542106Z",
+  "Reglas": [
+    {
+      "Name": "TiendaProd-Bloquear-LAN",
+      "Enabled": "True",
+      "Direction": "Inbound",
+      "Action": "Block",
+      "LocalPort": [
+        "3000",
+        "9081",
+        "9090",
+        "9444",
+        "55838",
+        "55846",
+        "56019",
+        "56020",
+        "56021",
+        "56022",
+        "56023",
+        "58511",
+        "58512",
+        "58513",
+        "58514",
+        "58515",
+        "60306",
+        "60307",
+        "60308",
+        "60309",
+        "60310",
+        "60741",
+        "60742",
+        "60743",
+        "60744",
+        "60745",
+        "61598",
+        "61600",
+        "61601",
+        "61602",
+        "61603",
+        "62814",
+        "62815",
+        "62816",
+        "63127",
+        "63128",
+        "63129",
+        "63130",
+        "63131"
+      ],
+      "LocalAddress": [
+        "Any"
+      ],
+      "RemoteAddress": [
+        "Any"
+      ],
+      "InterfaceAlias": [
+        "Ethernet"
+      ]
+    },
+    {
+      "Name": "TiendaProd-Https-LAN",
+      "Enabled": "True",
+      "Direction": "Inbound",
+      "Action": "Allow",
+      "LocalPort": [
+        "9443"
+      ],
+      "LocalAddress": [
+        "192.168.100.3"
+      ],
+      "RemoteAddress": [
+        "LocalSubnet"
+      ],
+      "InterfaceAlias": [
+        "Ethernet"
+      ]
+    }
+  ],
+  "Perfiles": [
+    {
+      "Name": "Domain",
+      "Enabled": 1,
+      "DefaultInboundAction": 4,
+      "DefaultOutboundAction": 2
+    },
+    {
+      "Name": "Private",
+      "Enabled": 1,
+      "DefaultInboundAction": 4,
+      "DefaultOutboundAction": 2
+    },
+    {
+      "Name": "Public",
+      "Enabled": 1,
+      "DefaultInboundAction": 4,
+      "DefaultOutboundAction": 2
+    }
+  ],
+  "Escuchas": [
+    {
+      "LocalAddress": "192.168.100.3",
+      "LocalPort": 9444,
+      "OwningProcess": 18092
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 9444,
+      "OwningProcess": 4204
+    },
+    {
+      "LocalAddress": "192.168.100.3",
+      "LocalPort": 9443,
+      "OwningProcess": 10428
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 9443,
+      "OwningProcess": 41712
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 3000,
+      "OwningProcess": 51188
+    }
+  ],
+  "ComprobacionLocalProduccion": "HTTPS /health/ready HTTP 200 mediante --resolve tienda-prod.test:9443:192.168.100.3, validando certificado",
+  "ComprobacionLocalSenuelo": "HTTP 200 desde la propia PC en 192.168.100.3:9444",
+  "PruebaExterna": "Reporte del usuario recibido el 27 de octubre de 2026: https://192.168.100.3:9443/ respondio 404 NOT FOUND; http://192.168.100.3:9444/ no cargo. Sin captura externa adjunta. No demuestra navegacion completa ni confianza TLS en el telefono."
+}

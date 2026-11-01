@@ -1,0 +1,18 @@
+ ped_id | ped_estado 
+--------+------------
+      2 | entregado
+      6 | cancelado
+(2 rows)
+
+ pla_id | tal_nombre | pta_stock 
+--------+------------+-----------
+     90 | S          |        20
+     90 | M          |        20
+(2 rows)
+
+ ped_id | eventos | pendientes 
+--------+---------+------------
+      2 |       5 |          0
+      6 |       2 |          0
+(2 rows)
+

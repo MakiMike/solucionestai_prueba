@@ -1,0 +1,27 @@
+OK sonda live responde
+OK login disponible con framework actualizado
+OK POST sin CSRF bloqueado
+OK login válido con sesión compartida
+OK carrito autenticado disponible HTTP 200
+OK agregar prenda al carrito
+OK checkout web crea pedido pendiente
+OK pantalla de pedidos y plazo visible
+OK cliente realiza pago sin aprobación administrativa
+OK pago web confirma pedido en PostgreSQL
+OK MongoDB caído no interrumpe consulta del pedido
+OK rol cliente rechazado en administracion HTTP 307
+OK pedido pendiente creado por API
+OK baja de pedido por cancelacion
+OK cancelacion API devuelve stock sin devolver el pedido pagado
+OK usuario creado por registro HTTP
+OK correo duplicado rechazado
+OK interfaz de usuarios disponible para administrador
+OK consulta usuario por API sin exponer hash
+OK usuario actualizado por API
+OK usuario desactivado sin borrar relaciones
+OK interfaz de productos disponible
+OK producto creado por API
+OK consulta productos por API
+OK producto editado por API
+OK producto dado de baja logicamente
+TOTAL 26 verificaciones HTTP correctas

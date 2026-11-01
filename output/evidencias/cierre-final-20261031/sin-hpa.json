@@ -1,0 +1,11 @@
+{
+    "ruta": "http:\/\/frontend:8080\/health\/ready",
+    "concurrencia": 24,
+    "duracion_seg": 300.688,
+    "solicitudes": 15955,
+    "correctas": 15955,
+    "fallos": 0,
+    "error_pct": 0,
+    "req_seg": 53.062,
+    "p95_ms": 823.314
+}

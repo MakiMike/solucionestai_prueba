@@ -1,0 +1,16 @@
+DIAGRAMAS DE REFERENCIA PARA LA TIENDA
+
+01 a 06: figuras obligatorias de la sección 3.1 del documento.
+07: modelo de datos adicional. 08: estados de pedido adicional.
+
+PNG: imagen lista para consultar o insertar.
+SVG: versión vectorial editable en Inkscape, Figma u otro editor compatible.
+
+Las topologías son de diseño, no capturas ni evidencia de implementación.
+La figura 06 usa CIDR de los archivos kind. Las IP de nodos y puertos API se obtendrán al crear los clústeres.
+La ubicación de las bases en producción es ilustrativa: no se han fijado por worker en los manifiestos.
+shared-rwx, observabilidad, TLS de motores y la entrada externa siguen pendientes de completar y probar.
+La figura 01 resume el sistema; la lectura del historial la hace el backend con el driver MongoDB.
+Las flechas indican el sentido principal de solicitud o envío, no todas las respuestas de red.
+El modelo 07 omite campos de perfil, recuperación de contraseña y sesiones para facilitar el redibujado.
+Los diagramas sustituyen la propuesta anterior con K3s y máquinas virtuales. No se han desplegado clústeres.

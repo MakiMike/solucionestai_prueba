@@ -1,0 +1,57 @@
+{
+  "apiVersion": "kustomize.config.k8s.io/v1beta1",
+  "kind": "Kustomization",
+  "namespace": "tienda-prod",
+  "resources": [
+    "../../base",
+    "namespace.yaml",
+    "scaling.yaml"
+  ],
+  "patches": [
+    {
+      "target": {
+        "kind": "ConfigMap",
+        "name": "tienda-config"
+      },
+      "patch": "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/data/APP_BASE_URL\",\n    \"value\": \"https://tienda-prod.test:9443/\"\n  }\n]\n"
+    },
+    {
+      "target": {
+        "kind": "Ingress",
+        "name": "tienda"
+      },
+      "patch": "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/spec/tls/0/hosts/0\",\n    \"value\": \"tienda-prod.test\"\n  },\n  {\n    \"op\": \"replace\",\n    \"path\": \"/spec/rules/0/host\",\n    \"value\": \"tienda-prod.test\"\n  }\n]\n"
+    },
+    {
+      "target": {
+        "kind": "PersistentVolumeClaim",
+        "name": "uploads"
+      },
+      "patch": "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/spec/accessModes/0\",\n    \"value\": \"ReadWriteMany\"\n  },\n  {\n    \"op\": \"add\",\n    \"path\": \"/spec/storageClassName\",\n    \"value\": \"shared-rwx\"\n  }\n]\n"
+    },
+    {
+      "target": {
+        "kind": "Deployment",
+        "name": "frontend"
+      },
+      "patch": "[\n  {\n    \"op\": \"add\",\n    \"path\": \"/spec/template/spec/topologySpreadConstraints\",\n    \"value\": [\n      {\n        \"maxSkew\": 1,\n        \"topologyKey\": \"kubernetes.io/hostname\",\n        \"whenUnsatisfiable\": \"DoNotSchedule\",\n        \"labelSelector\": {\n          \"matchLabels\": {\n            \"app\": \"frontend\"\n          }\n        }\n      }\n    ]\n  }\n]\n"
+    },
+    {
+      "target": {
+        "kind": "Deployment",
+        "name": "backend"
+      },
+      "patch": "[\n  {\n    \"op\": \"add\",\n    \"path\": \"/spec/template/spec/topologySpreadConstraints\",\n    \"value\": [\n      {\n        \"maxSkew\": 1,\n        \"topologyKey\": \"kubernetes.io/hostname\",\n        \"whenUnsatisfiable\": \"DoNotSchedule\",\n        \"labelSelector\": {\n          \"matchLabels\": {\n            \"app\": \"backend\"\n          }\n        }\n      }\n    ]\n  }\n]\n"
+    }
+  ],
+  "replicas": [
+    {
+      "name": "frontend",
+      "count": 2
+    },
+    {
+      "name": "backend",
+      "count": 2
+    }
+  ]
+}

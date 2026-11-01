@@ -1,0 +1,453 @@
+/* 
+   DISEÑO ALTERNATIVO UNDERGROUND - USUARIOS.PHP
+   Paleta: Morado oscuro, Rosa apagado, Negro profundo, Gris
+  */
+:root {
+    --purple-dark: #4a2d5f;
+    --purple-accent: #6b3d80;
+    --pink-dark: #9d4a6f;
+    --pink-muted: #b87399;
+    --black-main: #0f0f0f;
+    --gray-dark: #1a1a1a;
+    --gray-medium: #2d2d2d;
+    --gray-light: #3a3a3a;
+    --gray-border: #404040;
+    --white: #e8e8e8;
+    --white-faded: #b0b0b0;
+    --transition: all 0.2s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: var(--black-main);
+    color: var(--white);
+    line-height: 1.5;
+}
+
+/* ===== TÍTULO DE PÁGINA ===== */
+.page-title {
+    font-size: 1.6rem;
+    color: var(--white);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* ===== SECCIÓN DE FILTROS ===== */
+.filters-section {
+    background: var(--gray-dark);
+    padding: 1.25rem;
+    border-left: 3px solid var(--pink-dark);
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+}
+
+.filters-section:hover {
+    border-left-color: var(--pink-muted);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-group label {
+    font-weight: 400;
+    color: var(--white-faded);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ===== SELECT PERSONALIZADO ===== */
+#filtroSexo {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--gray-border);
+    background-color: var(--gray-medium);
+    color: var(--white);
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: var(--transition);
+    appearance: none;
+    font-family: 'Courier New', monospace;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%239d4a6f' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    padding-right: 2rem;
+}
+
+#filtroSexo:hover {
+    border-color: var(--pink-muted);
+    background-color: var(--gray-light);
+}
+
+#filtroSexo:focus {
+    outline: none;
+    border-color: var(--pink-dark);
+}
+
+#filtroSexo option {
+    padding: 0.5rem;
+    background-color: var(--gray-medium);
+    color: var(--white);
+}
+
+/* ===== CONTENEDOR TABLA ===== */
+.table-container {
+    background: var(--gray-dark);
+    overflow: hidden;
+    overflow-x: auto;
+    border: 1px solid var(--gray-border);
+}
+
+/* ===== TABLA DATATABLES ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead {
+    background: var(--gray-medium);
+    color: var(--white);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+table thead th {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--pink-dark);
+    transition: var(--transition);
+}
+
+table thead th:hover {
+    background: var(--purple-dark);
+}
+
+/* Filas de datos */
+table tbody tr {
+    border-bottom: 1px solid var(--gray-border);
+    transition: var(--transition);
+    background-color: var(--gray-dark);
+}
+
+table tbody tr:nth-child(even) {
+    background-color: var(--gray-medium);
+}
+
+table tbody tr:hover {
+    background-color: var(--purple-dark);
+}
+
+table tbody td {
+    padding: 0.9rem 1.25rem;
+    color: var(--white);
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+/* ===== PAGINACIÓN Y CONTROLES DATATABLES ===== */
+.dataTables_wrapper {
+    padding: 1rem;
+    background: var(--gray-dark);
+}
+
+.dataTables_info {
+    color: var(--white-faded);
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+
+.dataTables_paginate {
+    text-align: center;
+    padding: 0.75rem 0;
+}
+
+.paginate_button {
+    padding: 0.4rem 0.7rem;
+    margin: 0 0.2rem;
+    border: 1px solid var(--gray-border);
+    background-color: var(--gray-medium);
+    color: var(--white);
+    cursor: pointer;
+    font-weight: 400;
+    transition: var(--transition);
+    font-size: 0.85rem;
+    font-family: 'Courier New', monospace;
+}
+
+.paginate_button:hover {
+    background: var(--purple-dark);
+    border-color: var(--pink-dark);
+}
+
+.paginate_button.current {
+    background: var(--pink-dark);
+    color: var(--white);
+    border-color: var(--pink-dark);
+}
+
+.paginate_button.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* ===== CONTROLS (Length Menu) ===== */
+.dataTables_length {
+    margin-bottom: 1rem;
+}
+
+.dataTables_length select {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--gray-border);
+    background-color: var(--gray-medium);
+    color: var(--white);
+    font-weight: 400;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    font-family: 'Courier New', monospace;
+}
+
+.dataTables_length select:hover,
+.dataTables_length select:focus {
+    border-color: var(--pink-dark);
+    outline: none;
+}
+
+/* ===== LOADING/PROCESSING ===== */
+.dataTables_processing {
+    background: var(--gray-medium);
+    color: var(--white);
+    padding: 1.5rem;
+    font-weight: 400;
+    text-align: center;
+    border: 1px solid var(--pink-dark);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .actions-section {
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .action-button {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+        min-width: 140px;
+    }
+
+    .filter-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-group label {
+        font-size: 0.8rem;
+    }
+
+    #filtroSexo {
+        width: 100%;
+    }
+
+    table thead th,
+    table tbody td {
+        padding: 0.6rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    table thead th {
+        font-size: 0.75rem;
+    }
+
+    .container {
+        padding: 0 1rem;
+        margin: 1rem auto;
+    }
+
+    .filters-section {
+        padding: 1rem;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 500px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .actions-section {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .action-button {
+        width: 100%;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+        min-width: auto;
+    }
+
+    .header {
+        padding: 1rem;
+    }
+
+    .header h1 {
+        font-size: 1.2rem;
+    }
+
+    .filter-group label {
+        font-size: 0.75rem;
+    }
+
+    table thead th,
+    table tbody td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.7rem;
+    }
+
+    .dataTables_info {
+        font-size: 0.75rem;
+    }
+
+    .paginate_button {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.container {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ===== SCROLL BAR PERSONALIZADO ===== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-light);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--pink-dark);
+}
+
+.actions-section {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.action-button {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid;
+    background-color: transparent;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: 'Courier New', monospace;
+    width: auto;
+    min-width: 180px;
+}
+
+
+
+.action-button:hover {
+    transform: translateY(-2px);
+}
+
+/* Botón Excel - Verde */
+#exportExcel {
+    border-color: #2d7a3f;
+    color: #4ade80;
+}
+
+#exportExcel:hover {
+    background-color: rgba(45, 122, 63, 0.2);
+    border-color: #4ade80;
+    color: #86efac;
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+}
+
+#exportExcel:active {
+    background-color: rgba(45, 122, 63, 0.4);
+}
+
+/* Botón PDF - Rojo */
+#exportPDF {
+    border-color: #7a2d2d;
+    color: #f87171;
+}
+
+#exportPDF:hover {
+    background-color: rgba(122, 45, 45, 0.2);
+    border-color: #f87171;
+    color: #fca5a5;
+    box-shadow: 0 0 15px rgba(248, 113, 113, 0.3);
+}
+
+#exportPDF:active {
+    background-color: rgba(122, 45, 45, 0.4);
+}

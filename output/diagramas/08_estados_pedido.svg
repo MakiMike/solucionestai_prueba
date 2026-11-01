@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1150" viewBox="0 0 1800 1150"><rect width="1800" height="1150" fill="#faf9f6"/>
+<text x="55" y="71" font-family="Arial" font-size="36" font-weight="700" fill="#263444">8  Estados del pedido y plazo de pago</text>
+<text x="55" y="110" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Apoyo adicional · El servidor valida el tiempo con el reloj de PostgreSQL</text>
+<text x="55" y="1114" font-family="Arial" font-size="19" font-weight="400" fill="#263444">Tienda de ropa alternativa · Referencia para redibujar · Diseño previsto, no evidencia de despliegue</text>
+<rect x="60" y="225" width="320" height="145" rx="14" fill="#ffffff" stroke="#6d7a88" stroke-width="2"/>
+<text x="184.0" y="262" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Carrito</text>
+<text x="114.515625" y="299" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Todavía no hay reserva</text>
+<rect x="550" y="225" width="450" height="145" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="679.5" y="262" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Pendiente de pago</text>
+<text x="672.0" y="299" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Reserva de 30 minutos</text>
+<text x="656.5" y="326" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Plazo inicia al crear pedido</text>
+<polyline points="380,295 550,295" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="550,295 537.7138441335347,301.71195754045885 537.7138441335347,288.28804245954115" fill="#506576"/>
+<text x="413.0" y="273" font-family="Arial" font-size="18" font-weight="400" fill="#506576">Crear pedido</text>
+<rect x="1230" y="225" width="460" height="145" rx="14" fill="#e1f0eb" stroke="#6d7a88" stroke-width="2"/>
+<text x="1399.0" y="262" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Confirmado</text>
+<text x="1335.0" y="299" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Pago simulado por el cliente</text>
+<text x="1325.0" y="326" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Sin autorización administrativa</text>
+<polyline points="1000,295 1230,295" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1230,295 1217.7138441335348,301.71195754045885 1217.7138441335348,288.28804245954115" fill="#506576"/>
+<text x="1024.5" y="273" font-family="Arial" font-size="18" font-weight="400" fill="#506576">Pagar dentro del plazo</text>
+<rect x="440" y="535" width="360" height="145" rx="14" fill="#fff1d9" stroke="#6d7a88" stroke-width="2"/>
+<text x="565.5" y="572" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Cancelado</text>
+<text x="482.5" y="609" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Cliente cancela antes de pagar</text>
+<text x="504.5" y="636" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Devuelve reserva una vez</text>
+<rect x="875" y="535" width="360" height="145" rx="14" fill="#fff1d9" stroke="#6d7a88" stroke-width="2"/>
+<text x="1013.0078125" y="572" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Vencido</text>
+<text x="962.0" y="609" font-family="Arial" font-size="20" font-weight="400" fill="#263444">30 minutos sin pagar</text>
+<text x="939.5" y="636" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Devuelve reserva una vez</text>
+<polyline points="680,370 680,455 620,455 620,535" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="620,535 613.2880424595412,522.7138441335347 626.7119575404588,522.7138441335347" fill="#506576"/>
+<text x="539.0" y="448" font-family="Arial" font-size="18" font-weight="400" fill="#506576">Cancelar</text>
+<polyline points="900,370 900,455 1055,455 1055,535" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1055,535 1048.2880424595412,522.7138441335347 1061.7119575404588,522.7138441335347" fill="#506576"/>
+<text x="982.5" y="448" font-family="Arial" font-size="18" font-weight="400" fill="#506576">Plazo agotado</text>
+<rect x="1270" y="535" width="420" height="145" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="1401.0" y="572" font-family="Arial" font-size="22" font-weight="700" fill="#263444">En preparación</text>
+<text x="1397.0" y="609" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Solo administrador</text>
+<text x="1355.0" y="636" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Requiere pedido confirmado</text>
+<polyline points="1480,370 1480,535" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1480,535 1473.2880424595412,522.7138441335347 1486.7119575404588,522.7138441335347" fill="#506576"/>
+<text x="1535.0" y="463" font-family="Arial" font-size="18" font-weight="400" fill="#506576">Preparar</text>
+<rect x="1270" y="850" width="420" height="145" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="1386.5" y="887" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Listo para entrega</text>
+<text x="1326.5" y="924" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Administrador termina preparación</text>
+<polyline points="1480,680 1480,850" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1480,850 1473.2880424595412,837.7138441335347 1486.7119575404588,837.7138441335347" fill="#506576"/>
+<text x="1523.5" y="778" font-family="Arial" font-size="18" font-weight="400" fill="#506576">Marcar listo</text>
+<rect x="680" y="850" width="420" height="145" rx="14" fill="#e1f0eb" stroke="#6d7a88" stroke-width="2"/>
+<text x="836.5" y="887" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Entregado</text>
+<text x="755.0" y="924" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Administrador registra entrega</text>
+<polyline points="1270,920 1100,920" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1100,920 1112.2861558664652,913.2880424595412 1112.2861558664652,926.7119575404588" fill="#506576"/>
+<text x="1150.5" y="898" font-family="Arial" font-size="18" font-weight="400" fill="#506576">Entregar</text>
+<text x="65" y="863" font-family="Arial" font-size="23" font-weight="400" fill="#263444">No se puede pagar ni reactivar un pedido vencido.</text>
+<text x="65" y="894" font-family="Arial" font-size="23" font-weight="400" fill="#263444">Para comprar de nuevo, crear otro sujeto a existencias.</text>
+<text x="65" y="925" font-family="Arial" font-size="23" font-weight="400" fill="#263444">Pagar no vuelve a descontar inventario.</text>
+<text x="65" y="956" font-family="Arial" font-size="23" font-weight="400" fill="#263444">No se permiten saltos de estado.</text>
+<text x="55" y="1083" font-family="Arial" font-size="18" font-weight="400" fill="#263444">Leyenda: morado = aplicación · verde = datos · azul = infraestructura · amarillo = pendiente o excepción</text></svg>

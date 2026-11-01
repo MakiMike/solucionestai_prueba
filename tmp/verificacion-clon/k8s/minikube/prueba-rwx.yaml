@@ -1,0 +1,144 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "labels": {
+          "app": "prueba-rwx"
+        },
+        "namespace": "tienda-prod",
+        "name": "prueba-rwx-a"
+      },
+      "spec": {
+        "securityContext": {
+          "runAsNonRoot": true,
+          "runAsGroup": 33,
+          "runAsUser": 33,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "sleep 86400"
+            ],
+            "volumeMounts": [
+              {
+                "name": "fotos",
+                "mountPath": "/datos"
+              }
+            ],
+            "image": "busybox:1.37.0",
+            "name": "prueba",
+            "resources": {
+              "requests": {
+                "memory": "16Mi",
+                "cpu": "10m"
+              },
+              "limits": {
+                "memory": "32Mi",
+                "cpu": "100m"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "readOnlyRootFilesystem": true
+            }
+          }
+        ],
+        "nodeSelector": {
+          "kubernetes.io/hostname": "tienda-prod-m02"
+        },
+        "volumes": [
+          {
+            "name": "fotos",
+            "persistentVolumeClaim": {
+              "claimName": "uploads"
+            }
+          }
+        ],
+        "automountServiceAccountToken": false
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "labels": {
+          "app": "prueba-rwx"
+        },
+        "namespace": "tienda-prod",
+        "name": "prueba-rwx-b"
+      },
+      "spec": {
+        "securityContext": {
+          "runAsNonRoot": true,
+          "runAsGroup": 33,
+          "runAsUser": 33,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "containers": [
+          {
+            "command": [
+              "sh",
+              "-c",
+              "sleep 86400"
+            ],
+            "volumeMounts": [
+              {
+                "name": "fotos",
+                "mountPath": "/datos"
+              }
+            ],
+            "image": "busybox:1.37.0",
+            "name": "prueba",
+            "resources": {
+              "requests": {
+                "memory": "16Mi",
+                "cpu": "10m"
+              },
+              "limits": {
+                "memory": "32Mi",
+                "cpu": "100m"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "readOnlyRootFilesystem": true
+            }
+          }
+        ],
+        "nodeSelector": {
+          "kubernetes.io/hostname": "tienda-prod-m03"
+        },
+        "volumes": [
+          {
+            "name": "fotos",
+            "persistentVolumeClaim": {
+              "claimName": "uploads"
+            }
+          }
+        ],
+        "automountServiceAccountToken": false
+      }
+    }
+  ]
+}

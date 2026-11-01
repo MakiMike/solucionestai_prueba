@@ -1,0 +1,4 @@
+OK interrupcion: pedido SQL y evento pendiente conservados, envio cero
+OK recuperacion: un evento real enviado a MongoDB y visible por lectura de historial
+OK replay: indice unico y upsert evitan duplicados reales
+Esquema y base sinteticos retirados.

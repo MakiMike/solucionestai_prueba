@@ -1,0 +1,108 @@
+{
+  "apiVersion": "batch/v1",
+  "kind": "Job",
+  "metadata": {
+    "name": "verificar-bases",
+    "namespace": "tienda-dev"
+  },
+  "spec": {
+    "backoffLimit": 0,
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "backend"
+        }
+      },
+      "spec": {
+        "serviceAccountName": "tienda",
+        "automountServiceAccountToken": false,
+        "securityContext": {
+          "fsGroup": 33,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "containers": [
+          {
+            "name": "verificar",
+            "image": "tienda-backend:0.1.6",
+            "imagePullPolicy": "IfNotPresent",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "allowPrivilegeEscalation": false,
+              "readOnlyRootFilesystem": true,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              },
+              "runAsUser": 33
+            },
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              }
+            },
+            "envFrom": [
+              {
+                "configMapRef": {
+                  "name": "tienda-config"
+                }
+              }
+            ],
+            "env": [
+              {
+                "name": "DB_USERNAME",
+                "value": "tienda_app"
+              },
+              {
+                "name": "DB_PASSWORD",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "tienda-secrets",
+                    "key": "DB_PASSWORD"
+                  }
+                }
+              },
+              {
+                "name": "MONGO_URI",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "tienda-secrets",
+                    "key": "MONGO_URI"
+                  }
+                }
+              }
+            ],
+            "command": [
+              "php",
+              "-r",
+              "try {\nrequire 'application/services/TiendaConnection.php';\n$db=TiendaConnection::open();\necho 'Usuario PostgreSQL: '.$db->query('SELECT current_user')->fetchColumn().PHP_EOL;\nforeach(['playeras','tallas','playera_tallas','us_usuarios'] as $table) {\n echo $table.': '.$db->query('SELECT COUNT(*) FROM '.$table)->fetchColumn().PHP_EOL;\n}\n$m=new MongoDB\\Driver\\Manager(getenv('MONGO_URI'),['serverSelectionTimeoutMS'=>10000]);\n$indexes=$m->executeCommand('tienda',new MongoDB\\Driver\\Command(['listIndexes'=>'eventos']))->toArray();\necho 'MongoDB: acceso a eventos con usuario de aplicacion OK'.PHP_EOL;\nforeach($indexes as $index) echo 'Indice: '.$index->name.PHP_EOL;\necho 'VERIFICACION COMPLETA'.PHP_EOL;\n} catch(Throwable $e) {\nfwrite(STDERR,'Verificacion fallida: '.get_class($e).' codigo '.$e->getCode().PHP_EOL);exit(1);\n}"
+            ],
+            "volumeMounts": [
+              {
+                "name": "tmp",
+                "mountPath": "/tmp"
+              }
+            ]
+          }
+        ],
+        "restartPolicy": "Never",
+        "volumes": [
+          {
+            "name": "tmp",
+            "emptyDir": {}
+          }
+        ]
+      }
+    }
+  }
+}

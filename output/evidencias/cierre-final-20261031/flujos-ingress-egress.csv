@@ -1,0 +1,9 @@
+﻿fechaUTC,fase,motor,dns,tcp,esperado,correcto
+2026-10-31T07:25:52.721809+00:00,Solo egress: ingress bloquea,postgres,True,False,False,True
+2026-10-31T07:25:52.721809+00:00,Solo egress: ingress bloquea,mongo,True,False,False,True
+2026-10-31T07:25:57.731184+00:00,Ingress y egress permiten,postgres,True,True,True,True
+2026-10-31T07:25:57.731184+00:00,Ingress y egress permiten,mongo,True,True,True,True
+2026-10-31T07:26:06.861226+00:00,Solo ingress: egress bloquea,postgres,True,False,False,True
+2026-10-31T07:26:06.862237+00:00,Solo ingress: egress bloquea,mongo,True,False,False,True
+2026-10-31T07:26:10.542751+00:00,Restablecer ambos,postgres,True,True,True,True
+2026-10-31T07:26:10.542751+00:00,Restablecer ambos,mongo,True,True,True,True

@@ -1,0 +1,40 @@
+<svg width="1600" height="1200" viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="base" x1="155" y1="82" x2="1453" y2="1116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#07101F"/>
+      <stop offset="0.46" stop-color="#0B1D3C"/>
+      <stop offset="1" stop-color="#1E3368"/>
+    </linearGradient>
+    <radialGradient id="orb1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(420 310) rotate(90) scale(270 270)">
+      <stop stop-color="#6EA8FF" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#6EA8FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1175 255) rotate(90) scale(240 240)">
+      <stop stop-color="#A78BFA" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#A78BFA" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orb3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1040 890) rotate(90) scale(310 310)">
+      <stop stop-color="#32D6C7" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#32D6C7" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-100" y="-100" width="1800" height="1400" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="1200" fill="url(#base)"/>
+  <g filter="url(#soft)">
+    <circle cx="420" cy="310" r="270" fill="url(#orb1)"/>
+    <circle cx="1175" cy="255" r="240" fill="url(#orb2)"/>
+    <circle cx="1040" cy="890" r="310" fill="url(#orb3)"/>
+  </g>
+  <path d="M0 900C190 820 315 760 470 794C640 831 731 1004 924 1027C1123 1050 1254 899 1600 840V1200H0V900Z" fill="white" fill-opacity="0.06"/>
+  <path d="M0 1020C192 970 346 904 515 940C695 979 778 1116 959 1138C1187 1165 1318 1038 1600 980V1200H0V1020Z" fill="white" fill-opacity="0.045"/>
+  <g opacity="0.28">
+    <circle cx="220" cy="180" r="10" fill="white"/>
+    <circle cx="280" cy="230" r="5" fill="white"/>
+    <circle cx="1260" cy="120" r="8" fill="white"/>
+    <circle cx="1360" cy="170" r="5" fill="white"/>
+    <circle cx="1330" cy="980" r="8" fill="white"/>
+    <circle cx="1450" cy="1030" r="5" fill="white"/>
+  </g>
+</svg>

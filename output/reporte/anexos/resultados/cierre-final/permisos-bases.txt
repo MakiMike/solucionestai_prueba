@@ -1,0 +1,8 @@
+OK SQL: lectura con tienda_app
+OK SQL: sin superusuario, CREATEDB ni CREATEROLE
+OK SQL: operacion administrativa rechazada (42501), sin cambios
+OK SQL: operacion administrativa rechazada (42501), sin cambios
+OK SQL: operacion administrativa rechazada (42501), sin cambios
+OK Mongo: acceso administrativo rechazado (13)
+OK Mongo: escritura/lectura autorizadas y reintento sin duplicar
+Coleccion sintetica retirada; datos existentes conservados.

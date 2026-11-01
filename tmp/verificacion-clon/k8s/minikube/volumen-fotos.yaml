@@ -1,0 +1,25 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: shared-rwx
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: nfs-server.tienda-storage.svc.cluster.local
+  share: /uploads
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+mountOptions:
+  - nfsvers=4.1
+  - hard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: uploads
+  namespace: tienda-prod
+spec:
+  storageClassName: shared-rwx
+  accessModes: [ReadWriteMany]
+  resources:
+    requests:
+      storage: 2Gi

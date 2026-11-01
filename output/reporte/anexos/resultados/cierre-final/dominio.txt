@@ -1,0 +1,23 @@
+OK checkout crea reserva sin autorizar ni pagar
+OK precio tomado del catálogo y no del cliente
+OK reserva descuenta una unidad
+OK reintento de checkout no duplica pedido
+OK otro cliente no puede pagar ni consultar pedido ajeno
+OK detalle rechaza acceso ajeno
+OK administrador no puede saltar estados
+OK pago simulado automático e idempotente
+OK pagar no vuelve a descontar stock
+OK cliente no cancela pedido pagado
+OK límite acumulado incluye otras tallas y pedidos entregados
+OK pago tardío vence pedido aunque el worker no haya corrido
+OK vencimiento restaura existencias exactamente una vez
+OK cancelación idempotente libera reserva
+OK sin stock se rechaza toda la transacción
+OK cantidad cero rechazada
+OK detalle conserva precio y nombre originales
+OK eventos guardados con el cambio principal
+OK fallo de Mongo conserva todos los eventos para reintento
+OK fallo de sincronización registra un intento sin marcar envío
+OK dos compradores concurrentes no reservan la misma última unidad
+OK inventario nunca negativo tras concurrencia
+TOTAL 22 verificaciones correctas

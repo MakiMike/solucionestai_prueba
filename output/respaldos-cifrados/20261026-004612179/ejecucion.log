@@ -1,0 +1,19 @@
+﻿1/5 Creando respaldo de PostgreSQL...
+2/5 Creando respaldo de MongoDB...
+Archivo MongoDB generado.
+3/5 Respaldando las imÃ¡genes compartidas...
+4/5 Copiando los archivos a la laptop...
+tar: Removing leading `/' from member names
+tar: Removing leading `/' from member names
+tar: Removing leading `/' from member names
+5/5 Calculando hashes SHA-256...
+
+Archivo          Bytes SHA256                                                          
+-------          ----- ------                                                          
+postgres.dump    31937 0C9626083969FCDF89F13484D8C49050304780F1B170AB99DB30AA1013A8B9C5
+mongo.archive.gz   474 1360A5281C7133DB55454A4E1E99123AF988D3930F1F32DE67F2E8C5C0088E0F
+uploads.tar.gz   39043 D89DAF6D0EC5D7DF13496F8F11109A43884EF37CC6E6E16A7F4BC8CE78AAA967
+
+
+RESPALDO GUARDADO EN: C:\laragon\www\sistema\output\respaldos-cifrados\20261026-004612179\trabajo
+La restauraciÃ³n y su tiempo de recuperaciÃ³n todavÃ­a no se han probado.

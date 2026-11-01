@@ -1,0 +1,25 @@
+{
+    "fechaUTC":  "2026-10-31T07:27:52.8045662Z",
+    "segundos":  26.3,
+    "mongoIgual":  true,
+    "conteosSQLIguales":  true,
+    "antes":  {
+                  "postgres":  "detalle|6\noutbox|16\npedidos|6\nplayeras|100\nusuarios|3\nvariantes|500",
+                  "mongo":  "{\"documentos\":16,\"indices\":[{\"name\":\"_id_\",\"key\":{\"_id\":1},\"unique\":false},{\"name\":\"evento_unico\",\"key\":{\"evento_id\":1},\"unique\":true},{\"name\":\"pedido_fecha\",\"key\":{\"pedido_id\":1,\"fecha\":-1},\"unique\":false}]}",
+                  "pods":  [
+                               "NOMBRE       UID",
+                               "postgres-0   18b0cdf1-cf85-4a1b-8e67-4d37e9ac2478",
+                               "mongo-0      f767ed0b-956d-42c8-a7b1-15f5f78a0438"
+                           ]
+              },
+    "ambiente":  "tienda-dev",
+    "despues":  {
+                    "postgres":  "detalle|6\noutbox|16\npedidos|6\nplayeras|100\nusuarios|3\nvariantes|500",
+                    "mongo":  "{\"documentos\":16,\"indices\":[{\"name\":\"_id_\",\"key\":{\"_id\":1},\"unique\":false},{\"name\":\"evento_unico\",\"key\":{\"evento_id\":1},\"unique\":true},{\"name\":\"pedido_fecha\",\"key\":{\"pedido_id\":1,\"fecha\":-1},\"unique\":false}]}",
+                    "pods":  [
+                                 "NOMBRE       UID",
+                                 "postgres-0   e297e3b7-4b16-4b33-926c-cbd8f312956d",
+                                 "mongo-0      a70fd367-5b0b-4ee4-87c8-e57e7710c1ce"
+                             ]
+                }
+}

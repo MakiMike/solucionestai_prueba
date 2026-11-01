@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1150" viewBox="0 0 1800 1150"><rect width="1800" height="1150" fill="#faf9f6"/>
+<text x="55" y="71" font-family="Arial" font-size="36" font-weight="700" fill="#263444">1  Arquitectura de la aplicación</text>
+<text x="55" y="110" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Responsabilidades y protocolos · La interfaz actual se renderiza en el servidor</text>
+<text x="55" y="1114" font-family="Arial" font-size="19" font-weight="400" fill="#263444">Tienda de ropa alternativa · Referencia para redibujar · Diseño previsto, no evidencia de despliegue</text>
+<rect x="60" y="200" width="280" height="135" rx="14" fill="#ffffff" stroke="#6d7a88" stroke-width="2"/>
+<text x="79.5" y="237" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Cliente y administrador</text>
+<text x="151.5" y="274" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Navegador</text>
+<text x="135.5" y="301" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Roles distintos</text>
+<rect x="440" y="200" width="300" height="135" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="494.0" y="237" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Entrada y frontend</text>
+<text x="524.5078125" y="274" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Traefik HTTPS</text>
+<text x="484.0" y="301" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Nginx: estáticos y proxy</text>
+<rect x="870" y="165" width="430" height="220" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="994.0" y="202" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Backend modular</text>
+<text x="1001.5" y="239" font-family="Arial" font-size="20" font-weight="400" fill="#263444">PHP + CodeIgniter</text>
+<text x="971.0" y="266" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Sesión, permisos y CSRF</text>
+<text x="933.0" y="293" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Controladores y respuestas JSON</text>
+<polyline points="340,265 440,265" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="440,265 427.7138441335348,271.71195754045885 427.7138441335348,258.28804245954115" fill="#506576"/>
+<text x="343.0" y="243" font-family="Arial" font-size="18" font-weight="400" fill="#506576">HTTPS 443</text>
+<polyline points="740,265 870,265" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="870,265 857.7138441335347,271.71195754045885 857.7138441335347,258.28804245954115" fill="#506576"/>
+<text x="749.0" y="243" font-family="Arial" font-size="18" font-weight="400" fill="#506576">FastCGI 9000</text>
+<rect x="750" y="480" width="310" height="155" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="802.0" y="517" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Catálogo y usuarios</text>
+<text x="827.5" y="554" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Productos · tallas</text>
+<text x="799.5" y="581" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Usuarios · bajas lógicas</text>
+<rect x="1140" y="480" width="380" height="155" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="1219.0" y="517" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Compras e inventario</text>
+<text x="1210.0" y="554" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Carrito · reserva de 30 min</text>
+<text x="1220.0" y="581" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Pago simulado · estados</text>
+<polyline points="1000,385 1000,435 905,435 905,480" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="905,480 898.2880424595412,467.7138441335348 911.7119575404588,467.7138441335348" fill="#506576"/>
+<polyline points="1180,385 1180,435 1330,435 1330,480" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1330,480 1323.2880424595412,467.7138441335348 1336.7119575404588,467.7138441335348" fill="#506576"/>
+<rect x="600" y="790" width="470" height="150" rx="14" fill="#e1f0eb" stroke="#6d7a88" stroke-width="2"/>
+<text x="772.0" y="827" font-family="Arial" font-size="22" font-weight="700" fill="#263444">PostgreSQL</text>
+<text x="705.5" y="864" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Fuente de verdad + sesiones</text>
+<text x="704.5" y="891" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Pedidos, stock y tabla outbox</text>
+<polyline points="900,635 900,790" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="900,790 893.2880424595412,777.7138441335347 906.7119575404588,777.7138441335347" fill="#506576"/>
+<text x="959.5" y="728" font-family="Arial" font-size="18" font-weight="400" fill="#506576">SQL 5432</text>
+<polyline points="1320,635 1320,710 1060,710 1060,790" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1060,790 1053.2880424595412,777.7138441335347 1066.7119575404588,777.7138441335347" fill="#506576"/>
+<rect x="1210" y="790" width="480" height="150" rx="14" fill="#e1f0eb" stroke="#6d7a88" stroke-width="2"/>
+<text x="1399.0" y="827" font-family="Arial" font-size="22" font-weight="700" fill="#263444">MongoDB</text>
+<text x="1310.0" y="864" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Historial consultable de pedidos</text>
+<text x="1291.0" y="891" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Documentos flexibles e índice único</text>
+<rect x="120" y="790" width="340" height="150" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="168.5" y="827" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Procesos programados</text>
+<text x="221.0078125" y="864" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Vencer pedidos</text>
+<text x="172.5" y="891" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Enviar eventos pendientes</text>
+<polyline points="600,860 460,860" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="460,860 472.2861558664652,853.2880424595412 472.2861558664652,866.7119575404588" fill="#506576"/>
+<text x="501.0" y="838" font-family="Arial" font-size="18" font-weight="400" fill="#506576">Outbox</text>
+<polyline points="290,940 290,1000 1450,1000 1450,940" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1450,940 1456.7119575404588,952.2861558664653 1443.2880424595412,952.2861558664653" fill="#506576"/>
+<text x="730.0" y="988" font-family="Arial" font-size="18" font-weight="400" fill="#506576">Driver MongoDB · TCP 27017</text>
+<polyline points="1300,270 1740,270 1740,860 1690,860" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1690,860 1702.2861558664652,853.2880424595412 1702.2861558664652,866.7119575404588" fill="#506576"/>
+<text x="1405.0" y="338" font-family="Arial" font-size="18" font-weight="400" fill="#506576">Consultar historial · 27017</text>
+<text x="65" y="1050" font-family="Arial" font-size="20" font-weight="400" fill="#263444">El historial admite retraso. Las decisiones de compra siempre se validan contra PostgreSQL.</text>
+<text x="55" y="1083" font-family="Arial" font-size="18" font-weight="400" fill="#263444">Leyenda: morado = aplicación · verde = datos · azul = infraestructura · amarillo = pendiente o excepción</text></svg>

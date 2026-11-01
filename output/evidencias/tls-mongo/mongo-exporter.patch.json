@@ -1,0 +1,28 @@
+﻿{
+    "spec":  {
+                 "template":  {
+                                  "spec":  {
+                                               "containers":  [
+                                                                  {
+                                                                      "name":  "exporter",
+                                                                      "volumeMounts":  [
+                                                                                           {
+                                                                                               "mountPath":  "/etc/mongo-ca",
+                                                                                               "name":  "mongo-ca",
+                                                                                               "readOnly":  true
+                                                                                           }
+                                                                                       ]
+                                                                  }
+                                                              ],
+                                               "volumes":  [
+                                                               {
+                                                                   "name":  "mongo-ca",
+                                                                   "configMap":  {
+                                                                                     "name":  "mongo-ca"
+                                                                                 }
+                                                               }
+                                                           ]
+                                           }
+                              }
+             }
+}

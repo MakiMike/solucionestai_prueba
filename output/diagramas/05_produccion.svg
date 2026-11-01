@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1150" viewBox="0 0 1800 1150"><rect width="1800" height="1150" fill="#faf9f6"/>
+<text x="55" y="71" font-family="Arial" font-size="36" font-weight="700" fill="#263444">5  Producción de laboratorio con kind</text>
+<text x="55" y="110" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Los tres nodos son contenedores en la misma laptop; comparten recursos y el mismo dominio de fallo</text>
+<text x="55" y="1114" font-family="Arial" font-size="19" font-weight="400" fill="#263444">Tienda de ropa alternativa · Referencia para redibujar · Diseño previsto, no evidencia de despliegue</text>
+<rect x="50" y="145" width="1700" height="875" rx="14" fill="#f1f3f5" stroke="#6d7a88" stroke-width="2"/>
+<text x="68" y="179" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Docker Desktop / WSL 2 · clúster kind-tienda-prod · namespace tienda-prod</text>
+<rect x="85" y="210" width="550" height="125" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="229.5" y="247" font-family="Arial" font-size="22" font-weight="700" fill="#263444">tienda-prod-control-plane</text>
+<text x="254.5" y="284" font-family="Arial" font-size="20" font-weight="400" fill="#263444">API y control del clúster</text>
+<text x="186.0078125" y="311" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Nodo contenedor, no una VM dedicada</text>
+<rect x="775" y="210" width="930" height="125" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="1127.0" y="247" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Entrada HTTPS futura</text>
+<text x="997.5078125" y="284" font-family="Arial" font-size="20" font-weight="400" fill="#263444">127.0.0.1:9443 → worker:30443 → Traefik por instalar</text>
+<text x="1027.5" y="311" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Service frontend:8080 → Service backend:9000</text>
+<rect x="85" y="395" width="785" height="375" rx="14" fill="#f1f3f5" stroke="#6d7a88" stroke-width="2"/>
+<text x="103" y="429" font-family="Arial" font-size="22" font-weight="700" fill="#263444">tienda-prod-worker</text>
+<rect x="110" y="450" width="340" height="100" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="233.5" y="487" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Frontend</text>
+<text x="163.5" y="524" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Deployment · 1 Pod Nginx</text>
+<rect x="490" y="450" width="350" height="100" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="620.0" y="487" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Backend</text>
+<text x="549.5" y="524" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Deployment · 1 Pod inicial</text>
+<rect x="920" y="395" width="785" height="375" rx="14" fill="#f1f3f5" stroke="#6d7a88" stroke-width="2"/>
+<text x="938" y="429" font-family="Arial" font-size="22" font-weight="700" fill="#263444">tienda-prod-worker2</text>
+<rect x="945" y="450" width="340" height="100" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="1068.5" y="487" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Frontend</text>
+<text x="998.5" y="524" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Deployment · 1 Pod Nginx</text>
+<rect x="1325" y="450" width="350" height="100" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="1455.0" y="487" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Backend</text>
+<text x="1384.5" y="524" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Deployment · 1 Pod inicial</text>
+<rect x="110" y="600" width="730" height="130" rx="14" fill="#e1f0eb" stroke="#6d7a88" stroke-width="2"/>
+<text x="283.5" y="637" font-family="Arial" font-size="22" font-weight="700" fill="#263444">PostgreSQL x1 · ubicación ilustrativa</text>
+<text x="298.0" y="674" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Service :5432 · StatefulSet · PVC 5 GiB</text>
+<text x="248.5" y="701" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Ubicación final depende del scheduler y el volumen</text>
+<rect x="945" y="600" width="730" height="130" rx="14" fill="#e1f0eb" stroke="#6d7a88" stroke-width="2"/>
+<text x="1130.5" y="637" font-family="Arial" font-size="22" font-weight="700" fill="#263444">MongoDB x1 · ubicación ilustrativa</text>
+<text x="1127.5" y="674" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Service :27017 · StatefulSet · PVC 5 GiB</text>
+<text x="1145.0" y="701" font-family="Arial" font-size="20" font-weight="400" fill="#263444">No se configura replicación del motor</text>
+<rect x="85" y="820" width="500" height="155" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="226.5" y="857" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Persistencia prevista</text>
+<text x="235.0" y="894" font-family="Arial" font-size="20" font-weight="400" fill="#263444">PVC de BD separados</text>
+<text x="210.5" y="921" font-family="Arial" font-size="20" font-weight="400" fill="#263444">uploads: shared-rwx · 2 GiB</text>
+<text x="197.0" y="948" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Proveedor RWX aún pendiente</text>
+<rect x="635" y="820" width="510" height="155" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="836.5" y="857" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Operación</text>
+<text x="751.015625" y="894" font-family="Arial" font-size="20" font-weight="400" fill="#263444">HPA backend: 2–6 · CPU 70 %</text>
+<text x="742.0" y="921" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Distribución por hostname + PDB</text>
+<text x="760.5" y="948" font-family="Arial" font-size="20" font-weight="400" fill="#263444">CronJobs y Job de migración</text>
+<rect x="1195" y="820" width="510" height="155" rx="14" fill="#fff1d9" stroke="#6d7a88" stroke-width="2"/>
+<text x="1393.5" y="857" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Plataforma</text>
+<text x="1369.0" y="894" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Calico + CoreDNS</text>
+<text x="1335.0" y="921" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Observabilidad y métricas</text>
+<text x="1340.5" y="948" font-family="Arial" font-size="20" font-weight="400" fill="#263444">pendientes de completar</text>
+<text x="65" y="1055" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Dos réplicas por capa al inicio. El HPA crea Pods, no más recursos físicos. Si falla la laptop, cae todo.</text>
+<text x="55" y="1083" font-family="Arial" font-size="18" font-weight="400" fill="#263444">Leyenda: morado = aplicación · verde = datos · azul = infraestructura · amarillo = pendiente o excepción</text></svg>

@@ -1,0 +1,42 @@
+﻿{
+    "spec":  {
+                 "jobTemplate":  {
+                                     "spec":  {
+                                                  "template":  {
+                                                                   "spec":  {
+                                                                                "containers":  [
+                                                                                                   {
+                                                                                                       "env":  [
+                                                                                                                   {
+                                                                                                                       "value":  "verify-full",
+                                                                                                                       "name":  "DB_SSLMODE"
+                                                                                                                   },
+                                                                                                                   {
+                                                                                                                       "value":  "/etc/postgres-ca/ca.crt",
+                                                                                                                       "name":  "DB_SSLROOTCERT"
+                                                                                                                   }
+                                                                                                               ],
+                                                                                                       "name":  "sincronizar-historial",
+                                                                                                       "volumeMounts":  [
+                                                                                                                            {
+                                                                                                                                "mountPath":  "/etc/postgres-ca",
+                                                                                                                                "name":  "postgres-ca",
+                                                                                                                                "readOnly":  true
+                                                                                                                            }
+                                                                                                                        ]
+                                                                                                   }
+                                                                                               ],
+                                                                                "volumes":  [
+                                                                                                {
+                                                                                                    "name":  "postgres-ca",
+                                                                                                    "configMap":  {
+                                                                                                                      "name":  "postgres-ca"
+                                                                                                                  }
+                                                                                                }
+                                                                                            ]
+                                                                            }
+                                                               }
+                                              }
+                                 }
+             }
+}

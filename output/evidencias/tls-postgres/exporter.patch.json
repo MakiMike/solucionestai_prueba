@@ -1,0 +1,34 @@
+﻿{
+    "spec":  {
+                 "template":  {
+                                  "spec":  {
+                                               "containers":  [
+                                                                  {
+                                                                      "env":  [
+                                                                                  {
+                                                                                      "value":  "postgres:5432/tienda?sslmode=verify-full\u0026sslrootcert=/etc/postgres-ca/ca.crt",
+                                                                                      "name":  "DATA_SOURCE_URI"
+                                                                                  }
+                                                                              ],
+                                                                      "name":  "exporter",
+                                                                      "volumeMounts":  [
+                                                                                           {
+                                                                                               "mountPath":  "/etc/postgres-ca",
+                                                                                               "name":  "postgres-ca",
+                                                                                               "readOnly":  true
+                                                                                           }
+                                                                                       ]
+                                                                  }
+                                                              ],
+                                               "volumes":  [
+                                                               {
+                                                                   "name":  "postgres-ca",
+                                                                   "configMap":  {
+                                                                                     "name":  "postgres-ca"
+                                                                                 }
+                                                               }
+                                                           ]
+                                           }
+                              }
+             }
+}

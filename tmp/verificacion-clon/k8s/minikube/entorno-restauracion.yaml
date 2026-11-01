@@ -1,0 +1,415 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "labels": {
+          "pod-security.kubernetes.io/enforce": "restricted"
+        },
+        "name": "tienda-restauracion"
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "namespace": "tienda-restauracion",
+        "name": "aislar-restauracion"
+      },
+      "spec": {
+        "podSelector": {},
+        "policyTypes": [
+          "Ingress",
+          "Egress"
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "metadata": {
+        "namespace": "tienda-restauracion",
+        "name": "postgres-datos"
+      },
+      "spec": {
+        "storageClassName": "csi-hostpath-sc",
+        "resources": {
+          "requests": {
+            "storage": "1Gi"
+          }
+        },
+        "accessModes": [
+          "ReadWriteOnce"
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "namespace": "tienda-restauracion",
+        "name": "postgres-restore"
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "securityContext": {
+          "fsGroup": 999,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "containers": [
+          {
+            "name": "postgres",
+            "image": "postgres:17.6-bookworm",
+            "imagePullPolicy": "IfNotPresent",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "allowPrivilegeEscalation": false,
+              "readOnlyRootFilesystem": true,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              },
+              "runAsUser": 999
+            },
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              }
+            },
+            "ports": [
+              {
+                "containerPort": 5432
+              }
+            ],
+            "env": [
+              {
+                "value": "tienda",
+                "name": "POSTGRES_DB"
+              },
+              {
+                "value": "restore_owner",
+                "name": "POSTGRES_USER"
+              },
+              {
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "key": "password",
+                    "name": "restore-credentials"
+                  }
+                },
+                "name": "POSTGRES_PASSWORD"
+              },
+              {
+                "value": "/var/lib/postgresql/data/pgdata",
+                "name": "PGDATA"
+              }
+            ],
+            "readinessProbe": {
+              "exec": {
+                "command": [
+                  "pg_isready",
+                  "-U",
+                  "restore_owner",
+                  "-d",
+                  "tienda"
+                ]
+              },
+              "initialDelaySeconds": 5
+            },
+            "startupProbe": {
+              "tcpSocket": {
+                "port": 5432
+              },
+              "periodSeconds": 5,
+              "failureThreshold": 60
+            },
+            "livenessProbe": {
+              "tcpSocket": {
+                "port": 5432
+              },
+              "initialDelaySeconds": 30,
+              "periodSeconds": 15
+            },
+            "volumeMounts": [
+              {
+                "name": "data",
+                "mountPath": "/var/lib/postgresql/data"
+              },
+              {
+                "name": "tmp",
+                "mountPath": "/tmp"
+              },
+              {
+                "name": "runtime",
+                "mountPath": "/var/run/postgresql"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "tmp",
+            "emptyDir": {}
+          },
+          {
+            "name": "runtime",
+            "emptyDir": {}
+          },
+          {
+            "name": "data",
+            "persistentVolumeClaim": {
+              "claimName": "postgres-datos"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "metadata": {
+        "namespace": "tienda-restauracion",
+        "name": "mongo-datos"
+      },
+      "spec": {
+        "storageClassName": "csi-hostpath-sc",
+        "resources": {
+          "requests": {
+            "storage": "1Gi"
+          }
+        },
+        "accessModes": [
+          "ReadWriteOnce"
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "namespace": "tienda-restauracion",
+        "name": "mongo-restore"
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "securityContext": {
+          "fsGroup": 999,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "containers": [
+          {
+            "name": "mongo",
+            "image": "mongo:8.0.14",
+            "imagePullPolicy": "IfNotPresent",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "allowPrivilegeEscalation": false,
+              "readOnlyRootFilesystem": true,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              },
+              "runAsUser": 999
+            },
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "1",
+                "memory": "768Mi"
+              }
+            },
+            "ports": [
+              {
+                "containerPort": 27017
+              }
+            ],
+            "env": [
+              {
+                "value": "/tmp",
+                "name": "HOME"
+              },
+              {
+                "value": "restore_owner",
+                "name": "MONGO_INITDB_ROOT_USERNAME"
+              },
+              {
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "key": "password",
+                    "name": "restore-credentials"
+                  }
+                },
+                "name": "MONGO_INITDB_ROOT_PASSWORD"
+              }
+            ],
+            "readinessProbe": {
+              "tcpSocket": {
+                "port": 27017
+              },
+              "initialDelaySeconds": 10
+            },
+            "startupProbe": {
+              "tcpSocket": {
+                "port": 27017
+              },
+              "periodSeconds": 5,
+              "failureThreshold": 60
+            },
+            "livenessProbe": {
+              "tcpSocket": {
+                "port": 27017
+              },
+              "initialDelaySeconds": 30,
+              "periodSeconds": 15
+            },
+            "volumeMounts": [
+              {
+                "name": "data",
+                "mountPath": "/data/db"
+              },
+              {
+                "name": "tmp",
+                "mountPath": "/tmp"
+              },
+              {
+                "name": "runtime",
+                "mountPath": "/data/configdb"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "tmp",
+            "emptyDir": {}
+          },
+          {
+            "name": "runtime",
+            "emptyDir": {}
+          },
+          {
+            "name": "data",
+            "persistentVolumeClaim": {
+              "claimName": "mongo-datos"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "metadata": {
+        "namespace": "tienda-restauracion",
+        "name": "fotos-datos"
+      },
+      "spec": {
+        "storageClassName": "csi-hostpath-sc",
+        "resources": {
+          "requests": {
+            "storage": "1Gi"
+          }
+        },
+        "accessModes": [
+          "ReadWriteOnce"
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "namespace": "tienda-restauracion",
+        "name": "fotos-restore"
+      },
+      "spec": {
+        "containers": [
+          {
+            "resources": {
+              "limits": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "requests": {
+                "cpu": "10m",
+                "memory": "32Mi"
+              }
+            },
+            "securityContext": {
+              "readOnlyRootFilesystem": true,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "allowPrivilegeEscalation": false
+            },
+            "name": "fotos",
+            "volumeMounts": [
+              {
+                "mountPath": "/restaurado",
+                "name": "data"
+              },
+              {
+                "mountPath": "/tmp",
+                "name": "tmp"
+              }
+            ],
+            "image": "tienda-backend:0.1.1",
+            "command": [
+              "sh",
+              "-c",
+              "sleep 86400"
+            ],
+            "imagePullPolicy": "IfNotPresent"
+          }
+        ],
+        "automountServiceAccountToken": false,
+        "volumes": [
+          {
+            "persistentVolumeClaim": {
+              "claimName": "fotos-datos"
+            },
+            "name": "data"
+          },
+          {
+            "emptyDir": {},
+            "name": "tmp"
+          }
+        ],
+        "securityContext": {
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          },
+          "runAsUser": 33,
+          "runAsGroup": 33,
+          "fsGroup": 33,
+          "runAsNonRoot": true
+        }
+      }
+    }
+  ]
+}

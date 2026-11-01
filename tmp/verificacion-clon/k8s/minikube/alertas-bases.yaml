@@ -1,0 +1,41 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: tienda-bases
+  namespace: monitoreo
+  labels:
+    release: monitoreo
+spec:
+  groups:
+    - name: tienda.bases
+      rules:
+        - alert: TiendaPostgresSinVerificacion
+          expr: |
+            max by (namespace) (
+              (pg_up{namespace="tienda-prod"} == 0)
+              or (up{namespace="tienda-prod",job="postgres-exporter"} == 0)
+            )
+            or absent(pg_up{namespace="tienda-prod"})
+          for: 1m
+          labels:
+            severity: critical
+            proyecto: tienda
+            base: postgres
+          annotations:
+            summary: No se puede verificar PostgreSQL desde el monitoreo
+            description: Durante al menos un minuto el exporter no confirma disponibilidad o faltan sus métricas. Revisar red, credenciales, exporter y motor; la alerta por sí sola no identifica la causa.
+        - alert: TiendaMongoSinVerificacion
+          expr: |
+            max by (namespace) (
+              (mongodb_up{namespace="tienda-prod"} == 0)
+              or (up{namespace="tienda-prod",job="mongo-exporter"} == 0)
+            )
+            or absent(mongodb_up{namespace="tienda-prod"})
+          for: 1m
+          labels:
+            severity: critical
+            proyecto: tienda
+            base: mongo
+          annotations:
+            summary: No se puede verificar MongoDB desde el monitoreo
+            description: Durante al menos un minuto el exporter no confirma disponibilidad o faltan sus métricas. Revisar red, credenciales, exporter y motor; la alerta por sí sola no identifica la causa.

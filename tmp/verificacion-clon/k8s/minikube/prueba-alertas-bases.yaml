@@ -1,0 +1,26 @@
+# Prueba temporal: sustituye las salidas a DB de los exporters, no las de la aplicación.
+# DNS sigue permitido por la política allow-dns.
+# Restaurar aplicando metricas-postgres.yaml y metricas-mongo.yaml.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-exporter-salida
+  namespace: tienda-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: postgres-exporter
+  policyTypes: [Egress]
+  egress: []
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mongo-exporter-salida
+  namespace: tienda-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: mongo-exporter
+  policyTypes: [Egress]
+  egress: []

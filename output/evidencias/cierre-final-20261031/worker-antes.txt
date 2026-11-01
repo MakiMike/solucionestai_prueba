@@ -1,0 +1,10 @@
+NAMESPACE                        NAME                                       READY   STATUS      RESTARTS       AGE     IP              NODE              NOMINATED NODE   READINESS GATES
+kube-system                      calico-node-jj7cx                          1/1     Running     0              95m     192.168.58.4    tienda-prod-m03   <none>           <none>
+kube-system                      csi-hostpathplugin-5zczx                   6/6     Running     24 (97m ago)   6d      10.244.33.72    tienda-prod-m03   <none>           <none>
+kube-system                      csi-nfs-node-968lz                         3/3     Running     13 (97m ago)   5d5h    192.168.58.4    tienda-prod-m03   <none>           <none>
+kube-system                      kube-proxy-zhgw8                           1/1     Running     4 (97m ago)    6d1h    192.168.58.4    tienda-prod-m03   <none>           <none>
+monitoreo                        monitoreo-grafana-7568d4fb49-n2j4g         3/3     Running     0              2m36s   10.244.33.66    tienda-prod-m03   <none>           <none>
+monitoreo                        monitoreo-prometheus-node-exporter-r4r7s   1/1     Running     4 (97m ago)    5d3h    192.168.58.4    tienda-prod-m03   <none>           <none>
+tienda-prod                      sincronizar-historial-29890540-4h9lc       0/1     Completed   0              19s     10.244.33.108   tienda-prod-m03   <none>           <none>
+tienda-prod                      vencer-pedidos-29890540-69vbn              0/1     Completed   0              19s     10.244.33.117   tienda-prod-m03   <none>           <none>
+tienda-restore-20261025-235828   mongo-restore                              1/1     Running     0              2m31s   10.244.33.106   tienda-prod-m03   <none>           <none>

@@ -1,0 +1,9 @@
+{
+    "correctas":  0,
+    "restauracionAnterior":  "Pod Mongo recreado con el mismo PVC",
+    "mantenimiento":  "drain completo sin selector de aplicacion y sin --force",
+    "fallos":  31,
+    "limitacion":  "Grafana de instancia unica puede quedar pendiente de su PVC durante el mantenimiento; no se afirma HA del monitoreo ni de las bases.",
+    "replicas":  "rollout backend/frontend terminado",
+    "entrada":  "Traefik en nodo distinto, TLS validado"
+}

@@ -1,0 +1,8 @@
+Host esperado mongo: SI
+Puerto esperado 27017: SI
+Usuario esperado tienda_owner: SI
+authSource admin: SI
+Clave URI coincide con Secret: SI
+DNS mongo: 10.99.150.251
+TCP mongo:27017: OK
+Conexion autenticada: OK

@@ -1,0 +1,8 @@
+﻿Campo,Tipo BSON,Regla,Uso
+_id,ObjectId,Generado por MongoDB,Identificador interno
+evento_id,int o long,Obligatorio; índice único evento_unico,Idempotencia del outbox
+pedido_id,int o long,Obligatorio; índice pedido_fecha,Relación lógica con PostgreSQL
+tipo,string,Obligatorio,"reserva_creada, pago_confirmado y cambios de estado"
+fecha,date,Obligatorio; no string,Orden cronológico
+actor_id,"int, long o null",Opcional,Usuario o tarea que originó el evento
+datos,object,Obligatorio,Detalle del evento; no es la fuente autoritativa de stock

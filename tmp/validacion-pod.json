@@ -1,0 +1,116 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "name": "validacion-cierre",
+    "namespace": "tienda-dev",
+    "labels": {
+      "app": "migration"
+    }
+  },
+  "spec": {
+    "serviceAccountName": "tienda",
+    "automountServiceAccountToken": false,
+    "restartPolicy": "Never",
+    "securityContext": {
+      "runAsNonRoot": true,
+      "runAsUser": 33,
+      "fsGroup": 33,
+      "seccompProfile": {
+        "type": "RuntimeDefault"
+      }
+    },
+    "containers": [
+      {
+        "name": "pruebas",
+        "image": "tienda-backend:0.1.6",
+        "imagePullPolicy": "IfNotPresent",
+        "command": [
+          "sh",
+          "-c",
+          "mkdir -p /tmp/proyecto/tmp /tmp/proyecto/tests; for p in application vendor database bin index.php router.php public assets DataTables; do ln -s /var/www/html/$p /tmp/proyecto/$p; done; sleep 7200"
+        ],
+        "envFrom": [
+          {
+            "configMapRef": {
+              "name": "tienda-config"
+            }
+          }
+        ],
+        "env": [
+          {
+            "name": "DB_USERNAME",
+            "value": "tienda_owner"
+          },
+          {
+            "name": "DB_PASSWORD",
+            "valueFrom": {
+              "secretKeyRef": {
+                "name": "tienda-secrets",
+                "key": "DB_OWNER_PASSWORD"
+              }
+            }
+          },
+          {
+            "name": "MONGO_URI",
+            "valueFrom": {
+              "secretKeyRef": {
+                "name": "tienda-secrets",
+                "key": "MONGO_OWNER_URI"
+              }
+            }
+          },
+          {
+            "name": "DB_APP_PASSWORD",
+            "valueFrom": {
+              "secretKeyRef": {
+                "name": "tienda-secrets",
+                "key": "DB_PASSWORD"
+              }
+            }
+          },
+          {
+            "name": "MONGO_APP_URI",
+            "valueFrom": {
+              "secretKeyRef": {
+                "name": "tienda-secrets",
+                "key": "MONGO_URI"
+              }
+            }
+          }
+        ],
+        "resources": {
+          "requests": {
+            "cpu": "50m",
+            "memory": "64Mi"
+          },
+          "limits": {
+            "cpu": "1",
+            "memory": "384Mi"
+          }
+        },
+        "securityContext": {
+          "allowPrivilegeEscalation": false,
+          "readOnlyRootFilesystem": true,
+          "capabilities": {
+            "drop": [
+              "ALL"
+            ]
+          }
+        },
+        "volumeMounts": [
+          {
+            "name": "tmp",
+            "mountPath": "/tmp"
+          }
+        ]
+      }
+    ],
+    "volumes": [
+      {
+        "name": "tmp",
+        "emptyDir": {}
+      }
+    ]
+  }
+}

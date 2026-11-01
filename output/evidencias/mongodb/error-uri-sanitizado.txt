@@ -1,0 +1,4 @@
+Prueba FQDN
+FALLO: No suitable servers found (`serverSelectionTryOnce` set): [Failed to resolve '[fragmento de credencial oculto]@mongo.tienda-prod.svc.cluster.local.']. Topology type: Single
+Prueba IP temporal
+FALLO: No suitable servers found (`serverSelectionTryOnce` set): [Failed to resolve '[fragmento de credencial oculto]@10.99.150.251']. Topology type: Single

@@ -1,0 +1,232 @@
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_URI::$config is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\URI.php
+Line Number: 102
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Router::$uri is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Router.php
+Line Number: 128
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$benchmark is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$hooks is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$config is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$log is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$utf8 is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$uri is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$exceptions is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$router is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$output is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$security is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$input is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$lang is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Controller.php
+Line Number: 83
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property Compat_probe::$Probe_model is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 359
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_DB_postgre_driver::$connect_timeout is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\database\DB_driver.php
+Line Number: 372
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_DB_postgre_driver::$compress is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\database\DB_driver.php
+Line Number: 372
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_DB_postgre_driver::$stricton is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\database\DB_driver.php
+Line Number: 372
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_DB_postgre_driver::$failover is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\database\DB_driver.php
+Line Number: 372
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$load is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$benchmark is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$hooks is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$config is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$log is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$utf8 is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$uri is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$exceptions is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$router is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$output is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$security is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$input is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$lang is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+
+A PHP Error was encountered
+
+Severity:    8192
+Message:     Creation of dynamic property CI_Loader::$Probe_model is deprecated
+Filename:    C:\laragon\www\sistema\vendor\codeigniter\framework\system\core\Loader.php
+Line Number: 932
+CI_COMPAT_OK

@@ -1,0 +1,12 @@
+﻿1/5 Creando respaldo de PostgreSQL...
+2/5 Creando respaldo de MongoDB...
+2026-10-27T02:00:04.345+0000	error parsing command line options: unknown option "tls"
+2026-10-27T02:00:04.345+0000	try 'mongodump --help' for more information
+command terminated with exit code 1
+FallÃ³ mongodump.
+En C:\laragon\www\sistema\k8s\minikube\Respaldar-Bases.ps1: 32 Carácter: 28
++ if ($LASTEXITCODE -ne 0) { throw 'FallÃ³ mongodump.' }
++                            ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (FallÃ³ mongodump.:String) [], RuntimeException
+    + FullyQualifiedErrorId : FallÃ³ mongodump.
+ 

@@ -1,0 +1,74 @@
+{
+  "groups": [
+    {
+      "name": "tienda.operacion",
+      "rules": [
+        {
+          "alert": "TiendaAplicacionNoDisponible",
+          "expr": "kube_deployment_status_replicas_available{namespace=\"tienda-prod\",deployment=~\"backend|frontend\"} < 1",
+          "for": "1m",
+          "labels": {
+            "severity": "critical",
+            "proyecto": "tienda"
+          },
+          "annotations": {
+            "summary": "Aplicacion sin replicas disponibles",
+            "description": "Consultar docs/OPERACION_Y_VALIDACION.md y registrar diagnostico, intervencion y recuperacion."
+          }
+        },
+        {
+          "alert": "TiendaNodoNoDisponible",
+          "expr": "kube_node_status_condition{node=~\"tienda-prod.*\",condition=\"Ready\",status=\"true\"} == 0",
+          "for": "1m",
+          "labels": {
+            "severity": "critical",
+            "proyecto": "tienda"
+          },
+          "annotations": {
+            "summary": "Nodo de produccion no Ready",
+            "description": "Consultar docs/OPERACION_Y_VALIDACION.md y registrar diagnostico, intervencion y recuperacion."
+          }
+        },
+        {
+          "alert": "TiendaTasaErroresAlta",
+          "expr": "sum(rate(traefik_service_requests_total{service=~\".*tienda-prod.*\",code=~\"5..\"}[5m])) / clamp_min(sum(rate(traefik_service_requests_total{service=~\".*tienda-prod.*\"}[5m])), 0.001) > 0.01",
+          "for": "2m",
+          "labels": {
+            "severity": "warning",
+            "proyecto": "tienda"
+          },
+          "annotations": {
+            "summary": "Mas del 1 por ciento de solicitudes con 5xx",
+            "description": "Consultar docs/OPERACION_Y_VALIDACION.md y registrar diagnostico, intervencion y recuperacion."
+          }
+        },
+        {
+          "alert": "TiendaSaturacion",
+          "expr": "(sum by(pod)(rate(container_cpu_usage_seconds_total{namespace=\"tienda-prod\",container!=\"\",container!=\"POD\"}[5m])) / sum by(pod)(kube_pod_container_resource_limits{namespace=\"tienda-prod\",resource=\"cpu\"}) > 0.90) or (sum by(pod)(container_memory_working_set_bytes{namespace=\"tienda-prod\",container!=\"\",container!=\"POD\"}) / sum by(pod)(kube_pod_container_resource_limits{namespace=\"tienda-prod\",resource=\"memory\"}) > 0.85)",
+          "for": "5m",
+          "labels": {
+            "severity": "warning",
+            "proyecto": "tienda"
+          },
+          "annotations": {
+            "summary": "CPU o memoria cerca del limite",
+            "description": "Consultar docs/OPERACION_Y_VALIDACION.md y registrar diagnostico, intervencion y recuperacion."
+          }
+        },
+        {
+          "alert": "TiendaRespaldoVencidoOFallido",
+          "expr": "(time() - tienda_backup_last_success_timestamp_seconds > 93600) or (tienda_backup_last_run_success == 0) or absent(tienda_backup_last_success_timestamp_seconds)",
+          "for": "1m",
+          "labels": {
+            "severity": "critical",
+            "proyecto": "tienda"
+          },
+          "annotations": {
+            "summary": "Respaldo fallido, sin metrica o con mas de 26 horas",
+            "description": "Consultar docs/OPERACION_Y_VALIDACION.md y registrar diagnostico, intervencion y recuperacion."
+          }
+        }
+      ]
+    }
+  ]
+}

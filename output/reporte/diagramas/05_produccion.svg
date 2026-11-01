@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850"><rect width="1200" height="850" fill="white"/>
+<text x="28" y="50" font-family="Arial" font-size="30" font-weight="700" fill="#243247">5. Producción: perfil y contexto tienda-prod</text>
+<text x="40" y="98" font-family="Arial" font-size="23" font-weight="400" fill="#243247">Una laptop compartida | Docker Desktop / WSL 2 | Tres nodos contenedor</text>
+<rect x="25" y="135" width="360" height="88" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="127.0" y="169" font-family="Arial" font-size="24" font-weight="700" fill="#243247">Control plane</text>
+<text x="137.5" y="205" font-family="Arial" font-size="23" font-weight="400" fill="#243247">192.168.58.2</text>
+<rect x="420" y="135" width="360" height="88" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="532.0" y="169" font-family="Arial" font-size="24" font-weight="700" fill="#243247">Worker m02</text>
+<text x="532.5" y="205" font-family="Arial" font-size="23" font-weight="400" fill="#243247">192.168.58.3</text>
+<rect x="815" y="135" width="360" height="88" rx="10" fill="#edf2f7" stroke="#91a3b7" stroke-width="2"/>
+<text x="927.0" y="169" font-family="Arial" font-size="24" font-weight="700" fill="#243247">Worker m03</text>
+<text x="927.5" y="205" font-family="Arial" font-size="23" font-weight="400" fill="#243247">192.168.58.4</text>
+<rect x="25" y="260" width="360" height="160" rx="10" fill="#e5f2eb" stroke="#91a3b7" stroke-width="2"/>
+<text x="125.0" y="293" font-family="Arial" font-size="23" font-weight="700" fill="#243247">tienda-storage</text>
+<text x="88.0" y="329" font-family="Arial" font-size="22" font-weight="400" fill="#243247">NFS único + PVC 5 GiB</text>
+<text x="99.0" y="358" font-family="Arial" font-size="22" font-weight="400" fill="#243247">CSI NFS / shared-rwx</text>
+<text x="92.5" y="387" font-family="Arial" font-size="22" font-weight="400" fill="#243247">uploads RWX de 2 GiB</text>
+<rect x="420" y="260" width="360" height="160" rx="10" fill="#f0eafb" stroke="#91a3b7" stroke-width="2"/>
+<text x="536.5" y="293" font-family="Arial" font-size="23" font-weight="700" fill="#243247">tienda-prod</text>
+<text x="542.5" y="329" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Frontend x1</text>
+<text x="543.0" y="358" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Backend x1</text>
+<text x="509.5" y="387" font-family="Arial" font-size="22" font-weight="400" fill="#243247">PG x1 + Mongo x1</text>
+<rect x="815" y="260" width="360" height="160" rx="10" fill="#f0eafb" stroke="#91a3b7" stroke-width="2"/>
+<text x="931.5" y="293" font-family="Arial" font-size="23" font-weight="700" fill="#243247">tienda-prod</text>
+<text x="937.5" y="329" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Frontend x1</text>
+<text x="938.0" y="358" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Backend x1</text>
+<text x="866.5078125" y="387" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Réplicas adicionales: HPA</text>
+<rect x="25" y="465" width="360" height="150" rx="10" fill="#e5f2eb" stroke="#91a3b7" stroke-width="2"/>
+<text x="100.5" y="498" font-family="Arial" font-size="23" font-weight="700" fill="#243247">Persistencia de BD</text>
+<text x="99.5" y="534" font-family="Arial" font-size="22" font-weight="400" fill="#243247">PG: PVC RWO 5 GiB</text>
+<text x="82.5" y="563" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Mongo: PVC RWO 5 GiB</text>
+<text x="103.0" y="592" font-family="Arial" font-size="22" font-weight="400" fill="#243247">CSI hostpath en m02</text>
+<rect x="420" y="465" width="360" height="150" rx="10" fill="#e9f0fa" stroke="#91a3b7" stroke-width="2"/>
+<text x="489.5" y="498" font-family="Arial" font-size="23" font-weight="700" fill="#243247">Entrada y operación</text>
+<text x="511.0078125" y="534" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Traefik x2, Ingress</text>
+<text x="498.515625" y="563" font-family="Arial" font-size="22" font-weight="400" fill="#243247">HPA 2–6, CPU 70 %</text>
+<text x="500.0" y="592" font-family="Arial" font-size="22" font-weight="400" fill="#243247">PDB: minAvailable 1</text>
+<rect x="815" y="465" width="360" height="150" rx="10" fill="#e9f0fa" stroke="#91a3b7" stroke-width="2"/>
+<text x="939.0" y="498" font-family="Arial" font-size="23" font-weight="700" fill="#243247">monitoreo</text>
+<text x="885.0" y="534" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Prometheus + Grafana</text>
+<text x="872.5" y="563" font-family="Arial" font-size="22" font-weight="400" fill="#243247">Alertmanager + exporters</text>
+<text x="911.5" y="592" font-family="Arial" font-size="22" font-weight="400" fill="#243247">PVC 2 / 1 / 1 GiB</text>
+<text x="30" y="680" font-family="Arial" font-size="20" font-weight="400" fill="#243247">La ubicación de las réplicas de aplicación y de las BD coincide con la consulta del corte.</text>
+<text x="30" y="720" font-family="Arial" font-size="20" font-weight="400" fill="#243247">Los Pods de plataforma pueden reprogramarse; las bases locales quedan ligadas al volumen.</text>
+<text x="30" y="767" font-family="Arial" font-size="22" font-weight="700" fill="#243247">Límites: host único, control plane único, NFS único y una instancia por motor.</text>
+<text x="28" y="839" font-family="Arial" font-size="17" font-weight="400" fill="#243247">TSkull-Shirt | Minikube | Corte: 31-10-2026 | Diagrama, no captura de pantalla</text></svg>

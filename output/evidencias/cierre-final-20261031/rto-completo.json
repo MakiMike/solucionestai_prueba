@@ -1,0 +1,41 @@
+{
+  "finValidacionUTC": "2026-10-31T07:27:06.2762124Z",
+  "carpetaRespaldo": "C:\\laragon\\www\\sistema\\output\\respaldos\\20261031-012426",
+  "interfaz": "Login disponible; conteos, indices y fotos SHA256 verificados",
+  "RTOsegundos": 151.89,
+  "manifest": {
+    "perfil": "tienda-prod",
+    "namespace": "tienda-prod",
+    "base": "tienda",
+    "inicioUTC": "2026-10-31T07:24:26.6114761Z",
+    "finUTC": "2026-10-31T07:24:32.4917776Z",
+    "archivos": [
+      {
+        "Archivo": "postgres.dump",
+        "Bytes": 32388,
+        "SHA256": "D4268A622C2A545F4AF9E9EE4941BE120E25330F0789D671745700800CD0557C"
+      },
+      {
+        "Archivo": "mongo.archive.gz",
+        "Bytes": 823,
+        "SHA256": "F1511571F2096301067A55A4731712171520E34D668ADA00C52411DBE8BF4829"
+      },
+      {
+        "Archivo": "uploads.tar.gz",
+        "Bytes": 39046,
+        "SHA256": "55D2D04981B00A28BECB785FD5C2F3DADECE17E80ABF14FC152D814932C4CF49"
+      }
+    ],
+    "alcance": "Bases de datos e imágenes. Los roles de servidor y secretos se reconstruyen desde su configuración.",
+    "consistencia": "Respaldos independientes; no representan una transacción atómica entre PostgreSQL, MongoDB e imágenes.",
+    "restauracion": "Pendiente de prueba aislada."
+  },
+  "namespace": "tienda-restore-20261031-012435",
+  "salud": "HTTP interno 200 y status ok",
+  "alcance": "Restauracion aislada desde cero y arranque de aplicacion; no se detuvo produccion ni se simulo perdida de la laptop.",
+  "inicioIncidenteSimuladoUTC": "2026-10-31T07:24:34.3675661Z",
+  "finFuncionalUTC": "2026-10-31T07:31:06.262826+00:00",
+  "RTOHastaValidacionFuncionalSegundos": 391.9,
+  "RPOObservadoSegundos": 7.76,
+  "RPOAlcance": "Antiguedad conservadora desde inicio del respaldo al incidente simulado; no prueba ejecucion diaria durante 24 h ni snapshot atomico entre motores."
+}

@@ -1,0 +1,661 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "metadata": {
+        "name": "restore-app-config",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "data": {
+        "CI_ENV": "production",
+        "APP_BASE_URL": "http://127.0.0.1:9081/",
+        "APP_SESSION_DRIVER": "database",
+        "APP_COOKIE_SECURE": "false",
+        "DB_HOST": "postgres",
+        "DB_PORT": "5432",
+        "DB_DATABASE": "tienda",
+        "DB_USERNAME": "restore_owner",
+        "DB_SSLMODE": "disable",
+        "MONGO_DATABASE": "tienda",
+        "HOME": "/tmp"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "backend",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "selector": {
+          "app": "backend"
+        },
+        "ports": [
+          {
+            "port": 9000,
+            "targetPort": 9000
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "frontend",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "selector": {
+          "app": "frontend"
+        },
+        "ports": [
+          {
+            "port": 8080,
+            "targetPort": 8080
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "backend",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "backend"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "backend"
+            }
+          },
+          "spec": {
+            "automountServiceAccountToken": false,
+            "securityContext": {
+              "fsGroup": 33,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              },
+              "fsGroupChangePolicy": "OnRootMismatch"
+            },
+            "containers": [
+              {
+                "name": "backend",
+                "image": "tienda-backend:0.1.2",
+                "imagePullPolicy": "IfNotPresent",
+                "securityContext": {
+                  "runAsNonRoot": true,
+                  "allowPrivilegeEscalation": false,
+                  "readOnlyRootFilesystem": true,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  },
+                  "runAsUser": 33
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "100m",
+                    "memory": "128Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "ports": [
+                  {
+                    "containerPort": 9000
+                  }
+                ],
+                "envFrom": [
+                  {
+                    "configMapRef": {
+                      "name": "restore-app-config"
+                    }
+                  }
+                ],
+                "env": [
+                  {
+                    "name": "DB_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "restore-credentials",
+                        "key": "password"
+                      }
+                    }
+                  },
+                  {
+                    "name": "RESTORE_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "restore-credentials",
+                        "key": "password"
+                      }
+                    }
+                  },
+                  {
+                    "name": "MONGO_URI",
+                    "value": "mongodb://restore_owner:$(RESTORE_PASSWORD)@mongo:27017/tienda?authSource=admin"
+                  },
+                  {
+                    "name": "APP_ENCRYPTION_KEY",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "restore-credentials",
+                        "key": "password"
+                      }
+                    }
+                  }
+                ],
+                "livenessProbe": {
+                  "tcpSocket": {
+                    "port": 9000
+                  },
+                  "initialDelaySeconds": 10,
+                  "periodSeconds": 15
+                },
+                "readinessProbe": {
+                  "exec": {
+                    "command": [
+                      "php",
+                      "-r",
+                      "require 'application/services/TiendaConnection.php'; TiendaConnection::open()->query('SELECT evento_id FROM tienda_outbox LIMIT 0');"
+                    ]
+                  },
+                  "initialDelaySeconds": 5,
+                  "timeoutSeconds": 5
+                },
+                "volumeMounts": [
+                  {
+                    "name": "uploads",
+                    "mountPath": "/var/www/html/uploads",
+                    "readOnly": true,
+                    "subPath": "fotos"
+                  },
+                  {
+                    "name": "tmp",
+                    "mountPath": "/tmp"
+                  },
+                  {
+                    "name": "logs",
+                    "mountPath": "/var/www/html/application/logs"
+                  }
+                ],
+                "startupProbe": {
+                  "tcpSocket": {
+                    "port": 9000
+                  },
+                  "periodSeconds": 5,
+                  "failureThreshold": 30
+                }
+              }
+            ],
+            "volumes": [
+              {
+                "name": "uploads",
+                "persistentVolumeClaim": {
+                  "claimName": "fotos-datos"
+                }
+              },
+              {
+                "name": "tmp",
+                "emptyDir": {}
+              },
+              {
+                "name": "logs",
+                "emptyDir": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "frontend",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "frontend"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "frontend"
+            }
+          },
+          "spec": {
+            "automountServiceAccountToken": false,
+            "securityContext": {
+              "fsGroup": 33,
+              "seccompProfile": {
+                "type": "RuntimeDefault"
+              },
+              "fsGroupChangePolicy": "OnRootMismatch"
+            },
+            "containers": [
+              {
+                "name": "frontend",
+                "image": "tienda-frontend:0.1.0",
+                "imagePullPolicy": "IfNotPresent",
+                "securityContext": {
+                  "runAsNonRoot": true,
+                  "allowPrivilegeEscalation": false,
+                  "readOnlyRootFilesystem": true,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  },
+                  "seccompProfile": {
+                    "type": "RuntimeDefault"
+                  },
+                  "runAsUser": 101
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "100m",
+                    "memory": "128Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "ports": [
+                  {
+                    "containerPort": 8080
+                  }
+                ],
+                "livenessProbe": {
+                  "httpGet": {
+                    "path": "/healthz",
+                    "port": 8080
+                  },
+                  "initialDelaySeconds": 5
+                },
+                "readinessProbe": {
+                  "httpGet": {
+                    "path": "/health/ready",
+                    "port": 8080
+                  },
+                  "timeoutSeconds": 5
+                },
+                "volumeMounts": [
+                  {
+                    "name": "uploads",
+                    "mountPath": "/var/www/html/uploads",
+                    "readOnly": true,
+                    "subPath": "fotos"
+                  },
+                  {
+                    "name": "tmp",
+                    "mountPath": "/tmp"
+                  }
+                ],
+                "startupProbe": {
+                  "httpGet": {
+                    "path": "/healthz",
+                    "port": 8080
+                  },
+                  "periodSeconds": 5,
+                  "failureThreshold": 30
+                }
+              }
+            ],
+            "volumes": [
+              {
+                "name": "uploads",
+                "persistentVolumeClaim": {
+                  "claimName": "fotos-datos"
+                }
+              },
+              {
+                "name": "tmp",
+                "emptyDir": {}
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "postgres",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "selector": {
+          "app": "postgres-restore"
+        },
+        "ports": [
+          {
+            "port": 5432,
+            "targetPort": 5432
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "mongo",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "selector": {
+          "app": "mongo-restore"
+        },
+        "ports": [
+          {
+            "port": 27017,
+            "targetPort": 27017
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "restore-frontend-backend",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "frontend"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "backend"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 9000
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "restore-backend",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "backend"
+          }
+        },
+        "policyTypes": [
+          "Ingress",
+          "Egress"
+        ],
+        "ingress": [
+          {
+            "from": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "frontend"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 9000
+              }
+            ]
+          }
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "postgres-restore"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 5432
+              }
+            ]
+          },
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "mongo-restore"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 27017
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "restore-dns-backend",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "backend"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "namespaceSelector": {
+                  "matchLabels": {
+                    "kubernetes.io/metadata.name": "kube-system"
+                  }
+                },
+                "podSelector": {
+                  "matchLabels": {
+                    "k8s-app": "kube-dns"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "UDP",
+                "port": 53
+              },
+              {
+                "protocol": "TCP",
+                "port": 53
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "restore-dns-frontend",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "frontend"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "namespaceSelector": {
+                  "matchLabels": {
+                    "kubernetes.io/metadata.name": "kube-system"
+                  }
+                },
+                "podSelector": {
+                  "matchLabels": {
+                    "k8s-app": "kube-dns"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "UDP",
+                "port": 53
+              },
+              {
+                "protocol": "TCP",
+                "port": 53
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "restore-postgres",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "postgres-restore"
+          }
+        },
+        "policyTypes": [
+          "Ingress"
+        ],
+        "ingress": [
+          {
+            "from": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "backend"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 5432
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "restore-mongo",
+        "namespace": "tienda-restore-20261025-235828"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app": "mongo-restore"
+          }
+        },
+        "policyTypes": [
+          "Ingress"
+        ],
+        "ingress": [
+          {
+            "from": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "app": "backend"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 27017
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

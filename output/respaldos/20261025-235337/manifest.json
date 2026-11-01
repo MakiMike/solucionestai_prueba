@@ -1,0 +1,27 @@
+﻿{
+    "perfil":  "tienda-prod",
+    "namespace":  "tienda-prod",
+    "base":  "tienda",
+    "inicioUTC":  "2026-10-26T05:53:37.2326585Z",
+    "finUTC":  "2026-10-26T05:53:42.9363881Z",
+    "archivos":  [
+                     {
+                         "Archivo":  "postgres.dump",
+                         "Bytes":  31938,
+                         "SHA256":  "0487AA97E262DB79AB104E8E12AC651B39D04DC856797E9573447FECA8FB1D41"
+                     },
+                     {
+                         "Archivo":  "mongo.archive.gz",
+                         "Bytes":  474,
+                         "SHA256":  "1360A5281C7133DB55454A4E1E99123AF988D3930F1F32DE67F2E8C5C0088E0F"
+                     },
+                     {
+                         "Archivo":  "uploads.tar.gz",
+                         "Bytes":  39043,
+                         "SHA256":  "D89DAF6D0EC5D7DF13496F8F11109A43884EF37CC6E6E16A7F4BC8CE78AAA967"
+                     }
+                 ],
+    "alcance":  "Bases de datos e imÃ¡genes. Los roles de servidor y secretos se reconstruyen desde su configuraciÃ³n.",
+    "consistencia":  "Respaldos independientes; no representan una transacciÃ³n atÃ³mica entre PostgreSQL, MongoDB e imÃ¡genes.",
+    "restauracion":  "Pendiente de prueba aislada."
+}

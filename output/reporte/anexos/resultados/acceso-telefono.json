@@ -1,0 +1,12 @@
+{
+  "FechaUTC": "2026-10-31T06:06:35.2976199Z",
+  "PruebaTelefono": "Confirmada por el usuario: producción accesible y desarrollo bloqueado",
+  "URL": "https://192.168.100.3:9443/",
+  "Grafana": "HTTP 200 local",
+  "Desarrollo": "HTTP 200 local",
+  "Interfaz": "Ethernet",
+  "PruebaLocal": "HTTPS y login/CSS HTTP 200; certificado validado",
+  "Direccion": "192.168.100.3",
+  "FechaConfirmacionUsuario": "2026-10-31",
+  "FuenteConfirmacion": "Mensaje del usuario en esta conversación; sin captura nueva adjunta"
+}

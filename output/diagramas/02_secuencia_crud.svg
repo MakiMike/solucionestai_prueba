@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1150" viewBox="0 0 1800 1150"><rect width="1800" height="1150" fill="#faf9f6"/>
+<text x="55" y="71" font-family="Arial" font-size="36" font-weight="700" fill="#263444">2  Secuencia de un CRUD de productos</text>
+<text x="55" y="110" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Ejemplo: modificar una prenda · Solo el administrador puede guardar cambios</text>
+<text x="55" y="1114" font-family="Arial" font-size="19" font-weight="400" fill="#263444">Tienda de ropa alternativa · Referencia para redibujar · Diseño previsto, no evidencia de despliegue</text>
+<rect x="10.0" y="155" width="200" height="85" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="37.5" y="191" font-family="Arial" font-size="21" font-weight="700" fill="#263444">Administrador</text>
+<line x1="110.0" y1="245" x2="110.0" y2="1035" stroke="#a4afba" stroke-dasharray="6 5"/>
+<rect x="536.6666666666666" y="155" width="200" height="85" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="607.1666666666666" y="191" font-family="Arial" font-size="21" font-weight="700" fill="#263444">Nginx</text>
+<line x1="636.6666666666666" y1="245" x2="636.6666666666666" y2="1035" stroke="#a4afba" stroke-dasharray="6 5"/>
+<rect x="1063.3333333333333" y="155" width="200" height="85" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="1102.8333333333333" y="191" font-family="Arial" font-size="21" font-weight="700" fill="#263444">Controlador</text>
+<line x1="1163.3333333333333" y1="245" x2="1163.3333333333333" y2="1035" stroke="#a4afba" stroke-dasharray="6 5"/>
+<rect x="1590.0" y="155" width="200" height="85" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="1629.0" y="191" font-family="Arial" font-size="21" font-weight="700" fill="#263444">PostgreSQL</text>
+<line x1="1690.0" y1="245" x2="1690.0" y2="1035" stroke="#a4afba" stroke-dasharray="6 5"/>
+<polyline points="110.0,300 636.6666666666666,300" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="636.6666666666666,300 624.3805108002014,306.71195754045885 624.3805108002014,293.28804245954115" fill="#506576"/>
+<text x="258.3411458333333" y="286" font-family="Arial" font-size="18" font-weight="400" fill="#506576">1. Abrir formulario de edición</text>
+<polyline points="636.6666666666666,385 1163.3333333333333,385" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1163.3333333333333,385 1151.047177466868,391.71195754045885 1151.047177466868,378.28804245954115" fill="#506576"/>
+<text x="790.0" y="371" font-family="Arial" font-size="18" font-weight="400" fill="#506576">2. Solicitar producto y tallas</text>
+<polyline points="1163.3333333333333,465 1690.0,465" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1690.0,465 1677.7138441335348,471.71195754045885 1677.7138441335348,458.28804245954115" fill="#506576"/>
+<text x="1353.6666666666665" y="451" font-family="Arial" font-size="18" font-weight="400" fill="#506576">3. Consultar datos</text>
+<polyline points="1690.0,545 1163.3333333333333,545" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1163.3333333333333,545 1175.6194891997984,538.2880424595412 1175.6194891997984,551.7119575404588" fill="#506576"/>
+<text x="1320.6666666666665" y="531" font-family="Arial" font-size="18" font-weight="400" fill="#506576">4. Datos para el formulario</text>
+<polyline points="110.0,640 1163.3333333333333,640" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1163.3333333333333,640 1151.047177466868,646.7119575404588 1151.047177466868,633.2880424595412" fill="#506576"/>
+<text x="506.66666666666663" y="626" font-family="Arial" font-size="18" font-weight="400" fill="#506576">5. Enviar cambios y token CSRF</text>
+<polyline points="1163.3333333333333,760 1690.0,760" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1690.0,760 1677.7138441335348,766.7119575404588 1677.7138441335348,753.2880424595412" fill="#506576"/>
+<text x="1261.6666666666665" y="746" font-family="Arial" font-size="18" font-weight="400" fill="#506576">6. Transacción: producto + stock por talla</text>
+<polyline points="1690.0,850 1163.3333333333333,850" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1163.3333333333333,850 1175.6194891997984,843.2880424595412 1175.6194891997984,856.7119575404588" fill="#506576"/>
+<text x="1344.6666666666665" y="836" font-family="Arial" font-size="18" font-weight="400" fill="#506576">7. Commit o rollback</text>
+<polyline points="1163.3333333333333,970 110.0,970" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="110.0,970 122.28615586646522,963.2880424595412 122.28615586646522,976.7119575404588" fill="#506576"/>
+<text x="495.66666666666663" y="956" font-family="Arial" font-size="18" font-weight="400" fill="#506576">8. Confirmación o mensaje de error</text>
+<text x="423.0078125" y="710" font-family="Arial" font-size="20" font-weight="700" fill="#263444">Validar sesión, rol, campos y cantidades antes de escribir</text>
+<text x="65" y="1050" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Errores: sin permisos o CSRF → rechazar; datos inválidos → corregir; error SQL → revertir la operación.</text>
+<text x="55" y="1083" font-family="Arial" font-size="18" font-weight="400" fill="#263444">Leyenda: morado = aplicación · verde = datos · azul = infraestructura · amarillo = pendiente o excepción</text></svg>

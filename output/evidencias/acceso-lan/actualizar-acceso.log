@@ -1,0 +1,228 @@
+﻿**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261027085558
+Nombre de usuario: MIKE\josem
+Usuario RunAs: MIKE\josem
+Nombre de la configuración: 
+Máquina: MIKE (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\laragon\www\sistema\k8s\minikube\Actualizar-AccesoLAN.ps1
+Id. de proceso: 37644
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+namespace/tienda-prod
+customresourcedefinition.apiextensions.k8s.io/ingressroutes.traefik.io
+Red actual: Wi-Fi / 10.31.97.30
+
+Name    Enabled DefaultInboundAction DefaultOutboundAction
+----    ------- -------------------- ---------------------
+Domain     True                Block                 Allow
+Private    True                Block                 Allow
+Public     True                Block                 Allow
+
+
+
+DisplayName                                    Enabled Direction Action
+-----------                                    ------- --------- ------
+Tienda laboratorio - bloquear acceso desde LAN    True   Inbound  Block
+
+
+Interfaces fisicas: Wi-Fi
+Puertos TCP protegidos: 3000, 9081, 9090, 9444, 55785, 55786, 55788, 55791, 55792, 55838, 55846, 56019, 56020, 56021, 56022, 56023, 58511, 58512, 58513, 58514, 58515, 60306, 60307, 60308, 60309, 60310, 60741, 60742, 60743, 60744, 60745, 61521, 61522, 61523, 61524, 61525, 61598, 61600, 61601, 61602, 61603, 62358, 62359, 62360, 62361, 62362, 62390, 62391, 62392, 62393, 62394, 62814, 62815, 62816, 63127, 63128, 63129, 63130, 63131
+Configuracion exportada: C:\laragon\www\sistema\output\evidencias\seguridad
+REGLA DE FIREWALL APLICADA. Falta prueba de bloqueo desde otro equipo.
+HTTPS produccion permitido desde LocalSubnet: 10.31.97.30:9443
+Desarrollo 9444, Grafana 3000, Prometheus 9090 y restauracion 9081 mantienen bloqueo LAN.
+No se han cambiado perfiles, politicas generales ni otros servicios.
+Falta comprobar desde el telefono: permitir produccion y rechazar desarrollo.
+
+Created a new certificate valid for the following names ��
+ - "tskull-shirt.test"
+ - "tienda-prod.test"
+ - "10.31.97.30"
+
+The certificate is at "C:\laragon\www\sistema\k8s\tls\lan-dinamica\tienda-lan.crt" and the key at "C:\laragon\www\sistem
+a\k8s\tls\lan-dinamica\tienda-lan.key" ✅✅
+
+It will expire on 27 January 2029 �
+secret/tienda-tls configured
+ingressroute.traefik.io/tienda-lan created
+configmap/tienda-config patched
+deployment.apps/backend restarted
+Waiting for deployment "backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+deployment "backend" successfully rolled out
+PS>ErrorTerminación(): "No se completo: validar HTTPS local sin omitir el certificado"
+>> ErrorTerminación(): "No se completo: validar HTTPS local sin omitir el certificado"
+No se completo: validar HTTPS local sin omitir el certificado
+No se completo: validar HTTPS local sin omitir el certificado
+En C:\laragon\www\sistema\k8s\minikube\Actualizar-AccesoLAN.ps1: 10 Carácter: 32
++     if ($LASTEXITCODE -ne 0) { throw ('No se completo: ' + $Paso) }
++                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (No se completo:... el certificado:String) [], RuntimeException
+    + FullyQualifiedErrorId : No se completo: validar HTTPS local sin omitir el certificado
+
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20261027085658
+**********************
+**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261027092616
+Nombre de usuario: MIKE\josem
+Usuario RunAs: MIKE\josem
+Nombre de la configuración: 
+Máquina: MIKE (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\laragon\www\sistema\k8s\minikube\Actualizar-AccesoLAN.ps1
+Id. de proceso: 6992
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+namespace/tienda-prod
+customresourcedefinition.apiextensions.k8s.io/ingressroutes.traefik.io
+Red actual: Wi-Fi / 10.31.15.103
+
+Name    Enabled DefaultInboundAction DefaultOutboundAction
+----    ------- -------------------- ---------------------
+Domain     True                Block                 Allow
+Private    True                Block                 Allow
+Public     True                Block                 Allow
+
+
+
+DisplayName                                    Enabled Direction Action
+-----------                                    ------- --------- ------
+Tienda laboratorio - bloquear acceso desde LAN    True   Inbound  Block
+
+
+Interfaces fisicas: Wi-Fi
+Puertos TCP protegidos: 3000, 9081, 9090, 9444, 55785, 55786, 55788, 55791, 55792, 55838, 55846, 56019, 56020, 56021, 56022, 56023, 58511, 58512, 58513, 58514, 58515, 60306, 60307, 60308, 60309, 60310, 60741, 60742, 60743, 60744, 60745, 61521, 61522, 61523, 61524, 61525, 61598, 61600, 61601, 61602, 61603, 62358, 62359, 62360, 62361, 62362, 62390, 62391, 62392, 62393, 62394, 62814, 62815, 62816, 63127, 63128, 63129, 63130, 63131
+Configuracion exportada: C:\laragon\www\sistema\output\evidencias\seguridad
+REGLA DE FIREWALL APLICADA. Falta prueba de bloqueo desde otro equipo.
+HTTPS produccion permitido desde LocalSubnet: 10.31.15.103:9443
+Desarrollo 9444, Grafana 3000, Prometheus 9090 y restauracion 9081 mantienen bloqueo LAN.
+No se han cambiado perfiles, politicas generales ni otros servicios.
+Falta comprobar desde el telefono: permitir produccion y rechazar desarrollo.
+
+Created a new certificate valid for the following names ��
+ - "tskull-shirt.test"
+ - "tienda-prod.test"
+ - "10.31.15.103"
+
+The certificate is at "C:\laragon\www\sistema\k8s\tls\lan-dinamica\tienda-lan.crt" and the key at "C:\laragon\www\sistem
+a\k8s\tls\lan-dinamica\tienda-lan.key" ✅✅
+
+It will expire on 27 January 2029 �
+secret/tienda-tls configured
+tlsstore.traefik.io/default created
+ingressroute.traefik.io/tienda-lan configured
+configmap/tienda-config patched
+deployment.apps/backend restarted
+Waiting for deployment "backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 out of 2 new replicas have been updated...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+Waiting for deployment "backend" rollout to finish: 1 old replicas are pending termination...
+deployment "backend" successfully rolled out
+PS>ErrorTerminación(): "No se completo: validar HTTPS local sin omitir el certificado"
+>> ErrorTerminación(): "No se completo: validar HTTPS local sin omitir el certificado"
+No se completo: validar HTTPS local sin omitir el certificado
+No se completo: validar HTTPS local sin omitir el certificado
+En C:\laragon\www\sistema\k8s\minikube\Actualizar-AccesoLAN.ps1: 10 Carácter: 32
++     if ($LASTEXITCODE -ne 0) { throw ('No se completo: ' + $Paso) }
++                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (No se completo:... el certificado:String) [], RuntimeException
+    + FullyQualifiedErrorId : No se completo: validar HTTPS local sin omitir el certificado
+
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20261027092726
+**********************
+**********************
+Inicio de la transcripción de Windows PowerShell
+Hora de inicio: 20261027093012
+Nombre de usuario: MIKE\josem
+Usuario RunAs: MIKE\josem
+Nombre de la configuración: 
+Máquina: MIKE (Microsoft Windows NT 10.0.26200.0)
+Aplicación host: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\laragon\www\sistema\k8s\minikube\Actualizar-AccesoLAN.ps1
+Id. de proceso: 30284
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+namespace/tienda-prod
+customresourcedefinition.apiextensions.k8s.io/ingressroutes.traefik.io
+Red actual: Wi-Fi / 10.31.15.103
+
+Name    Enabled DefaultInboundAction DefaultOutboundAction
+----    ------- -------------------- ---------------------
+Domain     True                Block                 Allow
+Private    True                Block                 Allow
+Public     True                Block                 Allow
+
+
+
+DisplayName                                    Enabled Direction Action
+-----------                                    ------- --------- ------
+Tienda laboratorio - bloquear acceso desde LAN    True   Inbound  Block
+
+
+Interfaces fisicas: Wi-Fi
+Puertos TCP protegidos: 3000, 9081, 9090, 9444, 55785, 55786, 55788, 55791, 55792, 55838, 55846, 56019, 56020, 56021, 56022, 56023, 58511, 58512, 58513, 58514, 58515, 60306, 60307, 60308, 60309, 60310, 60741, 60742, 60743, 60744, 60745, 61521, 61522, 61523, 61524, 61525, 61598, 61600, 61601, 61602, 61603, 62358, 62359, 62360, 62361, 62362, 62390, 62391, 62392, 62393, 62394, 62814, 62815, 62816, 63127, 63128, 63129, 63130, 63131
+Configuracion exportada: C:\laragon\www\sistema\output\evidencias\seguridad
+REGLA DE FIREWALL APLICADA. Falta prueba de bloqueo desde otro equipo.
+HTTPS produccion permitido desde LocalSubnet: 10.31.15.103:9443
+Desarrollo 9444, Grafana 3000, Prometheus 9090 y restauracion 9081 mantienen bloqueo LAN.
+No se han cambiado perfiles, politicas generales ni otros servicios.
+Falta comprobar desde el telefono: permitir produccion y rechazar desarrollo.
+
+Created a new certificate valid for the following names ��
+ - "tskull-shirt.test"
+ - "tienda-prod.test"
+ - "10.31.15.103"
+
+The certificate is at "C:\laragon\www\sistema\k8s\tls\lan-dinamica\tienda-lan.crt" and the key at "C:\laragon\www\sistem
+a\k8s\tls\lan-dinamica\tienda-lan.key" ✅✅
+
+It will expire on 27 January 2029 �
+secret/tienda-tls configured
+tlsstore.traefik.io/default unchanged
+ingressroute.traefik.io/tienda-lan unchanged
+configmap/tienda-config patched (no change)
+deployment "backend" successfully rolled out
+PS>ErrorTerminación(): "No aparecio la escucha LAN; consultar el registro forward."
+No aparecio la escucha LAN; consultar el registro forward.
+No aparecio la escucha LAN; consultar el registro forward.
+En C:\laragon\www\sistema\k8s\minikube\Actualizar-AccesoLAN.ps1: 125 Carácter: 31
++ ... nt -eq 0) { throw 'No aparecio la escucha LAN; consultar el registro  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (No aparecio la ...gistro forward.:String) [], RuntimeException
+    + FullyQualifiedErrorId : No aparecio la escucha LAN; consultar el registro forward.
+
+**********************
+Fin de la transcripción de Windows PowerShell
+Hora de finalización: 20261027093054
+**********************

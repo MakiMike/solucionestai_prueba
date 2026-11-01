@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:17.6-bookworm
+    environment:
+      POSTGRES_DB: tienda
+      POSTGRES_USER: tienda_owner
+      POSTGRES_PASSWORD: ${DB_OWNER_PASSWORD:?Define DB_OWNER_PASSWORD}
+      DB_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres/init-app.sh:/docker-entrypoint-initdb.d/10-app.sh:ro
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U tienda_owner -d tienda']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  mongo:
+    image: mongo:8.0.14
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: tienda_owner
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_OWNER_PASSWORD:?Define MONGO_OWNER_PASSWORD}
+      MONGO_DATABASE: tienda
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Define MONGO_APP_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+      - ./docker/mongo/init-app.js:/docker-entrypoint-initdb.d/10-app.js:ro
+  backend:
+    image: tienda-backend:0.1.0
+    build: {context: ., dockerfile: docker/php/Dockerfile, target: backend}
+    environment: &app-environment
+      CI_ENV: production
+      APP_BASE_URL: http://localhost:8080/
+      APP_COOKIE_SECURE: 'false'
+      APP_SESSION_DRIVER: database
+      APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?Define APP_ENCRYPTION_KEY}
+      DB_HOST: postgres
+      DB_DATABASE: tienda
+      DB_USERNAME: tienda_app
+      DB_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD}
+      MONGO_URI: ${MONGO_URI:?Define MONGO_URI}
+      MONGO_DATABASE: tienda
+    depends_on: {postgres: {condition: service_healthy}, mongo: {condition: service_started}}
+    volumes: [uploads:/var/www/html/uploads]
+  frontend:
+    image: tienda-frontend:0.1.0
+    build: {context: ., dockerfile: docker/php/Dockerfile, target: frontend}
+    ports: ['127.0.0.1:8080:8080']
+    depends_on: [backend]
+    volumes: [uploads:/var/www/html/uploads:ro]
+  worker:
+    image: tienda-backend:0.1.0
+    environment: *app-environment
+    depends_on: [backend]
+    command: [sh, -c, 'while true; do php bin/tienda.php expire; php bin/tienda.php sync; sleep 15; done']
+volumes:
+  postgres-data:
+  mongo-data:
+  uploads:

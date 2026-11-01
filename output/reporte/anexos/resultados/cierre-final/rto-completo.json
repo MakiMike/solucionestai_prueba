@@ -1,0 +1,13 @@
+{
+  "finValidacionUTC": "2026-10-31T07:27:06.2762124Z",
+  "interfaz": "Login disponible; conteos, indices y fotos SHA256 verificados",
+  "RTOsegundos": 151.89,
+  "namespace": "tienda-restore-20261031-012435",
+  "salud": "HTTP interno 200 y status ok",
+  "alcance": "Restauracion aislada desde cero y arranque de aplicacion; no se detuvo produccion ni se simulo perdida de la laptop.",
+  "inicioIncidenteSimuladoUTC": "2026-10-31T07:24:34.3675661Z",
+  "finFuncionalUTC": "2026-10-31T07:31:06.262826+00:00",
+  "RTOHastaValidacionFuncionalSegundos": 391.9,
+  "RPOObservadoSegundos": 7.76,
+  "RPOAlcance": "Antiguedad conservadora desde inicio del respaldo al incidente simulado; no prueba ejecucion diaria durante 24 h ni snapshot atomico entre motores."
+}

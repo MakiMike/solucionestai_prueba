@@ -1,0 +1,1 @@
+E1027 01:00:13.636136   10428 portforward.go:525] "Error copying from local connection to remote stream" err="writeto tcp4 192.168.100.3:9443->192.168.100.11:58412: read tcp4 192.168.100.3:9443->192.168.100.11:58412: wsarecv: An existing connection was forcibly closed by the remote host." localPort=9443 remotePort=8443

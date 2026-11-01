@@ -1,0 +1,3 @@
+NOMBRE     IMAGEN                  LISTAS   DESEADAS
+backend    tienda-backend:0.1.4    2        2
+frontend   tienda-frontend:0.1.1   2        2

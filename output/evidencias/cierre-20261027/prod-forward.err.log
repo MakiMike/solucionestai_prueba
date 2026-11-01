@@ -1,0 +1,2 @@
+E1027 09:32:05.021074   24548 portforward.go:549] "An error occurred forwarding" err="error forwarding port 8443 to pod 2499de008b3b21d4969da8d77040b1118dc8e6b26122609a4bddda0494774bd9, uid : failed to find sandbox \"2499de008b3b21d4969da8d77040b1118dc8e6b26122609a4bddda0494774bd9\" in store: not found" localPort=9443 remotePort=8443
+error: lost connection to pod

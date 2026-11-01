@@ -1,0 +1,6 @@
+{
+    "autenticacion": "OK con cuenta sintetica temporal",
+    "catalogoHTTP": 100,
+    "eventosMongoDelPrimerPedido": 2,
+    "cuentaTemporalRetirada": true
+}

@@ -1,0 +1,18 @@
+﻿{
+    "Profile":  "Any",
+    "Action":  "Allow",
+    "Enabled":  "True",
+    "LocalAddress":  [
+                         "192.168.100.3"
+                     ],
+    "Direction":  "Inbound",
+    "LocalPort":  9443,
+    "Name":  "TiendaProd-Https-LAN",
+    "RemoteAddress":  "LocalSubnet",
+    "Group":  "TiendaLab",
+    "InterfaceAlias":  [
+                           "Ethernet"
+                       ],
+    "Protocol":  "TCP",
+    "DisplayName":  "TSkull-Shirt - HTTPS de produccion desde LAN"
+}

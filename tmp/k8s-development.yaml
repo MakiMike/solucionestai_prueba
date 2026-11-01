@@ -1,0 +1,934 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/warn: restricted
+  name: tienda-dev
+---
+apiVersion: v1
+automountServiceAccountToken: false
+kind: ServiceAccount
+metadata:
+  name: tienda
+  namespace: tienda-dev
+---
+apiVersion: v1
+data:
+  mongo.js: |
+    const target = db.getSiblingDB(process.env.MONGO_DATABASE || 'tienda');
+    if (!target.getUser('tienda_app')) {
+      target.createUser({user:'tienda_app',pwd:process.env.MONGO_APP_PASSWORD,roles:[{role:'readWrite',db:target.getName()}]});
+    }
+  postgres.sh: |
+    #!/bin/sh
+    set -eu
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" --set=app_password="$DB_PASSWORD" <<'SQL'
+    SELECT format('CREATE ROLE tienda_app LOGIN PASSWORD %L', :'app_password') WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='tienda_app') \gexec
+    SQL
+kind: ConfigMap
+metadata:
+  name: database-init
+  namespace: tienda-dev
+---
+apiVersion: v1
+data:
+  APP_BASE_URL: https://tienda-dev.test:8443/
+  APP_COOKIE_SECURE: "true"
+  APP_SESSION_DRIVER: database
+  CI_ENV: production
+  DB_DATABASE: tienda
+  DB_HOST: postgres
+  DB_PORT: "5432"
+  DB_SSLMODE: prefer
+  DB_USERNAME: tienda_app
+  HOME: /tmp
+  MONGO_DATABASE: tienda
+kind: ConfigMap
+metadata:
+  name: tienda-config
+  namespace: tienda-dev
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: tienda-dev
+spec:
+  ports:
+  - port: 9000
+    targetPort: 9000
+  selector:
+    app: backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: tienda-dev
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  namespace: tienda-dev
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  selector:
+    app: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: tienda-dev
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: postgres
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: uploads
+  namespace: tienda-dev
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: tienda-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: tienda-secrets
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_URI
+              name: tienda-secrets
+        - name: APP_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              key: APP_ENCRYPTION_KEY
+              name: tienda-secrets
+        envFrom:
+        - configMapRef:
+            name: tienda-config
+        image: tienda-backend:0.1.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          tcpSocket:
+            port: 9000
+        name: backend
+        ports:
+        - containerPort: 9000
+        readinessProbe:
+          exec:
+            command:
+            - php
+            - -r
+            - require 'application/services/TiendaConnection.php'; TiendaConnection::open()->query('SELECT
+              evento_id FROM tienda_outbox LIMIT 0');
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 33
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /var/www/html/uploads
+          name: uploads
+          readOnly: false
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /var/www/html/application/logs
+          name: logs
+      securityContext:
+        fsGroup: 33
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: tienda
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: uploads
+      - emptyDir: {}
+        name: tmp
+      - emptyDir: {}
+        name: logs
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: tienda-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - image: tienda-frontend:0.1.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 5
+        name: frontend
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 101
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /var/www/html/uploads
+          name: uploads
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp
+      securityContext:
+        fsGroup: 33
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: tienda
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: uploads
+      - emptyDir: {}
+        name: tmp
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+  namespace: tienda-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  serviceName: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - env:
+        - name: HOME
+          value: /tmp
+        - name: MONGO_DATABASE
+          value: tienda
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: tienda_owner
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_OWNER_PASSWORD
+              name: tienda-secrets
+        - name: MONGO_APP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_APP_PASSWORD
+              name: tienda-secrets
+        image: mongo:8.0.14
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          tcpSocket:
+            port: 27017
+        name: mongo
+        ports:
+        - containerPort: 27017
+        readinessProbe:
+          initialDelaySeconds: 10
+          tcpSocket:
+            port: 27017
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 999
+          seccompProfile:
+            type: RuntimeDefault
+        startupProbe:
+          failureThreshold: 60
+          periodSeconds: 5
+          tcpSocket:
+            port: 27017
+        volumeMounts:
+        - mountPath: /data/db
+          name: data
+        - mountPath: /docker-entrypoint-initdb.d/10-app.js
+          name: init
+          readOnly: true
+          subPath: mongo.js
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /data/configdb
+          name: runtime
+      securityContext:
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: tienda
+      volumes:
+      - configMap:
+          defaultMode: 365
+          name: database-init
+        name: init
+      - emptyDir: {}
+        name: tmp
+      - emptyDir: {}
+        name: runtime
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: tienda-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          value: tienda
+        - name: POSTGRES_USER
+          value: tienda_owner
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_OWNER_PASSWORD
+              name: tienda-secrets
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: tienda-secrets
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        image: postgres:17.6-bookworm
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          tcpSocket:
+            port: 5432
+        name: postgres
+        ports:
+        - containerPort: 5432
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -U
+            - tienda_owner
+            - -d
+            - tienda
+          initialDelaySeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 999
+          seccompProfile:
+            type: RuntimeDefault
+        startupProbe:
+          failureThreshold: 60
+          periodSeconds: 5
+          tcpSocket:
+            port: 5432
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: data
+        - mountPath: /docker-entrypoint-initdb.d/10-app.sh
+          name: init
+          readOnly: true
+          subPath: postgres.sh
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /var/run/postgresql
+          name: runtime
+      securityContext:
+        fsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: tienda
+      volumes:
+      - configMap:
+          defaultMode: 365
+          name: database-init
+        name: init
+      - emptyDir: {}
+        name: tmp
+      - emptyDir: {}
+        name: runtime
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sincronizar-historial
+  namespace: tienda-dev
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 50
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            app: worker
+        spec:
+          automountServiceAccountToken: false
+          containers:
+          - command:
+            - php
+            - bin/tienda.php
+            - sync
+            env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DB_PASSWORD
+                  name: tienda-secrets
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_URI
+                  name: tienda-secrets
+            - name: APP_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: APP_ENCRYPTION_KEY
+                  name: tienda-secrets
+            envFrom:
+            - configMapRef:
+                name: tienda-config
+            image: tienda-backend:0.1.0
+            imagePullPolicy: IfNotPresent
+            name: sincronizar-historial
+            resources:
+              limits:
+                cpu: "1"
+                memory: 512Mi
+              requests:
+                cpu: 100m
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              runAsUser: 33
+              seccompProfile:
+                type: RuntimeDefault
+            volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+          restartPolicy: OnFailure
+          securityContext:
+            fsGroup: 33
+            seccompProfile:
+              type: RuntimeDefault
+          serviceAccountName: tienda
+          volumes:
+          - emptyDir: {}
+            name: tmp
+  schedule: '* * * * *'
+  startingDeadlineSeconds: 60
+  successfulJobsHistoryLimit: 1
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vencer-pedidos
+  namespace: tienda-dev
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 50
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            app: worker
+        spec:
+          automountServiceAccountToken: false
+          containers:
+          - command:
+            - php
+            - bin/tienda.php
+            - expire
+            env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DB_PASSWORD
+                  name: tienda-secrets
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_URI
+                  name: tienda-secrets
+            - name: APP_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: APP_ENCRYPTION_KEY
+                  name: tienda-secrets
+            envFrom:
+            - configMapRef:
+                name: tienda-config
+            image: tienda-backend:0.1.0
+            imagePullPolicy: IfNotPresent
+            name: vencer-pedidos
+            resources:
+              limits:
+                cpu: "1"
+                memory: 512Mi
+              requests:
+                cpu: 100m
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              runAsUser: 33
+              seccompProfile:
+                type: RuntimeDefault
+            volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+          restartPolicy: OnFailure
+          securityContext:
+            fsGroup: 33
+            seccompProfile:
+              type: RuntimeDefault
+          serviceAccountName: tienda
+          volumes:
+          - emptyDir: {}
+            name: tmp
+  schedule: '* * * * *'
+  startingDeadlineSeconds: 60
+  successfulJobsHistoryLimit: 1
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tienda
+  namespace: tienda-dev
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: tienda-dev.test
+    http:
+      paths:
+      - backend:
+          service:
+            name: frontend
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - tienda-dev.test
+    secretName: tienda-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns
+  namespace: tienda-dev
+spec:
+  egress:
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+    to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+  podSelector: {}
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+  namespace: tienda-dev
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-backend-mongo
+  namespace: tienda-dev
+spec:
+  egress:
+  - ports:
+    - port: 27017
+      protocol: TCP
+    to:
+    - podSelector:
+        matchLabels:
+          app: mongo
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-backend-postgres
+  namespace: tienda-dev
+spec:
+  egress:
+  - ports:
+    - port: 5432
+      protocol: TCP
+    to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-frontend-backend
+  namespace: tienda-dev
+spec:
+  egress:
+  - ports:
+    - port: 9000
+      protocol: TCP
+    to:
+    - podSelector:
+        matchLabels:
+          app: backend
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-migration-mongo
+  namespace: tienda-dev
+spec:
+  egress:
+  - ports:
+    - port: 27017
+      protocol: TCP
+    to:
+    - podSelector:
+        matchLabels:
+          app: mongo
+  podSelector:
+    matchLabels:
+      app: migration
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-migration-postgres
+  namespace: tienda-dev
+spec:
+  egress:
+  - ports:
+    - port: 5432
+      protocol: TCP
+    to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+  podSelector:
+    matchLabels:
+      app: migration
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-worker-mongo
+  namespace: tienda-dev
+spec:
+  egress:
+  - ports:
+    - port: 27017
+      protocol: TCP
+    to:
+    - podSelector:
+        matchLabels:
+          app: mongo
+  podSelector:
+    matchLabels:
+      app: worker
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-worker-postgres
+  namespace: tienda-dev
+spec:
+  egress:
+  - ports:
+    - port: 5432
+      protocol: TCP
+    to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+  podSelector:
+    matchLabels:
+      app: worker
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-backend
+  namespace: tienda-dev
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: frontend
+    ports:
+    - port: 9000
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-frontend
+  namespace: tienda-dev
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: traefik
+    ports:
+    - port: 8080
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-mongo
+  namespace: tienda-dev
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+    - podSelector:
+        matchLabels:
+          app: worker
+    - podSelector:
+        matchLabels:
+          app: migration
+    ports:
+    - port: 27017
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      app: mongo
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-postgres
+  namespace: tienda-dev
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+    - podSelector:
+        matchLabels:
+          app: worker
+    - podSelector:
+        matchLabels:
+          app: migration
+    ports:
+    - port: 5432
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      app: postgres
+  policyTypes:
+  - Ingress

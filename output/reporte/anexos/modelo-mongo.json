@@ -1,0 +1,86 @@
+{
+  "coleccion": "eventos",
+  "nota": "Ejemplo sintÃ©tico, no registro extraÃ­do de un usuario real",
+  "documento": {
+    "evento_id": 1,
+    "pedido_id": 1,
+    "tipo": "reserva_creada",
+    "fecha": {
+      "$date": "2026-10-31T00:00:00Z"
+    },
+    "actor_id": 1,
+    "datos": {
+      "estado": "pendiente_pago"
+    }
+  },
+  "validador": {
+    "$jsonSchema": {
+      "bsonType": "object",
+      "required": [
+        "evento_id",
+        "pedido_id",
+        "tipo",
+        "fecha",
+        "datos"
+      ],
+      "properties": {
+        "evento_id": {
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "pedido_id": {
+          "bsonType": [
+            "int",
+            "long"
+          ]
+        },
+        "tipo": {
+          "bsonType": "string"
+        },
+        "fecha": {
+          "bsonType": "date"
+        },
+        "actor_id": {
+          "bsonType": [
+            "int",
+            "long",
+            "null"
+          ]
+        },
+        "datos": {
+          "bsonType": "object"
+        }
+      }
+    }
+  },
+  "indices": [
+    {
+      "nombre": "_id_",
+      "claves": {
+        "_id": 1
+      },
+      "unique": true
+    },
+    {
+      "nombre": "evento_unico",
+      "claves": {
+        "evento_id": 1
+      },
+      "unique": true
+    },
+    {
+      "nombre": "pedido_fecha",
+      "claves": {
+        "pedido_id": 1,
+        "fecha": -1
+      }
+    }
+  ],
+  "consultas": [
+    "db.eventos.find({pedido_id:1}).sort({fecha:-1})",
+    "db.eventos.find({evento_id:\"ejemplo-uuid\"})"
+  ],
+  "presupuesto": "Clientes con conexiones acotadas; dos rÃ©plicas backend en reposo, hasta seis con HPA y Jobs concurrentes. No se midiÃ³ el mÃ¡ximo real de conexiones. Revisar pools y lÃ­mites antes de aumentar rÃ©plicas."
+}

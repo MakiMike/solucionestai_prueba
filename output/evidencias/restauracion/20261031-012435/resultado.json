@@ -1,0 +1,12 @@
+﻿{
+    "namespace":  "tienda-restore-20261031-012435",
+    "respaldo":  "C:\\laragon\\www\\sistema\\output\\respaldos\\20261031-012426",
+    "finUTC":  "2026-10-31T07:26:42.4680412Z",
+    "segundos":  127.4,
+    "reanudado":  false,
+    "integridad":  "SHA256 de tres archivos verificado",
+    "postgres":  "Restaurado sin errores y tablas consultadas",
+    "mongo":  "Restaurado sin errores; colección e índices consultados",
+    "imagenes":  "Archivos restaurados comparados por SHA256; permisos y grupo no comparados",
+    "alcance":  "Tiempo de esta ejecucion (si se reanudo, excluye el intento anterior); no simula por si solo una recuperacion completa del servicio ni demuestra un RPO periodico."
+}

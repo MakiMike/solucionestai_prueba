@@ -1,0 +1,15 @@
+﻿Requisito,Resultado final,Alcance
+E01,Consultar D10 del informe final,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E02,Consultar D10 del informe final,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E03,22 negocio + 26 HTTP/CRUD correctas en datos aislados,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E04,Consultar D10 del informe final,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E05,Ambos Pods de datos dev recreados; conteos e índices conservados,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E06,Consultar D10 del informe final,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E07,Consultar D10 del informe final,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E08,8 casos separados ingress/egress coincidentes,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E09,7 comprobaciones SQL/Mongo y RBAC,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E10,Logs Loki/Alloy; 5 reglas sintéticas Promtool; respaldo firing/resuelto real,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E11,"Drain completo m03; 81 HTTP200, cero fallos; uncordon",Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E12,Consultar D10 del informe final,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E13,Restauración aislada: 391.9 s hasta función; antigüedad respaldo 7.76 s,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host
+E14,No ejecutada por recursos; profesor autorizó documentar límite según alumno,Cierre 31/10/2026; no implica auditoría exhaustiva ni pérdida física del host

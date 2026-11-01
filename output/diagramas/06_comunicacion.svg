@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1150" viewBox="0 0 1800 1150"><rect width="1800" height="1150" fill="#faf9f6"/>
+<text x="55" y="71" font-family="Arial" font-size="36" font-weight="700" fill="#263444">6  Comunicación local en una sola laptop</text>
+<text x="55" y="110" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Rediseño para kind · Las IP internas se obtendrán con docker inspect y kubectl; no son IP de máquinas virtuales</text>
+<text x="55" y="1114" font-family="Arial" font-size="19" font-weight="400" fill="#263444">Tienda de ropa alternativa · Referencia para redibujar · Diseño previsto, no evidencia de despliegue</text>
+<rect x="55" y="160" width="510" height="145" rx="14" fill="#ffffff" stroke="#6d7a88" stroke-width="2"/>
+<text x="130.5" y="197" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Windows: navegador y PowerShell</text>
+<text x="96.0" y="234" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Administración: contextos kind-tienda-dev / prod</text>
+<text x="106.5" y="261" font-family="Arial" font-size="20" font-weight="400" fill="#263444">API Kubernetes en 127.0.0.1:puerto asignado</text>
+<rect x="750" y="160" width="980" height="145" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="1024.5" y="197" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Docker Desktop con entorno Linux WSL 2</text>
+<text x="992.5078125" y="234" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Red bridge Docker llamada kind · NAT/salida de Docker</text>
+<text x="951.5" y="261" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Firewall del host controla publicación · no se añade VLAN ni VPN</text>
+<polyline points="565,235 750,235" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="750,235 737.7138441335347,241.71195754045885 737.7138441335347,228.28804245954115" fill="#506576"/>
+<text x="619.5" y="213" font-family="Arial" font-size="18" font-weight="400" fill="#506576">API local</text>
+<rect x="55" y="395" width="790" height="405" rx="14" fill="#f1f3f5" stroke="#6d7a88" stroke-width="2"/>
+<text x="73" y="429" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Desarrollo · kind-tienda-dev</text>
+<rect x="90" y="455" width="720" height="115" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="304.5" y="492" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Navegador → 127.0.0.1:8443</text>
+<text x="251.0078125" y="529" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Mapeo → nodo:30443 → Traefik (pendiente)</text>
+<text x="260.0" y="556" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Frontend :8080 → backend FastCGI :9000</text>
+<text x="90" y="632" font-family="Arial" font-size="22" font-weight="400" fill="#263444">Nodos: IP dinámicas de la red Docker kind</text>
+<text x="90" y="661" font-family="Arial" font-size="22" font-weight="400" fill="#263444">Pods: 10.244.0.0/16 · Services: 10.96.0.0/16</text>
+<text x="90" y="690" font-family="Arial" font-size="22" font-weight="400" fill="#263444">Calico + DNS interno UDP/TCP 53</text>
+<text x="90" y="719" font-family="Arial" font-size="22" font-weight="400" fill="#263444">PostgreSQL :5432 · MongoDB :27017 internos</text>
+<rect x="925" y="395" width="805" height="405" rx="14" fill="#f1f3f5" stroke="#6d7a88" stroke-width="2"/>
+<text x="943" y="429" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Producción · kind-tienda-prod</text>
+<rect x="960" y="455" width="735" height="115" rx="14" fill="#eee8f7" stroke="#6d7a88" stroke-width="2"/>
+<text x="1182.0" y="492" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Navegador → 127.0.0.1:9443</text>
+<text x="1120.5078125" y="529" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Mapeo → worker:30443 → Traefik (pendiente)</text>
+<text x="1137.5" y="556" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Frontend :8080 → backend FastCGI :9000</text>
+<text x="960" y="632" font-family="Arial" font-size="22" font-weight="400" fill="#263444">Nodos: IP dinámicas de la red Docker kind</text>
+<text x="960" y="661" font-family="Arial" font-size="22" font-weight="400" fill="#263444">Pods: 10.245.0.0/16 · Services: 10.97.0.0/16</text>
+<text x="960" y="690" font-family="Arial" font-size="22" font-weight="400" fill="#263444">Calico + DNS interno UDP/TCP 53</text>
+<text x="960" y="719" font-family="Arial" font-size="22" font-weight="400" fill="#263444">PostgreSQL :5432 · MongoDB :27017 internos</text>
+<polyline points="1050,305 1050,350 450,350 450,395" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="450,395 443.28804245954115,382.7138441335348 456.71195754045885,382.7138441335348" fill="#506576"/>
+<polyline points="1400,305 1400,395" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1400,395 1393.2880424595412,382.7138441335348 1406.7119575404588,382.7138441335348" fill="#506576"/>
+<rect x="55" y="855" width="1675" height="170" rx="14" fill="#fff1d9" stroke="#6d7a88" stroke-width="2"/>
+<text x="769.0" y="892" font-family="Arial" font-size="22" font-weight="700" fill="#263444">Alcance de red y límites</text>
+<text x="523.0078125" y="929" font-family="Arial" font-size="20" font-weight="400" fill="#263444">DNS local futuro: tienda-dev.test y tienda-prod.test → 127.0.0.1 (puertos distintos).</text>
+<text x="517.5234375" y="956" font-family="Arial" font-size="20" font-weight="400" fill="#263444">No se utiliza ServiceLB de K3s ni pool VIP. Traefik se instalará con NodePort 30443.</text>
+<text x="447.0" y="983" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Los clústeres comparten la red Docker y el host: no hay aislamiento físico ni tolerancia a su pérdida.</text>
+<text x="55" y="1083" font-family="Arial" font-size="18" font-weight="400" fill="#263444">Leyenda: morado = aplicación · verde = datos · azul = infraestructura · amarillo = pendiente o excepción</text></svg>

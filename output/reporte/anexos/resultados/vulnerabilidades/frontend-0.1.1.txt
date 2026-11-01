@@ -1,0 +1,196 @@
+
+
+## Overview
+
+                    │                   Analyzed Image                    
+────────────────────┼─────────────────────────────────────────────────────
+  Target            │  local://tienda-frontend:0.1.1                      
+    digest          │  4c300cccd3e0                                       
+    platform        │ linux/amd64                                         
+    provenance      │ https://github.com/nginx/docker-nginx-unprivileged  
+                    │  https://github.com/nginx/docker-nginx-unprivileged/blob/61141700fbe3bb03ee7379fd0a5cba5c9c5fc885           
+    vulnerabilities │    4C     9H    13M     5L                          
+    size            │ 33 MB                                               
+    packages        │ 86                                                  
+
+
+## Packages and Vulnerabilities
+
+   4C     8H     6M     0L  nginx 1.28.2-r1
+pkg:apk/alpine/nginx@1.28.2-r1?os_name=alpine&os_version=3.23
+
+    x CRITICAL CVE-2026-9256
+      https://scout.docker.com/v/CVE-2026-9256?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r2
+      Affected range : <1.28.3-r2  
+      Fixed version  : 1.28.3-r2   
+    
+    x CRITICAL CVE-2026-42945
+      https://scout.docker.com/v/CVE-2026-42945?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r1
+      Affected range : <1.28.3-r1  
+      Fixed version  : 1.28.3-r1   
+    
+    x CRITICAL CVE-2026-42533
+      https://scout.docker.com/v/CVE-2026-42533?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r6
+      Affected range : <1.28.3-r6  
+      Fixed version  : 1.28.3-r6   
+    
+    x CRITICAL CVE-2026-42055
+      https://scout.docker.com/v/CVE-2026-42055?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r4
+      Affected range : <1.28.3-r4  
+      Fixed version  : 1.28.3-r4   
+    
+    x HIGH CVE-2026-60005
+      https://scout.docker.com/v/CVE-2026-60005?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r6
+      Affected range : <1.28.3-r6  
+      Fixed version  : 1.28.3-r6   
+    
+    x HIGH CVE-2026-27654
+      https://scout.docker.com/v/CVE-2026-27654?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r0
+      Affected range : <1.28.3-r0  
+      Fixed version  : 1.28.3-r0   
+    
+    x HIGH CVE-2026-27651
+      https://scout.docker.com/v/CVE-2026-27651?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r0
+      Affected range : <1.28.3-r0  
+      Fixed version  : 1.28.3-r0   
+    
+    x HIGH CVE-2026-32647
+      https://scout.docker.com/v/CVE-2026-32647?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r0
+      Affected range : <1.28.3-r0  
+      Fixed version  : 1.28.3-r0   
+    
+    x HIGH CVE-2026-27784
+      https://scout.docker.com/v/CVE-2026-27784?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r0
+      Affected range : <1.28.3-r0  
+      Fixed version  : 1.28.3-r0   
+    
+    x HIGH CVE-2026-56434
+      https://scout.docker.com/v/CVE-2026-56434?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r6
+      Affected range : <1.28.3-r6  
+      Fixed version  : 1.28.3-r6   
+    
+    x HIGH CVE-2026-42946
+      https://scout.docker.com/v/CVE-2026-42946?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r1
+      Affected range : <1.28.3-r1  
+      Fixed version  : 1.28.3-r1   
+    
+    x HIGH CVE-2026-49975
+      https://scout.docker.com/v/CVE-2026-49975?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r3
+      Affected range : <1.28.3-r3  
+      Fixed version  : 1.28.3-r3   
+    
+    x MEDIUM CVE-2026-40460
+      https://scout.docker.com/v/CVE-2026-40460?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r1
+      Affected range : <1.28.3-r1  
+      Fixed version  : 1.28.3-r1   
+    
+    x MEDIUM CVE-2026-48142
+      https://scout.docker.com/v/CVE-2026-48142?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r4
+      Affected range : <1.28.3-r4  
+      Fixed version  : 1.28.3-r4   
+    
+    x MEDIUM CVE-2026-42934
+      https://scout.docker.com/v/CVE-2026-42934?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r1
+      Affected range : <1.28.3-r1  
+      Fixed version  : 1.28.3-r1   
+    
+    x MEDIUM CVE-2026-40701
+      https://scout.docker.com/v/CVE-2026-40701?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r1
+      Affected range : <1.28.3-r1  
+      Fixed version  : 1.28.3-r1   
+    
+    x MEDIUM CVE-2026-28753
+      https://scout.docker.com/v/CVE-2026-28753?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r0
+      Affected range : <1.28.3-r0  
+      Fixed version  : 1.28.3-r0   
+    
+    x MEDIUM CVE-2026-28755
+      https://scout.docker.com/v/CVE-2026-28755?s=alpine&n=nginx&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C1.28.3-r0
+      Affected range : <1.28.3-r0  
+      Fixed version  : 1.28.3-r0   
+    
+
+   0C     1H     5M     5L  libxml2 2.13.9-r1
+pkg:apk/alpine/libxml2@2.13.9-r1?os_name=alpine&os_version=3.23
+
+    x HIGH CVE-2026-86140
+      https://scout.docker.com/v/CVE-2026-86140?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+    x MEDIUM CVE-2026-86143
+      https://scout.docker.com/v/CVE-2026-86143?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+    x MEDIUM CVE-2026-86142
+      https://scout.docker.com/v/CVE-2026-86142?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+    x MEDIUM CVE-2026-86139
+      https://scout.docker.com/v/CVE-2026-86139?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+    x MEDIUM CVE-2026-86138
+      https://scout.docker.com/v/CVE-2026-86138?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+    x MEDIUM CVE-2026-86144
+      https://scout.docker.com/v/CVE-2026-86144?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+    x LOW CVE-2026-0989
+      https://scout.docker.com/v/CVE-2026-0989?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+    x LOW CVE-2026-86141
+      https://scout.docker.com/v/CVE-2026-86141?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+    x LOW CVE-2026-86137
+      https://scout.docker.com/v/CVE-2026-86137?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+    x LOW CVE-2025-8732
+      https://scout.docker.com/v/CVE-2025-8732?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+    x LOW CVE-2026-11979
+      https://scout.docker.com/v/CVE-2026-11979?s=alpine&n=libxml2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D2.13.9-r1
+      Affected range : <=2.13.9-r1  
+      Fixed version  : not fixed    
+    
+
+   0C     0H     1M     0L  busybox 1.37.0-r30
+pkg:apk/alpine/busybox@1.37.0-r30?os_name=alpine&os_version=3.23
+
+    x MEDIUM CVE-2025-60876
+      https://scout.docker.com/v/CVE-2025-60876?s=alpine&n=busybox&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D1.37.0-r30
+      Affected range : <=1.37.0-r30  
+      Fixed version  : not fixed     
+    
+
+   0C     0H     1M     0L  nghttp2 1.69.0-r0
+pkg:apk/alpine/nghttp2@1.69.0-r0?os_name=alpine&os_version=3.23
+
+    x MEDIUM CVE-2026-58055
+      https://scout.docker.com/v/CVE-2026-58055?s=alpine&n=nghttp2&ns=alpine&t=apk&osn=alpine&osv=3.23&vr=%3C%3D1.69.0-r0
+      Affected range : <=1.69.0-r0  
+      Fixed version  : not fixed    
+    
+
+
+31 vulnerabilities found in 4 packages
+  CRITICAL  4   
+  HIGH      9   
+  MEDIUM    13  
+  LOW       5   
+

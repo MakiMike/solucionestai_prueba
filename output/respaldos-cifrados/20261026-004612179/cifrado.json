@@ -1,0 +1,12 @@
+﻿{
+    "formato":  "tienda-dpapi-v1",
+    "perfil":  "tienda-prod",
+    "fechaUTC":  "2026-10-26T06:46:19.4900790Z",
+    "usuarioSID":  "S-1-5-21-1485476943-668379614-702749796-1001",
+    "cifrado":  "Windows DPAPI CurrentUser",
+    "SHA256":  "D17F368A3FB341DA0C2B9571F69026B94D6B37EFA60A1000A3082DF890B2F13D",
+    "zipSHA256":  "50329F2A11B1E62390AF2567096D6BBBEE92A7212B8EF407F56AFADEB3B39ED7",
+    "bytes":  49926,
+    "retencionCopias":  7,
+    "alcance":  "Copia fuera de los PVC, en la misma laptop. Requiere conservar el perfil y las claves DPAPI del usuario; no demuestra recuperacion tras perder el equipo."
+}

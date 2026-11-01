@@ -1,0 +1,8 @@
+{
+  "archivos_en_indice": 1552,
+  "archivos_privados": [],
+  "claves_privadas_PEM": [],
+  "archivos_con_URI_para_revisar": [
+    "k8s/minikube/restauracion/aplicacion-recuperada.yaml"
+  ]
+}

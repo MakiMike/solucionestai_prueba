@@ -1,0 +1,6 @@
+NAME                       CPU(cores)   MEMORY(bytes)   
+backend-5db78b7cdd-7ntbh   513m         31Mi            
+backend-5db78b7cdd-vxtkj   459m         58Mi            
+NAME                       CPU(cores)   MEMORY(bytes)   
+backend-5db78b7cdd-7ntbh   513m         31Mi            
+backend-5db78b7cdd-vxtkj   459m         58Mi            

@@ -1,0 +1,10 @@
+Incidencia: el nombre tienda-prod.test no resolvía en Windows.
+Corrección: entrada 127.0.0.1 tienda-prod.test en hosts y limpieza de caché DNS.
+Comprobación: resolución del nombre y solicitudes HTTPS sin omitir validación del certificado.
+curl usa --ssl-revoke-best-effort porque la CA local de mkcert no publica información de revocación.
+Resultados:
+127.0.0.1
+{"status":"ok"}
+Salud: HTTP 200
+Inicio: HTTP 200
+CSS: HTTP 200

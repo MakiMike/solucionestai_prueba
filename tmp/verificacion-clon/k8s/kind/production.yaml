@@ -1,0 +1,20 @@
+# Tres nodos en Docker, todos sobre la misma laptop. No hay HA del host.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  apiServerAddress: "127.0.0.1"
+  disableDefaultCNI: true
+  podSubnet: "10.245.0.0/16"
+  serviceSubnet: "10.97.0.0/16"
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.35.8@sha256:07b2536e30b803ed61d1677a79df6115f798ce64c80f9e22f6ed45afd09323c0
+  - role: worker
+    image: kindest/node:v1.35.8@sha256:07b2536e30b803ed61d1677a79df6115f798ce64c80f9e22f6ed45afd09323c0
+    extraPortMappings:
+      - containerPort: 30443
+        hostPort: 9443
+        listenAddress: "127.0.0.1"
+        protocol: TCP
+  - role: worker
+    image: kindest/node:v1.35.8@sha256:07b2536e30b803ed61d1677a79df6115f798ce64c80f9e22f6ed45afd09323c0

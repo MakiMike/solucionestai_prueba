@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1150" viewBox="0 0 1800 1150"><rect width="1800" height="1150" fill="#faf9f6"/>
+<text x="55" y="71" font-family="Arial" font-size="36" font-weight="700" fill="#263444">3  Reserva e historial con dos bases de datos</text>
+<text x="55" y="110" font-family="Arial" font-size="20" font-weight="400" fill="#263444">El pago ocurre después, desde la cuenta del cliente; no requiere autorización del administrador</text>
+<text x="55" y="1114" font-family="Arial" font-size="19" font-weight="400" fill="#263444">Tienda de ropa alternativa · Referencia para redibujar · Diseño previsto, no evidencia de despliegue</text>
+<rect x="10.0" y="155" width="200" height="85" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="74.5" y="191" font-family="Arial" font-size="21" font-weight="700" fill="#263444">Cliente</text>
+<line x1="110.0" y1="245" x2="110.0" y2="1035" stroke="#a4afba" stroke-dasharray="6 5"/>
+<rect x="405.0" y="155" width="200" height="85" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="460.5" y="191" font-family="Arial" font-size="21" font-weight="700" fill="#263444">Backend</text>
+<line x1="505.0" y1="245" x2="505.0" y2="1035" stroke="#a4afba" stroke-dasharray="6 5"/>
+<rect x="800.0" y="155" width="200" height="85" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="839.0" y="191" font-family="Arial" font-size="21" font-weight="700" fill="#263444">PostgreSQL</text>
+<line x1="900.0" y1="245" x2="900.0" y2="1035" stroke="#a4afba" stroke-dasharray="6 5"/>
+<rect x="1195.0" y="155" width="200" height="85" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="1258.5" y="191" font-family="Arial" font-size="21" font-weight="700" fill="#263444">Worker</text>
+<line x1="1295.0" y1="245" x2="1295.0" y2="1035" stroke="#a4afba" stroke-dasharray="6 5"/>
+<rect x="1590.0" y="155" width="200" height="85" rx="14" fill="#e7eef8" stroke="#6d7a88" stroke-width="2"/>
+<text x="1640.0" y="191" font-family="Arial" font-size="21" font-weight="700" fill="#263444">MongoDB</text>
+<line x1="1690.0" y1="245" x2="1690.0" y2="1035" stroke="#a4afba" stroke-dasharray="6 5"/>
+<polyline points="110.0,300 505.0,300" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="505.0,300 492.7138441335348,306.71195754045885 492.7138441335348,293.28804245954115" fill="#506576"/>
+<text x="245.5" y="286" font-family="Arial" font-size="18" font-weight="400" fill="#506576">1. Crear pedido</text>
+<polyline points="505.0,390 900.0,390" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="900.0,390 887.7138441335347,396.71195754045885 887.7138441335347,383.28804245954115" fill="#506576"/>
+<text x="530.0" y="376" font-family="Arial" font-size="18" font-weight="400" fill="#506576">2. Bloquear stock; guardar pedido + outbox</text>
+<polyline points="900.0,475 505.0,475" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="505.0,475 517.2861558664653,468.28804245954115 517.2861558664653,481.71195754045885" fill="#506576"/>
+<text x="562.0078125" y="461" font-family="Arial" font-size="18" font-weight="400" fill="#506576">3. COMMIT: reserva de 30 minutos</text>
+<polyline points="505.0,550 110.0,550" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="110.0,550 122.28615586646522,543.2880424595412 122.28615586646522,556.7119575404588" fill="#506576"/>
+<text x="161.5" y="536" font-family="Arial" font-size="18" font-weight="400" fill="#506576">4. Pedido pendiente y plazo de pago</text>
+<polyline points="1295.0,630 900.0,630" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="900.0,630 912.2861558664653,623.2880424595412 912.2861558664653,636.7119575404588" fill="#506576"/>
+<text x="998.0" y="616" font-family="Arial" font-size="18" font-weight="400" fill="#506576">5. Leer evento pendiente</text>
+<polyline points="1295.0,710 1690.0,710" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1690.0,710 1677.7138441335348,716.7119575404588 1677.7138441335348,703.2880424595412" fill="#506576"/>
+<text x="1399.0" y="696" font-family="Arial" font-size="18" font-weight="400" fill="#506576">6. Upsert por evento_id</text>
+<polyline points="1690.0,790 1295.0,790" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1295.0,790 1307.2861558664652,783.2880424595412 1307.2861558664652,796.7119575404588" fill="#506576"/>
+<text x="1347.0" y="776" font-family="Arial" font-size="18" font-weight="400" fill="#506576">7. Fallo temporal: evento no enviado</text>
+<polyline points="1295.0,885 1690.0,885" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1690.0,885 1677.7138441335348,891.7119575404588 1677.7138441335348,878.2880424595412" fill="#506576"/>
+<text x="1308.5" y="871" font-family="Arial" font-size="18" font-weight="400" fill="#506576">8. Tras recuperación: reintentar mismo evento</text>
+<polyline points="1690.0,945 1295.0,945" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="1295.0,945 1307.2861558664652,938.2880424595412 1307.2861558664652,951.7119575404588" fill="#506576"/>
+<text x="1395.0" y="931" font-family="Arial" font-size="18" font-weight="400" fill="#506576">8b. Escritura confirmada</text>
+<polyline points="1295.0,1010 900.0,1010" fill="none" stroke="#506576" stroke-width="3"/>
+<polygon points="900.0,1010 912.2861558664653,1003.2880424595412 912.2861558664653,1016.7119575404588" fill="#506576"/>
+<text x="961.5" y="996" font-family="Arial" font-size="18" font-weight="400" fill="#506576">9. Marcar enviado en PostgreSQL</text>
+<text x="80" y="1057" font-family="Arial" font-size="20" font-weight="400" fill="#263444">Si falla la transacción SQL, no hay pedido ni reserva. Si falla MongoDB, el pedido se conserva.</text>
+<text x="1110" y="843" font-family="Arial" font-size="18" font-weight="700" fill="#263444">Índice único evita duplicados</text>
+<text x="55" y="1083" font-family="Arial" font-size="18" font-weight="400" fill="#263444">Leyenda: morado = aplicación · verde = datos · azul = infraestructura · amarillo = pendiente o excepción</text></svg>

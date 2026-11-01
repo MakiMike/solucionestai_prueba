@@ -1,0 +1,28 @@
+{
+    "spec":  {
+                 "routes":  [
+                                {
+                                    "match":  "Host(`10.31.15.103`)",
+                                    "services":  [
+                                                     {
+                                                         "name":  "frontend",
+                                                         "port":  8080
+                                                     }
+                                                 ],
+                                    "kind":  "Rule"
+                                }
+                            ],
+                 "tls":  {
+                             "secretName":  "tienda-tls"
+                         },
+                 "entryPoints":  [
+                                     "websecure"
+                                 ]
+             },
+    "metadata":  {
+                     "namespace":  "tienda-prod",
+                     "name":  "tienda-lan"
+                 },
+    "apiVersion":  "traefik.io/v1alpha1",
+    "kind":  "IngressRoute"
+}

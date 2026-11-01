@@ -1,0 +1,3 @@
+NAME                STATUS     COMPLETIONS   DURATION   AGE
+tienda-migrate      Failed     0/1           9m50s      9m50s
+tienda-mongo-init   Complete   1/1           4s         55s
